@@ -11,12 +11,12 @@ export default function SideBar() {
   return (
     <aside
       id="logo-sidebar"
-      className="flex fixed top-0 left-0 z-40 h-screen pt-10 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0"
+      className="flex-1 flex fixed top-0 left-0 z-40 h-screen w-[340px] pt-10 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0"
       aria-label="Sidebar"
     >
       {/* first sldebar */}
       <div className="h-full">
-        <ul className="space-y-1 font-medium p-2">
+        <ul className="space-y-1 font-medium p-2 outline-none">
           <li className="p-2 hover:bg-gray-100 rounded-md">
             <TbSection size={20} />
           </li>
