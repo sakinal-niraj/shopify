@@ -1,11 +1,15 @@
- import { createSlice,PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
- interface colorState{
-    header_footer:string,
- }
- const initialState : colorState= {
-    header_footer: localStorage.getItem('header_footer')||'#ffffff',
- };
+interface colorState {
+  header_footer: string;
+}
+
+const initialState: colorState = {
+  header_footer: typeof window !== 'undefined' && localStorage.getItem('header_footer') 
+    ? localStorage.getItem('header_footer')!
+    : '#ffffff', // Fallback value
+};
+
 
  const colorSlice = createSlice({
     name:'header_footer',
