@@ -7,11 +7,18 @@ import { CiMobile1 } from "react-icons/ci";
 import { MdOutlineTablet } from "react-icons/md";
 import { GrUndo } from "react-icons/gr";
 import { GrRedo } from "react-icons/gr";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Header() {
   const [isDropOpen, setIsDropOpen] = useState(false);
   const [isPageSelected, setIsPageSelected] = useState<string>("Home Page");
+
+  useEffect(()=>{
+    const page = localStorage.getItem('currentPage');
+    if(page){
+      setIsPageSelected(page);
+    }
+  },[])
 
   // Toggle effect on onclick
   const handleToggle = ()=>{
@@ -22,7 +29,10 @@ export default function Header() {
   const handlePageSelection = (event: React.MouseEvent<HTMLUListElement>)=>{
     const target = event.target as HTMLElement;
     if(target.tagName === 'LI'){
-      setIsPageSelected(target.textContent as string);
+      const currentPage = target.textContent as string;
+      setIsPageSelected(currentPage);
+      localStorage.setItem('currentPage',currentPage);
+      window.dispatchEvent(new CustomEvent("pageChange", { detail: currentPage }));
       setIsDropOpen(false);
     }
   }

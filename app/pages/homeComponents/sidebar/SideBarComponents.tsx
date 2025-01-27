@@ -3,30 +3,20 @@ import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
-// import { useDispatch, useSelector } from "react-redux";
-// import { AppDispatch, RootState } from "@/app/redux/store";
-// import { setHeader_Footer } from "@/app/redux/colorSlice";
 
 // colors
 export function Colors() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState<string>("#000000");
-  // const [headFootSelector, setHeadFootSelector] = useState("#000000");
-  // const dispatch = useDispatch<AppDispatch>();
-  // const selectedColor = useSelector(
-  //   (state: RootState) => state.header_footer.header_footer
-  // );
 
   useEffect(() => {
     const storedColor = localStorage.getItem("header_footer");
     if (storedColor) {
       setSelectedColor(storedColor);
-      // dispatch(setHeader_Footer(storedColor));
       document.documentElement.style.setProperty(
         "--headerFooter-Color",
         storedColor
       );
-      // setSelectedColor()
     }
   }, []);
 
@@ -34,15 +24,11 @@ export function Colors() {
     const storedColor = event.target.value;
     setSelectedColor(storedColor);
     localStorage.setItem("header_footer", storedColor);
-    // dispatch(setHeader_Footer(selectedColor));
     document.documentElement.style.setProperty(
       "--headerFooter-Color",
       storedColor,
     );
   };
-  // const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setHeadFootSelector(event.target.value);
-  // };
   return (
     <>
       <button

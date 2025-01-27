@@ -55,7 +55,7 @@ export function NavBar() {
 }
 
 export function HomeBody() {
-  return <>{/* body */}</>;
+  return <>hello{/* body */}</>;
 }
 
 export function Contact() {
