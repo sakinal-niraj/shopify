@@ -4,6 +4,7 @@
 
  :root {
   --headerFooter-Color: rgb(177, 177, 177);
+  --pageBackground-Color: white;
   --background: #ffffff;
   --foreground: #171717;
 }

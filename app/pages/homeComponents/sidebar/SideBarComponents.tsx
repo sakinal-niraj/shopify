@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
+import ColorSelector from "@/app/components/ColorSelector";
 
 // colors
 export function Colors() {
@@ -26,7 +27,7 @@ export function Colors() {
     localStorage.setItem("header_footer", storedColor);
     document.documentElement.style.setProperty(
       "--headerFooter-Color",
-      storedColor,
+      storedColor
     );
   };
   return (
@@ -45,27 +46,21 @@ export function Colors() {
       </button>
       {isDropdownOpen && (
         <div className="py-1 px-4 space-y-2 border-b border-gray-100 w-full">
-          <div className=" flex items-center justify-between">
-            <span className="font-normal text-xs">
-              Header & Footer <br /> Background
-            </span>
-            <p className="flex items-center justify-between text-[10px] bg-gray-200 pr-1 pl-0.5 rounded-sm w-24">
-              <input
-                type="color"
-                id="heade&foot"
-                className="outline-none min-w-[23px] max-w-[23px] bg-none"
-                value={selectedColor}
-                onChange={handleColorChange}
-              />
-              <label
-                htmlFor="heade&foot"
-                className="flex items-center gap-3 uppercase"
-              >
-                {selectedColor}{" "}
-                <IoMdArrowDropdown className="pt-[1px]" size={17} />
-              </label>
-            </p>
-          </div>
+          {/* Header & Footer Backround */}
+          <ColorSelector
+            label="Header & Footer Background"
+            value={selectedColor}
+            onChange={handleColorChange}
+            icon={<IoMdArrowDropdown />}
+          />
+
+          {/* Page Bacground Color */}
+          {/* <ColorSelector 
+          label="Page Background Color"
+          value={selectedColor}
+          onChange={handleColorChange}
+          icon={<IoMdArrowDropdown />}
+          /> */}
         </div>
       )}
     </>
