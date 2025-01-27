@@ -1,16 +1,18 @@
+"use client";
 import { FiSearch } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa6";
 import { LiaShoppingBagSolid } from "react-icons/lia";
+// import { useSelector } from "react-redux";
+// import { RootState } from "@/app/redux/store";
+// import { useEffect, useState } from "react";
 
-export default function ContentPage() {
+export function HomeBody() {
+
   return (
-    <main
-      id="logo-sidebar"
-      className="p-0 m-0 flex fixed top-0 left-[310px] z-40 h-[91vh] w-[76.5vw] my-14 mx-10 rounded-xl transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0"
-      aria-label="Sidebar"
-    >
+    <>
+      {/* navbar */}
       <nav className="w-full rounded-lg">
-        <div className="flex items-center justify-between py-3 px-10 bg-gray-100">
+        <div className={`flex items-center justify-between py-3 px-10 homeBody`}>
           {/* left side */}
           <div className="flex items-center">
             {/* logo */}
@@ -29,7 +31,7 @@ export default function ContentPage() {
                 <span className="absolute -bottom-1 left-0 bg-gray-600 group-hover:bg-black w-0 h-[2px] group-hover:w-full duration-700" />
               </li>
               <li className="relative group cursor-pointer">
-                Contac
+                Contact
                 <span className="absolute -bottom-1 left-0 bg-gray-600 group-hover:bg-black w-0 h-[2px] group-hover:w-full duration-700" />
               </li>
             </ul>
@@ -49,6 +51,17 @@ export default function ContentPage() {
           </div>
         </div>
       </nav>
-    </main>
+
+      {/* body */}
+      
+    </>
   );
+}
+
+export function Contact() {
+  return <>contact</>;
+}
+
+export function About() {
+  return <>about us</>;
 }

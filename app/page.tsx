@@ -1,4 +1,4 @@
-import ContentPage from "./pages/homeComponents/ContentPage";
+import ContentPage from "./pages/homeComponents/bodyContent/ContentPage";
 import SideBar from "./pages/homeComponents/sidebar/SideBar";
 
 export default function Home() {
@@ -6,6 +6,7 @@ export default function Home() {
       <div className="">
         <SideBar />
         <ContentPage />
+        
       </div>
   );
 }

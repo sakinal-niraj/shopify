@@ -1,17 +1,38 @@
 "use client";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/app/redux/store";
+import { setHeader_Footer } from "@/app/redux/colorSlice";
 
 // colors
 export function Colors() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [headFootSelector, setHeadFootSelector] = useState("#000000");
+  // const [headFootSelector, setHeadFootSelector] = useState("#000000");
+  const dispatch = useDispatch<AppDispatch>();
+  const selectedColor = useSelector(
+    (state: RootState) => state.header_footer.header_footer
+  );
+
+  useEffect(() => {
+    const storedColor = localStorage.getItem("header_footer");
+    if (storedColor) {
+      dispatch(setHeader_Footer(storedColor));
+      document.documentElement.style.setProperty("--headerFooter-Color", storedColor);
+    }
+  }, [dispatch]);
 
   const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setHeadFootSelector(event.target.value);
+    const selectedColor = event.target.value;
+    localStorage.setItem("header_footer", selectedColor);
+    dispatch(setHeader_Footer(selectedColor));
+    document.documentElement.style.setProperty("--headerFooter-Color", event.target.value);
   };
+  // const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setHeadFootSelector(event.target.value);
+  // };
   return (
     <>
       <button
@@ -23,7 +44,7 @@ export function Colors() {
       >
         Colors
         <span className="pt-[3px] text-xl">
-          {isDropdownOpen ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp />}
+          {isDropdownOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
         </span>
       </button>
       {isDropdownOpen && (
@@ -33,18 +54,22 @@ export function Colors() {
               Header & Footer <br /> Background
             </span>
             <p className="flex items-center justify-between text-[10px] bg-gray-200 pr-1 pl-0.5 rounded-sm w-24">
-                <input
-                  type="color"
-                  id="heade&foot"
-                  className=" outline-none w-6 bg-none"
-                  value={headFootSelector}
-                  onChange={handleColorChange}
-                />
-                <label htmlFor="heade&foot" className="flex items-center gap-3 uppercase">{headFootSelector} <IoMdArrowDropdown className="pt-[1px]" size={17} /></label>
+              <input
+                type="color"
+                id="heade&foot"
+                className=" outline-none min-w-[23px] max-w-[23px] bg-none"
+                value={selectedColor}
+                onChange={handleColorChange}
+              />
+              <label
+                htmlFor="heade&foot"
+                className="flex items-center gap-3 uppercase"
+              >
+                {selectedColor}{" "}
+                <IoMdArrowDropdown className="pt-[1px]" size={17} />
+              </label>
             </p>
           </div>
-
-
         </div>
       )}
     </>
@@ -65,7 +90,7 @@ export function Typography() {
       >
         Typography
         <span className="pt-[3px] text-xl">
-          {isDropdownOpen ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp />}
+          {isDropdownOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
         </span>
       </button>
       {isDropdownOpen && (
@@ -89,7 +114,7 @@ export function Buttons() {
       >
         Buttons
         <span className="pt-[3px] text-xl">
-          {isDropdownOpen ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp />}
+          {isDropdownOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
         </span>
       </button>
       {isDropdownOpen && (
@@ -113,7 +138,7 @@ export function ProductCard() {
       >
         Product cards
         <span className="pt-[3px] text-xl">
-          {isDropdownOpen ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp />}
+          {isDropdownOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
         </span>
       </button>
       {isDropdownOpen && (
