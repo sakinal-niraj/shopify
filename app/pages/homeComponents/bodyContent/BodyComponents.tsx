@@ -2,17 +2,16 @@
 import { FiSearch } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa6";
 import { LiaShoppingBagSolid } from "react-icons/lia";
-// import { useSelector } from "react-redux";
-// import { RootState } from "@/app/redux/store";
-// import { useEffect, useState } from "react";
 
-export function HomeBody() {
-
+  
+export function NavBar() {
   return (
     <>
       {/* navbar */}
       <nav className="w-full rounded-lg">
-        <div className={`flex items-center justify-between py-3 px-10 homeBody`}>
+        <div
+          className={`flex items-center justify-between py-3 px-10 homeBody`}
+        >
           {/* left side */}
           <div className="flex items-center">
             {/* logo */}
@@ -51,11 +50,12 @@ export function HomeBody() {
           </div>
         </div>
       </nav>
-
-      {/* body */}
-      
     </>
   );
+}
+
+export function HomeBody() {
+  return <>{/* body */}</>;
 }
 
 export function Contact() {

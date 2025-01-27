@@ -5,7 +5,7 @@ interface colorState {
 }
 
 const initialState: colorState = {
-  header_footer: typeof window !== localStorage.getItem('header_footer') 
+  header_footer: typeof window !== 'undefined' && localStorage.getItem('header_footer') 
     ? localStorage.getItem('header_footer')!
     : '#ffffff', // Fallback value
 };
