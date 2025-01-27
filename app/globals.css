@@ -5,8 +5,15 @@
  :root {
   --headerFooter-Color: rgb(177, 177, 177);
   --pageBackground-Color: white;
+  --icons-Color:white;
+  --icons-Text-Color:white;
+  --head-Text-Color:black;
+  --body-Text-Color:black;
+  --button-Color:black;
+  --product-Bg-Color:white;
   --background: #ffffff;
   --foreground: #171717;
+  --font-Scale-Size:1;
 }
 
 /*
@@ -25,9 +32,30 @@ body {
   width: 100vw; 
 }
 
-.homeBody{
+.navBar{
   background:var(--headerFooter-Color);
+  color:var(--head-Text-Color);
+  transform:scaleX(var(--font-Scale-Size)) ;
 }
+
+.homeBody{
+  background-color: var(--pageBackground-Color);
+  color: var(--body-Text-Color);
+}
+
+.icons{
+  color: var(--icons-Color);
+}
+
+.ShopIcon{
+  background: var(--icons-Color);
+  color: var(--icons-Text-Color);
+}
+
+.products{
+  background-color: var(--product-Bg-Color);
+}
+
 
 /* .mainScrollBar::-webkit-scrollbar {
   width: 5px;

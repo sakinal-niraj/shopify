@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import scrollbar from 'tailwind-scrollbar';
+import aspectRatio from '@tailwindcss/aspect-ratio';
 
 export default {
   content: [
@@ -17,5 +18,6 @@ export default {
   },
   plugins: [
     scrollbar,  
+    aspectRatio,
   ],
 } satisfies Config;

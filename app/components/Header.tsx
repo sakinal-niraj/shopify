@@ -60,10 +60,10 @@ export default function Header() {
           {isDropOpen && (
             <ul
              onClick={handlePageSelection}
-             className="absolute left-3 bg-[#f7f7f7] w-32 p-2 rounded-lg space-y-2">
+             className="absolute left-0 top-10 bg-[#f7f7f7] w-48 p-2 rounded-lg space-y-2">
               <li className="cursor-pointer hover:bg-[white]">Home Page</li>
-              <li className="cursor-pointer hover:bg-[white]">Contact Page</li>
-              <li className="cursor-pointer hover:bg-[white]">About Page</li>
+              <li className="cursor-pointer hover:bg-[white]">Categories</li>
+              <li className="cursor-pointer hover:bg-[white]">Product Details Page</li>
             </ul>
           )}
         </div>
