@@ -11,9 +11,15 @@
   --body-Text-Color:black;
   --button-Color:black;
   --product-Bg-Color:white;
+  --mrp-Text-Color:white;
+  --font-Scale-Size:12;
+  --font-body-Scale-Size:12;
+  --font-head-family:'Courier New', Courier, monospace;
+  --font-body-family:'Courier New', Courier, monospace;
+
+
   --background: #ffffff;
   --foreground: #171717;
-  --font-Scale-Size:1;
 }
 
 /*
@@ -30,17 +36,26 @@ body {
   padding: 0;
   height: 100vh;
   width: 100vw; 
+  /* font-family: ; */
 }
 
 .navBar{
   background:var(--headerFooter-Color);
   color:var(--head-Text-Color);
-  transform:scaleX(var(--font-Scale-Size)) ;
+  font-family: var(--font-head-family);
+  /* font-size:var(--font-Scale-Size); */
+}
+
+.menuLinks{
+  font-size: var(--font-Scale-Size);
+  padding: 0;
 }
 
 .homeBody{
   background-color: var(--pageBackground-Color);
   color: var(--body-Text-Color);
+  font-size: var(--font-body-Scale-Size);
+  font-family: var(--font-body-family);
 }
 
 .icons{
@@ -56,6 +71,9 @@ body {
   background-color: var(--product-Bg-Color);
 }
 
+.mrp{
+  color: var(--mrp-Text-Color);
+}
 
 /* .mainScrollBar::-webkit-scrollbar {
   width: 5px;

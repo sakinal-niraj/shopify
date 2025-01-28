@@ -4,6 +4,20 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 import ColorSelector from "@/app/components/ColorSelector";
+// import Select from "react-select";
+
+import FontScale from "@/app/components/FontScaleBox";
+// import Select from "react-select";
+import CustomSelect from "@/app/components/CustomSelect";
+
+interface Options {
+  value: string;
+  label: string;
+}
+
+interface fontSizeType {
+  value: string;
+}
 
 // colors
 export function Colors() {
@@ -23,6 +37,8 @@ export function Colors() {
     useState<string>("#000000");
   const [selectedProductBgColor, setSelectedProductBgColor] =
     useState<string>("#000000");
+  const [selectedMrpTextColor, setSelectedMrpTextColor] =
+    useState<string>("#000000");
 
   useEffect(() => {
     const storedHeadFootColor = localStorage.getItem("header_footer");
@@ -33,6 +49,7 @@ export function Colors() {
     const storedBodyTextColor = localStorage.getItem("bodyTextColor");
     const storedButtonColor = localStorage.getItem("buttonColor");
     const storedProductBgColor = localStorage.getItem("productBgColor");
+    const storedMrpTextColor = localStorage.getItem("mrpTextColor");
 
     // Header and footer bg color
     if (storedHeadFootColor) {
@@ -103,6 +120,15 @@ export function Colors() {
       document.documentElement.style.setProperty(
         "--button-Color",
         storedProductBgColor
+      );
+    }
+
+    // Mrp text color
+    if (storedMrpTextColor) {
+      setSelectedMrpTextColor(storedMrpTextColor);
+      document.documentElement.style.setProperty(
+        "--mrp-Text-Color",
+        storedMrpTextColor
       );
     }
   }, []);
@@ -203,6 +229,17 @@ export function Colors() {
       storedProductBgColor
     );
   };
+
+  // handle Mrp text color change
+  const handleMrpTextColor = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const storedMrpTextColor = event.target.value;
+    setSelectedMrpTextColor(storedMrpTextColor);
+    localStorage.setItem("mrpTextColor", storedMrpTextColor);
+    document.documentElement.style.setProperty(
+      "--mrp-Text-Color",
+      storedMrpTextColor
+    );
+  };
   return (
     <>
       <button
@@ -290,6 +327,15 @@ export function Colors() {
             icon={<IoMdArrowDropdown />}
             id="productBgColor"
           />
+
+          {/* Button Color */}
+          <ColorSelector
+            label="Mrp Text Color"
+            value={selectedMrpTextColor}
+            onChange={handleMrpTextColor}
+            icon={<IoMdArrowDropdown />}
+            id="MrpTextColor"
+          />
         </div>
       )}
     </>
@@ -299,27 +345,148 @@ export function Colors() {
 // typography
 export function Typography() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isFontSize,setIsFontSize] = useState('1');
+  const [isHeadFontSize, setIsHeadFontSize] = useState("12");
+  const [isBodyFontSize, setIsBodyFontSize] = useState("12");
+  const [isHeadFontFamily, setIsHeadFontFamily] = useState<Options | null>(
+    null
+  );
+  const [isBoyFontFamily, setIsBodyFontFamily] = useState<Options | null>(null);
 
-  useEffect(()=>{
-    const storedFontSize = localStorage.getItem('fontSizeScale');
+  const headFontFamily: Options[] = [
+    { value: "serif", label: "Serif" },
+    { value: "sans-serif", label: "Sans-Serif" },
+    { value: "monospace", label: "Monospace" },
+    { value: "cursive", label: "Cursive" },
+    { value: "fantasy", label: "Fantasy" },
+    { value: "system-ui", label: "System UI" },
+    { value: "ui-sans-serif", label: "UI Sans-Serif" },
+    { value: "ui-serif", label: "UI Serif" },
+    { value: "ui-monospace", label: "UI Monospace" },
+    { value: "ui-rounded", label: "UI Rounded" },
+    { value: "emoji", label: "Emoji" },
+    { value: "math", label: "Math" },
+    { value: "fangsong", label: "Fangsong" },
+  ];
+
+  const fontSizes: fontSizeType[] = [
+    { value: "1.0" },
+    { value: "1.1" },
+    { value: "1.2" },
+    { value: "1.3" },
+    { value: "1.4" },
+    { value: "1.5" },
+  ];
+
+  useEffect(() => {
+    const storedFontSize = localStorage.getItem("fontSizeScale");
+    const storedBodyFontSize = localStorage.getItem("bodyFontSizeScale");
+    const storedHeadFontFamily = localStorage.getItem("fontHeadFamily");
+    const storedBodyFontFamily = localStorage.getItem("fontBodyFamily");
+
+    // head font size
     if (storedFontSize) {
-       setIsFontSize(storedFontSize);
-       document.documentElement.style.setProperty(
-         "--font-Scale-Size",
-         storedFontSize
-       );
-     }
-  },[])
+      setIsHeadFontSize(storedFontSize);
+      document.documentElement.style.setProperty(
+        "--font-Scale-Size",
+        storedFontSize
+      );
+    }
 
+    // body font size
+    if (storedBodyFontSize) {
+      setIsBodyFontSize(storedBodyFontSize);
+      document.documentElement.style.setProperty(
+        "--font-body-Scale-Size",
+        storedBodyFontSize
+      );
+    }
 
-  const handleFontSizeScale = (event:React.ChangeEvent<HTMLInputElement>)=>{
+    // Head font famyli
+    if (storedHeadFontFamily) {
+      // Find the matching font option from the list
+      const fontOption = headFontFamily.find(
+        (font) => font.value === storedHeadFontFamily
+      );
+
+      // If found, update the state and apply it to the document
+      if (fontOption) {
+        setIsHeadFontFamily(fontOption);
+        document.documentElement.style.setProperty(
+          "--font-head-family",
+          fontOption.value
+        );
+      }
+    }
+
+    // Body Font Famyli
+    if (storedBodyFontFamily) {
+      // Find the matching font option from the list
+      const fontOption = headFontFamily.find(
+        (font) => font.value === storedBodyFontFamily
+      );
+
+      // If found, update the state and apply it to the document
+      if (fontOption) {
+        setIsBodyFontFamily(fontOption);
+        document.documentElement.style.setProperty(
+          "--font-body-family",
+          fontOption.value
+        );
+      }
+    }
+  }, []);
+
+  // head font size scale changer
+  const handleFontSizeScale = (event: React.ChangeEvent<HTMLInputElement>) => {
     const scaleSize = event.target.value;
-    setIsFontSize(scaleSize);
-    localStorage.setItem("fontSizeScale",scaleSize);
-    document.documentElement.style.setProperty("--font-Scale-Size",scaleSize);
-  }
+    setIsHeadFontSize(scaleSize);
+    localStorage.setItem("fontSizeScale", scaleSize + "px");
+    document.documentElement.style.setProperty(
+      "--font-Scale-Size",
+      scaleSize + "px"
+    );
+  };
 
+
+  // body font size scale changer
+  const handleBodyFontSizeScale = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const scaleSize = event.target.value;
+    setIsBodyFontSize(scaleSize);
+    localStorage.setItem("bodyFontSizeScale", scaleSize + "px");
+    document.documentElement.style.setProperty(
+      "--font-body-Scale-Size",
+      scaleSize + "px"
+    );
+  };
+
+  // head font change handler
+  const handleFontFamily = (selected: Options | null) => {
+    setIsHeadFontFamily(selected);
+
+    if (selected) {
+      // Save the selected font family to localStorage
+      localStorage.setItem("fontHeadFamily", selected.value);
+      document.documentElement.style.setProperty(
+        "--font-head-family",
+        selected.value
+      );
+    }
+  };
+
+  // body font change handler
+  const handleBodyFontFamily = (selected: Options | null) => {
+    setIsBodyFontFamily(selected);
+
+    if (selected) {
+      // Save the selected font family to localStorage
+      localStorage.setItem("fontBodyFamily", selected.value);
+      document.documentElement.style.setProperty(
+        "--font-body-family",
+        selected.value
+      );
+    }
+  };
+ 
   return (
     <>
       <button
@@ -335,40 +502,57 @@ export function Typography() {
         </span>
       </button>
       {isDropdownOpen && (
-        <div className="py-1 px-4 space-y-2 border-b border-gray-100">
+        <div className="py-1 px-4 space-y-8 border-b border-gray-100">
           {/* Head */}
-          <div className="font-normal text-xs">
+          <div className="font-normal mt-4 text-xs">
             {/* Heading */}
             <h1 className="pb-3 text-sm font-medium">Headings</h1>
 
             {/* font selector */}
-            <p className="flex justify-between">
-              <label htmlFor="font">Font</label>
-              <span>system UI</span>
-            </p>
+            <CustomSelect
+              label="Font"
+              value={isHeadFontFamily}
+              options={headFontFamily}
+              onChange={handleFontFamily}
+            />
+            {/* <SelectBox label="Font" options={headFontFamily} /> */}
 
-            <div className="flex justify-between items-center">
-              <span className="w-[50%]">Font size scale</span>
-              <div className="flex my-4 relative">
-                <input
-                  type="range"
-                  min="1.0"
-                  max="1.5"
-                  step="0.1"
-                  onChange={handleFontSizeScale}
-                  value={isFontSize}
-                  className={`w-full h-1 bg-gray-300 rounded-lg hover:cursor-grab  active:cursor-pointer relative`}
-                />
-                <div className="absolute top-2 left-0 right-0 flex gap-2.5 text-[10px] text-gray-600">
-                  <span>1.0</span>
-                  <span>1.1</span>
-                  <span>1.2</span>
-                  <span>1.3</span>
-                  <span>1.4</span>
-                  <span>1.5</span>
-                </div>
-              </div>
-            </div>
+            {/* font size scaler */}
+            <FontScale
+              label="Font Size Scale"
+              min="12"
+              max="22"
+              step="2"
+              onChange={handleFontSizeScale}
+              value={isHeadFontSize}
+              sizes={fontSizes}
+            />
+          </div>
+
+          <div className="font-normal text-xs">
+            {/* Heading */}
+            <h1 className="pb-3 text-sm font-medium">Body</h1>
+
+            {/* font selector */}
+            {/* <SelectBox label="Font" options={headFontFamily} /> */}
+            <CustomSelect
+              label="Font"
+              value={isBoyFontFamily}
+              options={headFontFamily}
+              onChange={handleBodyFontFamily}
+            />
+
+            {/* font size scaler */}
+            {/* font size scaler */}
+            <FontScale
+              label="Font Size Scale"
+              min="12"
+              max="22"
+              step="2"
+              onChange={handleBodyFontSizeScale}
+              value={isBodyFontSize}
+              sizes={fontSizes}
+            />
           </div>
         </div>
       )}

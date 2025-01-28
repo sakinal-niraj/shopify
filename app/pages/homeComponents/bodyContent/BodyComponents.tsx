@@ -12,6 +12,7 @@ interface Product {
   id: number;
   thumbnail: string;
   title: string;
+  price: number;
 }
 
 export function NavBar() {
@@ -23,19 +24,19 @@ export function NavBar() {
           {/* left side */}
           <div className="flex items-center">
             {/* logo */}
-            <h1 className="mr-3 text-xl hover:text-black">My store</h1>
+            <h1 className="mr-3 mb-1 text-xl hover:text-black">My store</h1>
 
             {/* links */}
-            <ul className="flex ml-7 gap-6 text-sm">
-              <li className="relative group cursor-pointer text-[14px]">
+            <ul className="flex ml-7 gap-6 ">
+              <li className="relative group cursor-pointer menuLinks">
                 Home
                 <span className="absolute -bottom-1 left-0 bg-gray-600 group-hover:bg-black w-0 h-[2px] group-hover:w-full duration-700" />
               </li>
-              <li className="relative group cursor-pointer text-[14px]">
+              <li className="relative group cursor-pointer menuLinks">
                 Mens Clothing
                 <span className="absolute -bottom-1 left-0 bg-gray-600 group-hover:bg-black w-0 h-[2px] group-hover:w-full duration-700" />
               </li>
-              <li className="relative group cursor-pointer text-[14px]">
+              <li className="relative group cursor-pointer menuLinks">
                 Womes Clothing
                 <span className="absolute -bottom-1 left-0 bg-gray-600 group-hover:bg-black w-0 h-[2px] group-hover:w-full duration-700" />
               </li>
@@ -68,9 +69,13 @@ export function HomeBody() {
 
   useEffect(() => {
     async function getProducts() {
-      const res = await fetch("https://dummyjson.com/products?limit=10");
-      const data = await res.json();
-      setProductsData(data.products);
+      try {
+        const res = await fetch("https://dummyjson.com/products?limit=12");
+        const data = await res.json();
+        setProductsData(data.products);
+      } catch (error) {
+        console.log("Error Fetching products : ",error)
+      }
     }
 
     getProducts();
@@ -104,23 +109,32 @@ export function HomeBody() {
         {/* Products */}
         <div className="mt-10 grid grid-cols-4 text-center gap-10">
           {/* single product container */}
-          {productsData.map((item) => (
-            <div className="max-w-full" key={item.id}>
-              {/* img container */}
-              <div className="w-full h-auto products">
-                <Image
-                  src={item.thumbnail}
-                  alt="product image"
-                  width={200} // Set the width of the image (e.g., 200px)
-                  height={200} // Set the height of the image (e.g., 200px)
-                  layout="responsive" // Makes the image responsive and adjusts automatically
-                  className="object-cover"
-                />
+          {productsData.length > 0 ? (
+            productsData.map((item) => (
+              <div className="max-w-full" key={item?.id}>
+                {/* img container */}
+                <div className="w-full h-auto products text-left">
+                  <Image
+                    src={item?.thumbnail}
+                    alt="product image"
+                    width={200} // Set the width of the image (e.g., 200px)
+                    height={200} // Set the height of the image (e.g., 200px)
+                    layout="responsive" // Makes the image responsive and adjusts automatically
+                    className="object-cover"
+                  />
+                </div>
+                {/* content */}
+                <p className="w-full text-left">
+                  <span className="cursor-pointer">{item?.title}</span>
+                </p>
+                <p className="w-full text-left mrp">
+                  <span className="cursor-pointer">{item?.price}</span>
+                </p>
               </div>
-              {/* content */}
-              <p className="">{item.title}</p>
-            </div>
-          ))}
+            ))
+          ) : (
+            <div className="text-center text-4xl">Loading...</div>
+          )}
         </div>
       </div>
     </div>

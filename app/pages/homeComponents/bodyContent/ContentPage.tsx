@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { About, Contact, HomeBody, NavBar } from "./BodyComponents";
-// import RangeSlider from "@/app/components/RangeSlider";
 
 export default function ContentPage() {
   const [isCurrentPage, setIsCurrentPage] = useState("Home Page");
@@ -29,7 +28,6 @@ export default function ContentPage() {
       aria-label="Sidebar"
     >
       <NavBar />
-      {/* <RangeSlider /> */}
       {isCurrentPage === "Home Page" && <HomeBody /> }
       {isCurrentPage === "Contact Page" && <Contact /> }
       {isCurrentPage === "About Page" && <About /> }
