@@ -9,6 +9,9 @@ import ColorSelector from "@/app/components/ColorSelector";
 import FontScale from "@/app/components/FontScaleBox";
 // import Select from "react-select";
 import CustomSelect from "@/app/components/CustomSelect";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import { selectBodyColor, selectBodyTextColor, selectButtonColor, selectHeaderFooterColor, selectHeadTextColor, selectIconsColor, selectIconTextColor, selectMrpTextColor, selectProdutBgColor } from "@/app/redux/selectors/colorSelectors";
+import { setBodyColor, setBodyTextColor, setButtonColor, setHeaderFooter, setHeadTextColor, setIconsColor, setIconTextColor, setMrpTextColor, setProductBgColor } from "@/app/redux/slices/colorSlice";
 
 interface Options {
   value: string;
@@ -22,224 +25,130 @@ interface fontSizeType {
 // colors
 export function Colors() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedHeadFootColor, setSelectedHeadFootColor] =
-    useState<string>("#000000");
-  const [selectedBodyColor, setSelectedBodyColor] = useState<string>("#000000");
-  const [selectedIconsColor, setSelectedIconsColor] =
-    useState<string>("#000000");
-  const [selectedIconTextColor, setSelectedIconTextColor] =
-    useState<string>("#000000");
-  const [selectedHeadTextColor, setSelectedHeadTextColor] =
-    useState<string>("#000000");
-  const [selectedBodyTextColor, setSelectedBodyTextColor] =
-    useState<string>("#000000");
-  const [selectedButtonColor, setSelectedButtonColor] =
-    useState<string>("#000000");
-  const [selectedProductBgColor, setSelectedProductBgColor] =
-    useState<string>("#000000");
-  const [selectedMrpTextColor, setSelectedMrpTextColor] =
-    useState<string>("#000000");
+
+  const dispatch = useAppDispatch();
+  const headerFooterColor = useAppSelector(selectHeaderFooterColor);
+  const bodyColor = useAppSelector(selectBodyColor);
+  const iconsColor = useAppSelector(selectIconsColor);
+  const iconTextColor = useAppSelector(selectIconTextColor);  
+  const headTextColor = useAppSelector(selectHeadTextColor);
+  const bodyTextColor = useAppSelector(selectBodyTextColor);
+  const buttonColor = useAppSelector(selectButtonColor);
+  const productBgColor = useAppSelector(selectProdutBgColor);
+  const mrpTextColor = useAppSelector(selectMrpTextColor);
+  
 
   useEffect(() => {
-    const storedHeadFootColor = localStorage.getItem("header_footer");
-    const storedBodyColor = localStorage.getItem("bodyColor");
-    const storedIconsColor = localStorage.getItem("iconsColor");
-    const storedIconTextColor = localStorage.getItem("iconTextColor");
-    const storedHeadTextColor = localStorage.getItem("headTextColor");
-    const storedBodyTextColor = localStorage.getItem("bodyTextColor");
-    const storedButtonColor = localStorage.getItem("buttonColor");
-    const storedProductBgColor = localStorage.getItem("productBgColor");
-    const storedMrpTextColor = localStorage.getItem("mrpTextColor");
-
-    // Header and footer bg color
-    if (storedHeadFootColor) {
-      setSelectedHeadFootColor(storedHeadFootColor);
-      document.documentElement.style.setProperty(
-        "--headerFooter-Color",
-        storedHeadFootColor
-      );
-    }
-
-    // body bg color
-    if (storedBodyColor) {
-      setSelectedBodyColor(storedBodyColor);
-      document.documentElement.style.setProperty(
-        "--pageBackground-Color",
-        storedBodyColor
-      );
-    }
-
-    // icons color
-    if (storedIconsColor) {
-      setSelectedIconsColor(storedIconsColor);
-      document.documentElement.style.setProperty(
-        "--icons-Color",
-        storedIconsColor
-      );
-    }
-
-    // icon Text color
-    if (storedIconTextColor) {
-      setSelectedIconTextColor(storedIconTextColor);
-      document.documentElement.style.setProperty(
-        "--icon-TextColor",
-        storedIconTextColor
-      );
-    }
-
-    // Head text color
-    if (storedHeadTextColor) {
-      setSelectedHeadTextColor(storedHeadTextColor);
-      document.documentElement.style.setProperty(
-        "--head-Text-Color",
-        storedHeadTextColor
-      );
-    }
-
-    // body text color
-    if (storedBodyTextColor) {
-      setSelectedBodyTextColor(storedBodyTextColor);
-      document.documentElement.style.setProperty(
-        "--body-Text-Color",
-        storedBodyTextColor
-      );
-    }
-
-    // button color
-    if (storedButtonColor) {
-      setSelectedButtonColor(storedButtonColor);
-      document.documentElement.style.setProperty(
-        "--button-Color",
-        storedButtonColor
-      );
-    }
-
-    // Product Bg color
-    if (storedProductBgColor) {
-      setSelectedButtonColor(storedProductBgColor);
-      document.documentElement.style.setProperty(
-        "--button-Color",
-        storedProductBgColor
-      );
-    }
-
-    // Mrp text color
-    if (storedMrpTextColor) {
-      setSelectedMrpTextColor(storedMrpTextColor);
-      document.documentElement.style.setProperty(
-        "--mrp-Text-Color",
-        storedMrpTextColor
-      );
-    }
-  }, []);
-
-  // head and footer event handler
-  const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const storedHeadFootColor = event.target.value;
-    setSelectedHeadFootColor(storedHeadFootColor);
-    localStorage.setItem("header_footer", storedHeadFootColor);
+    // header and footer color
     document.documentElement.style.setProperty(
       "--headerFooter-Color",
-      storedHeadFootColor
+      headerFooterColor
     );
-  };
+    localStorage.setItem("header_footer", headerFooterColor);
 
-  // body event handler
-  const handleBodyColorChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const storedBodyColor = event.target.value;
-    setSelectedBodyColor(storedBodyColor);
-    localStorage.setItem("bodyColor", storedBodyColor);
+    // body color
     document.documentElement.style.setProperty(
       "--pageBackground-Color",
-      storedBodyColor
+      bodyColor
     );
-  };
+    localStorage.setItem("body_color",bodyColor);
 
-  // icons color event handler
-  const handleIconsColorChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const storedIconsColor = event.target.value;
-    setSelectedIconsColor(storedIconsColor);
-    localStorage.setItem("iconsColor", storedIconsColor);
+    // icons color
     document.documentElement.style.setProperty(
       "--icons-Color",
-      storedIconsColor
+      iconsColor,
     );
-  };
+    localStorage.setItem("iconsColor",iconsColor);
 
-  // handle Icons text change
-  const handleIconTextColorChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const storedIconTextColor = event.target.value;
-    setSelectedIconTextColor(storedIconTextColor);
-    localStorage.setItem("iconTextColor", storedIconTextColor);
-
+    // icon text color
     document.documentElement.style.setProperty(
       "--icons-Text-Color",
-      storedIconTextColor
+      iconTextColor,
     );
-  };
+    localStorage.setItem('iconTextColor',iconTextColor);
 
-  // handle head text change
-  const handleHeadTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const storedHeadTextColor = event.target.value;
-    setSelectedHeadTextColor(storedHeadTextColor);
-    localStorage.setItem("headTextColor", storedHeadTextColor);
+    // head text color
     document.documentElement.style.setProperty(
       "--head-Text-Color",
-      storedHeadTextColor
+      headTextColor,
     );
-  };
+    localStorage.setItem('headTextColor',headTextColor);
 
-  // handle body text change
-  const handleBodyTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const storedBodyTextColor = event.target.value;
-    setSelectedBodyTextColor(storedBodyTextColor);
-    localStorage.setItem("bodyTextColor", storedBodyTextColor);
+    // body text color
     document.documentElement.style.setProperty(
       "--body-Text-Color",
-      storedBodyTextColor
+      bodyTextColor,
     );
-  };
+    localStorage.setItem('bodyTextColor',bodyTextColor);
 
-  // handle Button change
-  const handleButtonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const storedButtonColor = event.target.value;
-    setSelectedButtonColor(storedButtonColor);
-    localStorage.setItem("buttonColor", storedButtonColor);
+    // button color
     document.documentElement.style.setProperty(
       "--button-Color",
-      storedButtonColor
+      buttonColor,
+    )
+    localStorage.setItem('buttonColor',buttonColor);
+
+    // product bg color
+    document.documentElement.style.setProperty(
+      '--product-Bg-Color',
+      productBgColor,
     );
+    localStorage.setItem('productBgColor',productBgColor);
+
+    // mrp text color
+    document.documentElement.style.setProperty(
+      '--mrp-Text-Color',
+      mrpTextColor,
+    );
+    localStorage.setItem('mrpTextColor',mrpTextColor);
+
+  }, [headerFooterColor,bodyColor,iconsColor,iconTextColor,headTextColor,bodyTextColor,buttonColor,productBgColor,mrpTextColor]);
+
+
+  // header footer color change evnt handler
+  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setHeaderFooter(e.target.value));
   };
 
-  // handle Products bg color change
-  const handleProductBgColorChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const storedProductBgColor = event.target.value;
-    setSelectedProductBgColor(storedProductBgColor);
-    localStorage.setItem("productBgColor", storedProductBgColor);
-    document.documentElement.style.setProperty(
-      "--product-Bg-Color",
-      storedProductBgColor
-    );
-  };
+  // body color change evnt handler
+  const handleBodyColorChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    dispatch(setBodyColor(e.target.value));
+  }
 
-  // handle Mrp text color change
-  const handleMrpTextColor = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const storedMrpTextColor = event.target.value;
-    setSelectedMrpTextColor(storedMrpTextColor);
-    localStorage.setItem("mrpTextColor", storedMrpTextColor);
-    document.documentElement.style.setProperty(
-      "--mrp-Text-Color",
-      storedMrpTextColor
-    );
-  };
+  // icons color change event handler
+  const handleIconsColorChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    dispatch(setIconsColor(e.target.value));
+  }
+
+  // icon text color change event handler
+  const handleIconTextColorChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    dispatch(setIconTextColor(e.target.value));
+  }
+
+  // head text color change event handler
+  const handleHeadTextChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    dispatch(setHeadTextColor(e.target.value));
+  }
+
+  // body text color change event handler
+  const handleBodyTextChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    dispatch(setBodyTextColor(e.target.value));
+  }
+
+  // button text color
+  const handleButtonChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    dispatch(setButtonColor(e.target.value));
+  }
+
+  // product background color change event handler
+  const handleProductBgColorChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    dispatch(setProductBgColor(e.target.value));
+  }
+
+  //  Mrp text color change event handler
+  const handleMrpTextColor = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    dispatch(setMrpTextColor(e.target.value));
+  }
   return (
     <>
       <button
@@ -259,7 +168,7 @@ export function Colors() {
           {/* Header & Footer Backround */}
           <ColorSelector
             label="Header & Footer Background"
-            value={selectedHeadFootColor}
+            value={headerFooterColor}
             onChange={handleColorChange}
             icon={<IoMdArrowDropdown />}
             id="header-footer"
@@ -268,7 +177,7 @@ export function Colors() {
           {/* Page Bacground Color */}
           <ColorSelector
             label="Page Background Color"
-            value={selectedBodyColor}
+            value={bodyColor}
             onChange={handleBodyColorChange}
             icon={<IoMdArrowDropdown />}
             id="bodyColor"
@@ -277,7 +186,7 @@ export function Colors() {
           {/* Icons Color */}
           <ColorSelector
             label="Icons Color"
-            value={selectedIconsColor}
+            value={iconsColor}
             onChange={handleIconsColorChange}
             icon={<IoMdArrowDropdown />}
             id="iconColor"
@@ -286,7 +195,7 @@ export function Colors() {
           {/* Icon text Color */}
           <ColorSelector
             label="Icons Text Color"
-            value={selectedIconTextColor}
+            value={iconTextColor}
             onChange={handleIconTextColorChange}
             icon={<IoMdArrowDropdown />}
             id="iconsTextColor"
@@ -295,7 +204,7 @@ export function Colors() {
           {/* head text Color */}
           <ColorSelector
             label="Head Text Color"
-            value={selectedHeadTextColor}
+            value={headTextColor}
             onChange={handleHeadTextChange}
             icon={<IoMdArrowDropdown />}
             id="headTextColor"
@@ -304,7 +213,7 @@ export function Colors() {
           {/* Body text Color */}
           <ColorSelector
             label="Body Text Color"
-            value={selectedBodyTextColor}
+            value={bodyTextColor}
             onChange={handleBodyTextChange}
             icon={<IoMdArrowDropdown />}
             id="bodyTextColor"
@@ -313,7 +222,7 @@ export function Colors() {
           {/* Button Color */}
           <ColorSelector
             label="Button Color"
-            value={selectedButtonColor}
+            value={buttonColor}
             onChange={handleButtonChange}
             icon={<IoMdArrowDropdown />}
             id="buttonTextColor"
@@ -322,7 +231,7 @@ export function Colors() {
           {/* Button Color */}
           <ColorSelector
             label="Product Background Color"
-            value={selectedProductBgColor}
+            value={productBgColor}
             onChange={handleProductBgColorChange}
             icon={<IoMdArrowDropdown />}
             id="productBgColor"
@@ -331,7 +240,7 @@ export function Colors() {
           {/* Button Color */}
           <ColorSelector
             label="Mrp Text Color"
-            value={selectedMrpTextColor}
+            value={mrpTextColor}
             onChange={handleMrpTextColor}
             icon={<IoMdArrowDropdown />}
             id="MrpTextColor"
@@ -447,9 +356,10 @@ export function Typography() {
     );
   };
 
-
   // body font size scale changer
-  const handleBodyFontSizeScale = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBodyFontSizeScale = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const scaleSize = event.target.value;
     setIsBodyFontSize(scaleSize);
     localStorage.setItem("bodyFontSizeScale", scaleSize + "px");
@@ -486,7 +396,7 @@ export function Typography() {
       );
     }
   };
- 
+
   return (
     <>
       <button
@@ -529,6 +439,7 @@ export function Typography() {
             />
           </div>
 
+          {/* Body */}
           <div className="font-normal text-xs">
             {/* Heading */}
             <h1 className="pb-3 text-sm font-medium">Body</h1>
@@ -563,6 +474,41 @@ export function Typography() {
 // Buttons
 export function Buttons() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isBorderThickness, setIsBorderThickness] = useState("12");
+
+  const fontSizes: fontSizeType[] = [
+    { value: "1.0" },
+    { value: "1.1" },
+    { value: "1.2" },
+    { value: "1.3" },
+    { value: "1.4" },
+    { value: "1.5" },
+  ];
+
+  useEffect(() => {
+    const storedFontSize = localStorage.getItem("borderThickness");
+    // head font size
+    if (storedFontSize) {
+      setIsBorderThickness(storedFontSize);
+      document.documentElement.style.setProperty(
+        "--btn-border-thickness",
+        storedFontSize
+      );
+    }
+  }, []);
+
+  // head font size scale changer
+  const handleBorderThickness = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const scaleSize = event.target.value;
+    setIsBorderThickness(scaleSize);
+    // localStorage.setItem("borderThickness", scaleSize + "px");
+    document.documentElement.style.setProperty(
+      "--btn-border-thickness",
+      scaleSize + "px"
+    );
+  };
   return (
     <>
       <button
@@ -578,7 +524,24 @@ export function Buttons() {
         </span>
       </button>
       {isDropdownOpen && (
-        <div className="py-1 px-4 space-y-2 border-b border-gray-100">hell</div>
+        <div className="py-1 px-4 space-y-2 border-b border-gray-100">
+          {/* Border */}
+          <div className="font-normal mt-4 text-xs">
+            {/* Heading */}
+            <h1 className="pb-3 text-sm font-medium">Headings</h1>
+
+            {/* font size scaler */}
+            <FontScale
+              label="Border thickness"
+              min="0"
+              max="10"
+              step="2"
+              onChange={handleBorderThickness}
+              value={isBorderThickness}
+              sizes={fontSizes}
+            />
+          </div>
+        </div>
       )}
     </>
   );

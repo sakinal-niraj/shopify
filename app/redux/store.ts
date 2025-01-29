@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import colorSlice from './colorSlice';
+import colorReducer from './slices/colorSlice';
 
 
 const store = configureStore({
     reducer:{
-        header_footer: colorSlice,
+        color: colorReducer,
     }
 });
 

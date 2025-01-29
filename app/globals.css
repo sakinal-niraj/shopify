@@ -3,9 +3,9 @@
 @tailwind utilities;
 
  :root {
-  --headerFooter-Color: rgb(177, 177, 177);
-  --pageBackground-Color: white;
-  --icons-Color:white;
+  --headerFooter-Color: ##9c9c9c;
+  --pageBackground-Color: #d2d0d0;
+  --icons-Color:#000000;
   --icons-Text-Color:white;
   --head-Text-Color:black;
   --body-Text-Color:black;
@@ -16,6 +16,7 @@
   --font-body-Scale-Size:12;
   --font-head-family:'Courier New', Courier, monospace;
   --font-body-family:'Courier New', Courier, monospace;
+  --btn-border-thickness: "2px solid black";
 
 
   --background: #ffffff;
@@ -69,6 +70,8 @@ body {
 
 .products{
   background-color: var(--product-Bg-Color);
+  border: var(--btn-border-thickness) solid black;
+  /* border: black; */
 }
 
 .mrp{

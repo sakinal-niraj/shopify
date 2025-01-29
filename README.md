@@ -35,9 +35,29 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-
-
-
-
-
 <!-- Website Info -->
+
+const [selectedHeadFootColor, setSelectedHeadFootColor] =
+useState<string>("#000000");
+const storedHeadFootColor = localStorage.getItem("header_footer");
+
+<!-- Header and footer bg color -->
+if (storedHeadFootColor) {
+setSelectedHeadFootColor(storedHeadFootColor);
+document.documentElement.style.setProperty(
+"--headerFooter-Color",
+storedHeadFootColor
+);
+}
+
+    
+<!-- head and footer event handler -->
+const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+const storedHeadFootColor = event.target.value;
+setSelectedHeadFootColor(storedHeadFootColor);
+localStorage.setItem("header_footer", storedHeadFootColor);
+document.documentElement.style.setProperty(
+"--headerFooter-Color",
+storedHeadFootColor
+);
+};

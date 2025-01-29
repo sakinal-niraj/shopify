@@ -111,9 +111,9 @@ export function HomeBody() {
           {/* single product container */}
           {productsData.length > 0 ? (
             productsData.map((item) => (
-              <div className="max-w-full" key={item?.id}>
+              <div className="max-w-full products" key={item?.id}>
                 {/* img container */}
-                <div className="w-full h-auto products text-left">
+                <div className="w-full h-auto text-left">
                   <Image
                     src={item?.thumbnail}
                     alt="product image"
