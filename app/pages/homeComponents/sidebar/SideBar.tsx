@@ -30,7 +30,7 @@ export default function SideBar() {
       </div>
 
       {/* big sidebar */}
-      <div className="h-full border-l border-gray-100">
+      <div className="h-full border-l border-gray-100 mainScrollBar max-h-[800px] overflow-y-auto overflow-x-hidden ">
         <ul className=" font-medium pt-[4px] min-w-72">
           <li className="border-b border-gray-100 hover:bg-gray-100 ">
             <button className=" p-4 w-full text-left">Themes settings</button>

@@ -7,11 +7,12 @@ interface OptionType {
 }
 
 interface CustomSelectProps {
-  label: string;
-  value: SingleValue<OptionType>; // `SingleValue` is a type from react-select
-  options: Options<OptionType>;   // `Options` is a type from react-select
-  onChange: (selectedOption: SingleValue<OptionType>) => void; // Replace `any` with `SingleValue<OptionType>`
+  label?: string;
+  value?: SingleValue<OptionType>; // `SingleValue` is a type from react-select
+  options?: Options<OptionType>;   // `Options` is a type from react-select
+  onChange?: (selectedOption: SingleValue<OptionType>) => void; // Replace `any` with `SingleValue<OptionType>`
   className?: string;
+  className1:string;
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -20,9 +21,10 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   options,
   onChange,
   className,
+  className1,
 }) => {
   return (
-    <div className="flex justify-between items-center">
+    <div className={className1}>
       <label htmlFor={label}>{label}</label>
       <Select
         value={value}

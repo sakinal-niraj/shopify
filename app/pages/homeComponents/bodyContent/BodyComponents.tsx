@@ -120,14 +120,14 @@ export function HomeBody() {
                     width={200} // Set the width of the image (e.g., 200px)
                     height={200} // Set the height of the image (e.g., 200px)
                     layout="responsive" // Makes the image responsive and adjusts automatically
-                    className="object-cover"
+                    className="object-cover productImg"
                   />
                 </div>
                 {/* content */}
-                <p className="w-full text-left">
+                <p className="w-full">
                   <span className="cursor-pointer">{item?.title}</span>
                 </p>
-                <p className="w-full text-left mrp">
+                <p className="w-full mrp">
                   <span className="cursor-pointer">{item?.price}</span>
                 </p>
               </div>

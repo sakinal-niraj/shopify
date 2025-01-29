@@ -11,7 +11,7 @@ interface FontScaleProps {
   step?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   value?: string;
-  // className?:string;
+  className?:string;
   sizes: Option[];
 }
 
@@ -23,6 +23,7 @@ const FontScale: React.FC<FontScaleProps> = ({
   onChange,
   value,
   sizes,
+  className,
 }) => {
   return (
     <div className="flex justify-between items-center">
@@ -37,16 +38,10 @@ const FontScale: React.FC<FontScaleProps> = ({
           value={value}
           className={`w-full h-1 bg-gray-300 rounded-lg hover:cursor-grab  active:cursor-grabbing relative`}
         />
-        <div className="absolute top-2 left-0 right-0 flex gap-2.5 text-[10px] text-gray-600">
+        <div className={className}>
           {sizes.map((item, index) => (
             <span key={index}>{item.value}</span>
           ))}
-          {/* <span>1.0</span>
-                  <span>1.1</span>
-                  <span>1.2</span>
-                  <span>1.3</span>
-                  <span>1.4</span>
-                  <span>1.5</span> */}
         </div>
       </div>
     </div>

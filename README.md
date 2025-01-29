@@ -61,3 +61,42 @@ document.documentElement.style.setProperty(
 storedHeadFootColor
 );
 };
+
+
+
+
+<!-- buttons border localstorage variables -->
+btnThickness,
+btnBorderStyle,
+btnBorderRadius,
+btnBorderColor,
+btnConstrastBorderColor
+
+
+<!-- buttons shadow localsotrage variables -->
+btnHorizontalOffset,
+btnVerticalOffset,
+btnBlur,
+btnShadowColor,
+
+
+
+<!-- Product Cards -->
+<!-- product -->
+imgPadding,
+imgRadius,
+textAlignment,
+
+
+<!-- product border -->
+productBorderThickness,
+productBorderStyle,
+productBorderRadius,
+productBorderColor,
+
+
+<!-- product box shadow -->
+productHorizontalOffset,
+productverticalOffeset,
+productBlur,
+productShadowColor,

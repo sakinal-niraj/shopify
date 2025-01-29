@@ -3,11 +3,11 @@
 import React, { ChangeEvent } from "react";
 
 interface ColorSelectorProps {
-  label: string;
-  value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  icon: React.ReactNode;
-  id:string,
+  label?: string;
+  value?: string;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  icon?: React.ReactNode;
+  id?:string,
 }
 
 const ColorSelector: React.FC<ColorSelectorProps> = ({ label, value, onChange, icon,id }) => {
