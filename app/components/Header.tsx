@@ -13,29 +13,31 @@ export default function Header() {
   const [isDropOpen, setIsDropOpen] = useState(false);
   const [isPageSelected, setIsPageSelected] = useState<string>("Home Page");
 
-  useEffect(()=>{
-    const page = localStorage.getItem('currentPage');
-    if(page){
+  useEffect(() => {
+    const page = localStorage.getItem("currentPage");
+    if (page) {
       setIsPageSelected(page);
     }
-  },[])
+  }, []);
 
   // Toggle effect on onclick
-  const handleToggle = ()=>{
-    setIsDropOpen((prev)=> !prev);
-  }
+  const handleToggle = () => {
+    setIsDropOpen((prev) => !prev);
+  };
 
   // Selecting the value from the page selector
-  const handlePageSelection = (event: React.MouseEvent<HTMLUListElement>)=>{
+  const handlePageSelection = (event: React.MouseEvent<HTMLUListElement>) => {
     const target = event.target as HTMLElement;
-    if(target.tagName === 'LI'){
+    if (target.tagName === "LI") {
       const currentPage = target.textContent as string;
       setIsPageSelected(currentPage);
-      localStorage.setItem('currentPage',currentPage);
-      window.dispatchEvent(new CustomEvent("pageChange", { detail: currentPage }));
+      localStorage.setItem("currentPage", currentPage);
+      window.dispatchEvent(
+        new CustomEvent("pageChange", { detail: currentPage })
+      );
       setIsDropOpen(false);
     }
-  }
+  };
   return (
     <header className="bg-white fixed top-0 z-50 w-full border-b border-gray-100">
       <nav className="w-full flex justify-between items-center px-3 py-1.5">
@@ -48,8 +50,8 @@ export default function Header() {
         {/* middle side */}
         <div className="relative">
           <span
-          onClick={handleToggle}
-          className="flex items-center gap-2 hover:bg-gray-100 px-2 py-1 rounded-md cursor-pointer"
+            onClick={handleToggle}
+            className="flex items-center gap-2 hover:bg-gray-100 px-2 py-1 rounded-md cursor-pointer"
           >
             <FiHome />
             {isPageSelected}
@@ -59,11 +61,14 @@ export default function Header() {
           </span>
           {isDropOpen && (
             <ul
-             onClick={handlePageSelection}
-             className="absolute left-0 top-10 bg-[#f7f7f7] w-48 p-2 rounded-lg space-y-2">
+              onClick={handlePageSelection}
+              className="absolute left-0 top-10 bg-[#f7f7f7] w-48 p-2 rounded-lg space-y-2"
+            >
               <li className="cursor-pointer hover:bg-[white]">Home Page</li>
               <li className="cursor-pointer hover:bg-[white]">Categories</li>
-              <li className="cursor-pointer hover:bg-[white]">Product Details Page</li>
+              <li className="cursor-pointer hover:bg-[white]">
+                Product Details Page
+              </li>
             </ul>
           )}
         </div>
@@ -72,9 +77,15 @@ export default function Header() {
         <div className="flex items-center gap-2 cursor-pointer">
           {/* device screen changer */}
           <div className="flex items-center gap-2 bg-gray-100 px-2.5 py-1.5 rounded-sm">
-            <HiOutlineComputerDesktop />
-            <CiMobile1 />
-            <MdOutlineTablet />
+            <span className="bg-white p-1 rounded-[4px]">
+              <HiOutlineComputerDesktop className="text-green-500" />
+            </span>
+            <span>
+              <CiMobile1 />
+            </span>
+            <span>
+              <MdOutlineTablet />
+            </span>
           </div>
 
           {/* undo & redo */}

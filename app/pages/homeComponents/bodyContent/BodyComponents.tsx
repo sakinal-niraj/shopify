@@ -74,7 +74,7 @@ export function HomeBody() {
         const data = await res.json();
         setProductsData(data.products);
       } catch (error) {
-        console.log("Error Fetching products : ",error)
+        console.log("Error Fetching products : ", error);
       }
     }
 
@@ -141,10 +141,79 @@ export function HomeBody() {
   );
 }
 
-export function Contact() {
-  return <div className="homeBody">contact</div>;
+export function Categories() {
+  const [productsData, setProductsData] = useState<Product[]>([]);
+
+  useEffect(() => {
+    async function getProducts() {
+      try {
+        const res = await fetch("https://dummyjson.com/products?limit=12");
+        const data = await res.json();
+        setProductsData(data.products);
+      } catch (error) {
+        console.log("Error Fetching products : ", error);
+      }
+    }
+
+    getProducts();
+  }, []);
+  return (
+    <div className="homeBody py-2">
+      <div className="mt-10 mx-10">
+        {/* filter */}
+        <div className="flex justify-between items-center">
+          <div>
+            <p>All Products</p>
+            <p>24 items</p>
+          </div>
+
+          <div>
+            <label htmlFor="">Sorted by:</label>
+            <select name="" id="" className="bg-white">
+              <option value="Newest Arrival">Newest Arrival</option>
+              <option value="Newest Arrival">Trending</option>
+              <option value="Newest Arrival">latest</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Products */}
+        <div className="mt-10 grid grid-cols-4 text-center gap-10">
+          {/* single product container */}
+          {productsData.length > 0 ? (
+            productsData.map((item) => (
+              <div className="max-w-full products" key={item?.id}>
+                {/* img container */}
+                <div className="w-full h-auto text-left imgContainer">
+                  <Image
+                    src={item?.thumbnail}
+                    alt="product image"
+                    width={200} // Set the width of the image (e.g., 200px)
+                    height={200} // Set the height of the image (e.g., 200px)
+                    layout="responsive" // Makes the image responsive and adjusts automatically
+                    className="object-cover productImg"
+                  />
+                </div>
+                {/* content */}
+                <p className="w-full">
+                  <span className="cursor-pointer">{item?.title}</span>
+                </p>
+                <p className="w-full mrp">
+                  <span className="cursor-pointer">{item?.price}</span>
+                </p>
+              </div>
+            ))
+          ) : (
+            <div className="text-center text-4xl">Loading...</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export function About() {
-  return <div className="homeBody">about us</div>;
+export function PageDetailsPage() {
+  return <div className="homeBody flex flex-col">
+      
+  </div>;
 }

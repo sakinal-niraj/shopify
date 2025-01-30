@@ -5,6 +5,8 @@ import buttonReducer from './slices/buttonSlice';
 import productReducer from './slices/productSlice';
 import historyReducer from './slices/historySlice';
 import { historyMiddleware } from "./middleware/historyMiddleware";
+import pageReducer from './slices/pageSlice';
+import screenReducer from './slices/screenSizeSlice';
 
 const store = configureStore({
     reducer:{
@@ -13,6 +15,8 @@ const store = configureStore({
         button: buttonReducer,
         product:productReducer,
         history: historyReducer,
+        page:pageReducer,
+        screen:screenReducer,
     },
     middleware:(getDefaultMiddleware)=>
         getDefaultMiddleware().concat(historyMiddleware)

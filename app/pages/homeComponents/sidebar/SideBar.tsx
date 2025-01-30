@@ -3,9 +3,8 @@ import { TbSection } from "react-icons/tb";
 import { CiSettings } from "react-icons/ci";
 import { TbCategoryPlus } from "react-icons/tb";
 import { Buttons, Colors, ProductCard, Typography } from "./SideBarComponents";
+import { Tooltip } from "react-tooltip";
 // import Colors from "./SideBarComponents";
-
-
 
 export default function SideBar() {
   return (
@@ -17,15 +16,36 @@ export default function SideBar() {
       {/* first sldebar */}
       <div className="h-full">
         <ul className="space-y-1 font-medium p-2 outline-none">
-          <li className="p-2 hover:bg-gray-100 rounded-md">
+          <li
+            className="p-2 hover:bg-gray-100 rounded-md"
+            data-tooltip-id="custom-tooltip"
+            data-tooltip-content="Section"
+          >
             <TbSection size={20} />
           </li>
-          <li className="p-2 hover:bg-gray-100 rounded-md">
+          <li
+            data-tooltip-id="custom-tooltip"
+            data-tooltip-content="Color"
+            className="p-2 hover:bg-gray-100 rounded-md"
+          >
             <CiSettings size={20} />
           </li>
-          <li className="p-2 hover:bg-gray-100 rounded-md">
+          <li
+            data-tooltip-id="custom-tooltip"
+            data-tooltip-content="Settings"
+            className="p-2 hover:bg-gray-100 rounded-md"
+          >
             <TbCategoryPlus size={20} />
           </li>
+          <Tooltip
+            id="custom-tooltip"
+            place="bottom"
+            style={{
+              backgroundColor: "black",
+              color: "white",
+              fontSize: "14px",
+            }}
+          />
         </ul>
       </div>
 

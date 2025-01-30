@@ -1198,9 +1198,9 @@ export function ProductCard() {
               <FontScale
                 value={productBorderThickness}
                 label="Thickness"
-                min="2"
-                max="12"
-                step="2"
+                min="0"
+                max="5"
+                step="1"
                 sizes={Sizes}
                 onChange={handleProductBorderThickness}
                 className="absolute top-2 left-[0.2px] right-0 flex gap-[19px] text-[10px] text-gray-600"
@@ -1225,7 +1225,7 @@ export function ProductCard() {
               <FontScale
                 min="0"
                 max="20"
-                step="5"
+                step="4"
                 label="Border radius"
                 sizes={RadiusSizes}
                 onChange={handleProductBorderRadius}
