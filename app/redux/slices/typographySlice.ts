@@ -1,43 +1,46 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Helper function for SSR-safe localStorage access
-const getInitialTypography = (storageKey:string, defaultValue: string)=>{
-    if(typeof window === 'undefined') return defaultValue;
+const getInitialTypography = (storageKey: string, defaultValue: string) => {
+    if (typeof window === 'undefined') return defaultValue;
     return localStorage.getItem(storageKey) || defaultValue;
 }
 
-interface TypographyState{
+interface TypographyState {
     fontHeadFamily: string,
     fontBodyFamily: string,
     headFontScaleSize: string,
     bodyFontSizeScale: string,
 }
 const initialState: TypographyState = {
-    fontHeadFamily:getInitialTypography("fontHeadFamily","sans-serif"),
-    fontBodyFamily:getInitialTypography("fontBodyFamily","sans-serif"),
-    headFontScaleSize: getInitialTypography("headFontScaleSize","12px"),
-    bodyFontSizeScale: getInitialTypography("bodyFontSizeScale","12px"),
+    fontHeadFamily: getInitialTypography("fontHeadFamily", "sans-serif"),
+    fontBodyFamily: getInitialTypography("fontBodyFamily", "sans-serif"),
+    headFontScaleSize: getInitialTypography("headFontScaleSize", "12px"),
+    bodyFontSizeScale: getInitialTypography("bodyFontSizeScale", "12px"),
 }
 
 
 const typographySlice = createSlice({
     name: 'typography',
     initialState,
-    reducers:{
-        setHeadFontFamily(state,action: PayloadAction<string>){
+    reducers: {
+        setHeadFontFamily(state, action: PayloadAction<string>) {
             state.fontHeadFamily = action.payload;
         },
-        setBodyFontFamily(state,action:PayloadAction<string>){
+        setBodyFontFamily(state, action: PayloadAction<string>) {
             state.fontBodyFamily = action.payload;
         },
-        setHeadFontScaleSize(state,action: PayloadAction<string>){
+        setHeadFontScaleSize(state, action: PayloadAction<string>) {
             state.headFontScaleSize = action.payload;
         },
-        setBodyFontScaleSize(state,action: PayloadAction<string>){
+        setBodyFontScaleSize(state, action: PayloadAction<string>) {
             state.bodyFontSizeScale = action.payload;
-        }
+        },
+        resetTypographyState: (state, action: PayloadAction<TypographyState>) => {
+            return action.payload;
+        },
     }
 });
 
-export const {setHeadFontFamily,setBodyFontFamily,setHeadFontScaleSize, setBodyFontScaleSize} = typographySlice.actions;
+export const { setHeadFontFamily, setBodyFontFamily, setHeadFontScaleSize, setBodyFontScaleSize, resetTypographyState } = typographySlice.actions;
 export default typographySlice.reducer;

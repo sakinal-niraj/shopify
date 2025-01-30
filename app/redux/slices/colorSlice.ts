@@ -60,9 +60,12 @@ const colorSlice = createSlice({
     },
     setMrpTextColor: (state, action: PayloadAction<string>) => {
       state.mrpTextColor = action.payload;
-    }
+    },
+    resetColorState: (state, action: PayloadAction<ColorState>) => {
+      return action.payload;
+    },
   }
 });
 
-export const { setHeaderFooter, setBodyColor, setIconsColor, setIconTextColor, setHeadTextColor, setBodyTextColor, setButtonColor, setProductBgColor, setMrpTextColor } = colorSlice.actions;
+export const { setHeaderFooter, setBodyColor, setIconsColor, setIconTextColor, setHeadTextColor, setBodyTextColor, setButtonColor, setProductBgColor, setMrpTextColor ,resetColorState} = colorSlice.actions;
 export default colorSlice.reducer;

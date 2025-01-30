@@ -97,12 +97,14 @@ body {
   box-shadow: var(--product-horizontal-offset) var(--product-vertical-offset) var(--product-blur) var(--product-shadow-color);
 }
 
+.imgContainer{
+  padding: var(--img-padding);
+}
 .productImg{
   /* border: var(--btn-border-thickness) var(--btn-border-style) var(--btn-border-color  );
   box-shadow: var(--btn-horizontal-offset) var(--btn-vertical-offset) var(--btn-blur) var(--btn-shadow-color);
   */
   background-color: var(--product-Bg-Color); 
-  padding: var(--img-padding);
   border-radius: var(--img-radius);
 }
 

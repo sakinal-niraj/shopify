@@ -113,7 +113,7 @@ export function HomeBody() {
             productsData.map((item) => (
               <div className="max-w-full products" key={item?.id}>
                 {/* img container */}
-                <div className="w-full h-auto text-left">
+                <div className="w-full h-auto text-left imgContainer">
                   <Image
                     src={item?.thumbnail}
                     alt="product image"

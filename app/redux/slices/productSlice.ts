@@ -16,7 +16,7 @@ interface productState {
     productHorizontalOffset: string,
     productverticalOffeset: string,
     productBlur: string,
-    productShadowColor:string,
+    productShadowColor: string,
 }
 
 const initialState: productState = {
@@ -30,7 +30,7 @@ const initialState: productState = {
     productHorizontalOffset: getInitialProduct("productHorizontalOffset", "2px"),
     productverticalOffeset: getInitialProduct("productverticalOffeset", "2px"),
     productBlur: getInitialProduct("productBlur", "2px"),
-    productShadowColor:getInitialProduct("productShadowColor","#000000"),
+    productShadowColor: getInitialProduct("productShadowColor", "#000000"),
 }
 
 
@@ -68,11 +68,14 @@ const productSlice = createSlice({
         setProductBlur: (state, action: PayloadAction<string>) => {
             state.productBlur = action.payload;
         },
-        setProductShadowColor: (state,action:PayloadAction<string>) =>{
+        setProductShadowColor: (state, action: PayloadAction<string>) => {
             state.productShadowColor = action.payload;
-        }
+        },
+        resetProductState: (state, action: PayloadAction<productState>) => {
+            return action.payload;
+        },
     }
 });
 
-export const { setImgPadding, setImgRadius, setTextAlignment, setProductBorderThickness, setProductBorderStyle, setProductBorderRadius, setProductBorderColor, setProductHorizontalOffset, setProductverticalOffeset, setProductBlur ,setProductShadowColor} = productSlice.actions;
+export const { setImgPadding, setImgRadius, setTextAlignment, setProductBorderThickness, setProductBorderStyle, setProductBorderRadius, setProductBorderColor, setProductHorizontalOffset, setProductverticalOffeset, setProductBlur, setProductShadowColor ,resetProductState} = productSlice.actions;
 export default productSlice.reducer;

@@ -1148,7 +1148,7 @@ export function ProductCard() {
             <div className="space-y-6 mb-2">
               {/* Image padding sizer */}
               <FontScale
-                // value={btnHorizontalOffset}
+                value={imgPadding}
                 label="Image Padding"
                 min="0"
                 max="20"
