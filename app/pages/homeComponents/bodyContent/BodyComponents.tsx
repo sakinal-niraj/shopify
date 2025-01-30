@@ -7,6 +7,8 @@ import hero1 from "@/public/images/hero1.jpg";
 // import tshirt from "@/public/images/t-shirt.jpg";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useAppSelector } from "@/app/redux/hooks";
+import { selectScreenType } from "@/app/redux/slices/screenSizeSlice";
 
 interface Product {
   id: number;
@@ -16,11 +18,12 @@ interface Product {
 }
 
 export function NavBar() {
+    const screenType = useAppSelector(selectScreenType);
   return (
     <>
       {/* navbar */}
       <nav className="w-full rounded-lg">
-        <div className={`flex items-center justify-between py-3 px-10 navBar`}>
+        <div className={`flex ${screenType === 'mobile' ? 'hidden':''} items-center justify-between py-3 px-10 navBar`}>
           {/* left side */}
           <div className="flex items-center">
             {/* logo */}
@@ -66,6 +69,7 @@ export function NavBar() {
 
 export function HomeBody() {
   const [productsData, setProductsData] = useState<Product[]>([]);
+  const screenType = useAppSelector(selectScreenType);
 
   useEffect(() => {
     async function getProducts() {
@@ -107,7 +111,11 @@ export function HomeBody() {
         </div>
 
         {/* Products */}
-        <div className="mt-10 grid grid-cols-4 text-center gap-10">
+        <div
+          className={`mt-10 grid  ${
+            screenType === "mobile" ? "grid-cols-1" : "grid-cols-4"
+          } text-center gap-10`}
+        >
           {/* single product container */}
           {productsData.length > 0 ? (
             productsData.map((item) => (
@@ -142,6 +150,7 @@ export function HomeBody() {
 }
 
 export function Categories() {
+  const screenType = useAppSelector(selectScreenType);
   const [productsData, setProductsData] = useState<Product[]>([]);
 
   useEffect(() => {
@@ -178,7 +187,11 @@ export function Categories() {
         </div>
 
         {/* Products */}
-        <div className="mt-10 grid grid-cols-4 text-center gap-10">
+        <div
+          className={`mt-10 grid  ${
+            screenType === "mobile" ? "grid-cols-1" : "grid-cols-4"
+          } text-center gap-10`}
+        >
           {/* single product container */}
           {productsData.length > 0 ? (
             productsData.map((item) => (
@@ -213,7 +226,5 @@ export function Categories() {
 }
 
 export function PageDetailsPage() {
-  return <div className="homeBody flex flex-col">
-      
-  </div>;
+  return <div className="homeBody flex flex-col"></div>;
 }

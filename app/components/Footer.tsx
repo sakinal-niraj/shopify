@@ -1,10 +1,15 @@
+import { useAppSelector } from "../redux/hooks";
+import { selectScreenType } from "../redux/slices/screenSizeSlice";
+
 export const Footer = () => {
+  const screenType = useAppSelector(selectScreenType);
+
   return (
     <div className="bg-[#81689d]">
       <div className="px-10 pt-10 pb-5 flex justify-center">
         <div className="max-w-[1080px] w-full flex justify-between">
           {/* left side */}
-          <div className="grid grid-cols-2 gap-20">
+          <div className={`${screenType === 'mobile' ? 'flex flex-col' :'grid grid-cols-2 gap-20'}`}>
             {/* logo */}
             <div className="text-white font-semibold text-2xl">My store</div>
             <div>

@@ -8,10 +8,35 @@ import { MdOutlineTablet } from "react-icons/md";
 import { GrUndo } from "react-icons/gr";
 import { GrRedo } from "react-icons/gr";
 import React, { useEffect, useState } from "react";
+import { IconType } from "react-icons";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import {
+  selectScreenType,
+  setScreenSize,
+} from "../redux/slices/screenSizeSlice";
 
+interface NavItem {
+  id: number;
+  name: string;
+  icon: IconType;
+}
 export default function Header() {
   const [isDropOpen, setIsDropOpen] = useState(false);
   const [isPageSelected, setIsPageSelected] = useState<string>("Home Page");
+
+  const dispatch = useAppDispatch();
+  const screenType = useAppSelector(selectScreenType);
+
+  const screenSizes: NavItem[] = [
+    { id: 1, name: "screen", icon: HiOutlineComputerDesktop },
+    { id: 2, name: "mobile", icon: CiMobile1 },
+    { id: 3, name: "full screen", icon: MdOutlineTablet },
+  ];
+
+  // event delegation
+  const handleScreenSize = (name: string) => {
+    dispatch(setScreenSize(name));
+  };
 
   useEffect(() => {
     const page = localStorage.getItem("currentPage");
@@ -77,15 +102,23 @@ export default function Header() {
         <div className="flex items-center gap-2 cursor-pointer">
           {/* device screen changer */}
           <div className="flex items-center gap-2 bg-gray-100 px-2.5 py-1.5 rounded-sm">
-            <span className="bg-white p-1 rounded-[4px]">
-              <HiOutlineComputerDesktop className="text-green-500" />
-            </span>
-            <span>
-              <CiMobile1 />
-            </span>
-            <span>
-              <MdOutlineTablet />
-            </span>
+            {screenSizes.map((item) => (
+              <span
+                onClick={() => {
+                  handleScreenSize(item.name);
+                }}
+                className={`${
+                  screenType === item.name ? "bg-white p-1 rounded-[4px]" : ""
+                }`}
+                key={item.id}
+              >
+                <item.icon
+                  className={`${
+                    screenType === item.name ? "text-green-500" : ""
+                  }`}
+                />
+              </span>
+            ))}
           </div>
 
           {/* undo & redo */}

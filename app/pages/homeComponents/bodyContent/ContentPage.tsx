@@ -38,7 +38,7 @@ export default function ContentPage() {
         my-14 mx-10 rounded-xl transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 overflow-y-auto mainScrollBar
         ${
           screenType === "full screen"
-            ? "w-full -left-8"
+            ? "w-[99.5%] -left-9"
             : ""
         } 
 
@@ -47,7 +47,7 @@ export default function ContentPage() {
         }
 
         ${screenType === 'mobile' ?
-          "w-[50vw] left-[35%]": ""
+          "w-[25vw] left-[40%]": ""
         }
         `}
       aria-label="Sidebar"
