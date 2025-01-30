@@ -92,6 +92,12 @@ import {
   setProductverticalOffeset,
   setTextAlignment,
 } from "@/app/redux/slices/productSlice";
+import {
+  setStoreDetails,
+  setStoreName,
+  setStoreSocialMedia,
+} from "@/app/redux/slices/categorySlice";
+import Input from "@/app/components/Input";
 
 interface Options {
   value: string;
@@ -1019,7 +1025,6 @@ export function ProductCard() {
     );
     localStorage.setItem("productBorderColor", productBorderColor);
 
-
     // btn shadow
     // btnHorizontalOffset
     document.documentElement.style.setProperty(
@@ -1036,7 +1041,10 @@ export function ProductCard() {
     localStorage.setItem("productverticalOffeset", productverticalOffeset);
 
     // btnBlur size
-    document.documentElement.style.setProperty("--product-blur", productBlur + "px");
+    document.documentElement.style.setProperty(
+      "--product-blur",
+      productBlur + "px"
+    );
     localStorage.setItem("productBlur", productBlur);
 
     // shadow color
@@ -1101,9 +1109,6 @@ export function ProductCard() {
   const handleProductBorderColor = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(setProductBorderColor(e.target.value));
   };
-
-
-
 
   // shadow
 
@@ -1299,5 +1304,73 @@ export function ProductCard() {
         </div>
       )}
     </>
+  );
+}
+
+// Category
+
+export function StoreDetails() {
+  const [stName, setStName] = useState("");
+  const [stDetails, setStDetails] = useState("");
+  const [stSocialMedia, setStSocialMedia] = useState("");
+
+  const dispatch = useAppDispatch();
+  // const storeDetails = useAppSelector(selectStoreDetails);
+
+  // store name handler
+  const handleStoreName = () => {
+    if (stName.trim()) {
+      dispatch(setStoreName(stName));
+      setStName("");
+    }
+  };
+
+  // store details handler
+  const handleStoreDetails = () => {
+    if (stDetails.trim()) {
+      dispatch(setStoreDetails(stDetails));
+      setStDetails("");
+    }
+  };
+
+  // store social media
+  const handleStoreSocialMedia = () => {
+    if (stSocialMedia.trim()) {
+      dispatch(setStoreSocialMedia(stSocialMedia));
+      setStSocialMedia("");
+    }
+  };
+  return (
+    <div className="py-1 px-4 space-y-8  border-gray-100">
+      {/* Store Name */}
+      <Input
+        label="Store Name"
+        value={stName}
+        onChange={(e) => setStName(e.target.value)}
+        onClick={handleStoreName}
+        btnText="Submit"
+        placeholder="My store name"
+      />
+
+      {/* Store detials */}
+      <Input
+        label="Store details"
+        value={stDetails}
+        onChange={(e) => setStDetails(e.target.value)}
+        onClick={handleStoreDetails}
+        btnText="Submit"
+        placeholder="addres"
+      />
+
+      {/* Store Social media */}
+      <Input
+        label="Store Social Media"
+        value={stSocialMedia}
+        onChange={(e) => setStSocialMedia(e.target.value)}
+        onClick={handleStoreSocialMedia}
+        btnText="Submit"
+        placeholder="store@gmail.com"
+      />
+    </div>
   );
 }

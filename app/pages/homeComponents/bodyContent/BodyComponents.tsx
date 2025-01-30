@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useAppSelector } from "@/app/redux/hooks";
 import { selectScreenType } from "@/app/redux/slices/screenSizeSlice";
+import { selectStoreName } from "@/app/redux/selectors/categorySelector";
 
 interface Product {
   id: number;
@@ -19,6 +20,7 @@ interface Product {
 
 export function NavBar() {
     const screenType = useAppSelector(selectScreenType);
+    const storeName = useAppSelector(selectStoreName);
   return (
     <>
       {/* navbar */}
@@ -27,7 +29,7 @@ export function NavBar() {
           {/* left side */}
           <div className="flex items-center">
             {/* logo */}
-            <h1 className="mr-3 mb-1 text-xl hover:text-black">My store</h1>
+            <h1 className="mr-3 mb-1 text-xl hover:text-black">{storeName}</h1>
 
             {/* links */}
             <ul className="flex ml-7 gap-6 ">

@@ -2,11 +2,34 @@
 import { TbSection } from "react-icons/tb";
 import { CiSettings } from "react-icons/ci";
 import { TbCategoryPlus } from "react-icons/tb";
-import { Buttons, Colors, ProductCard, Typography } from "./SideBarComponents";
+import { Buttons, Colors, ProductCard, StoreDetails, Typography } from "./SideBarComponents";
 import { Tooltip } from "react-tooltip";
-// import Colors from "./SideBarComponents";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import {
+  selectSidebarType,
+  setSidebarType,
+} from "@/app/redux/slices/sidebarSlice";
+import { IconType } from "react-icons";
+
+interface SidebarItems {
+  id: number;
+  name: string;
+  icon: IconType;
+}
 
 export default function SideBar() {
+  const dispatch = useAppDispatch();
+  const sidebarType = useAppSelector(selectSidebarType);
+
+  const sidebarItems: SidebarItems[] = [
+    { id: 1, name: "Section", icon: TbSection },
+    { id: 2, name: "Settings", icon: CiSettings },
+    { id: 3, name: "Categories", icon: TbCategoryPlus },
+  ];
+
+  const handleSidebarChange = (name: string) => {
+    dispatch(setSidebarType(name));
+  };
   return (
     <aside
       id="logo-sidebar"
@@ -16,27 +39,22 @@ export default function SideBar() {
       {/* first sldebar */}
       <div className="h-full">
         <ul className="space-y-1 font-medium p-2 outline-none">
-          <li
-            className="p-2 hover:bg-gray-100 rounded-md"
-            data-tooltip-id="custom-tooltip"
-            data-tooltip-content="Section"
-          >
-            <TbSection size={20} />
-          </li>
-          <li
-            data-tooltip-id="custom-tooltip"
-            data-tooltip-content="Color"
-            className="p-2 hover:bg-gray-100 rounded-md"
-          >
-            <CiSettings size={20} />
-          </li>
-          <li
-            data-tooltip-id="custom-tooltip"
-            data-tooltip-content="Settings"
-            className="p-2 hover:bg-gray-100 rounded-md"
-          >
-            <TbCategoryPlus size={20} />
-          </li>
+          {sidebarItems.map((item) => (
+            <li
+              onClick={() => {
+                handleSidebarChange(item.name);
+              }}
+              className={`p-2 hover:bg-gray-200 ${
+                sidebarType === item.name ? "bg-gray-200" : ""
+              }  rounded-md`}
+              data-tooltip-id="custom-tooltip"
+              data-tooltip-content={item.name}
+              key={item.id}
+            >
+              {<item.icon size={23} />}
+            </li>
+          ))}
+
           <Tooltip
             id="custom-tooltip"
             place="bottom"
@@ -49,26 +67,61 @@ export default function SideBar() {
         </ul>
       </div>
 
-      {/* big sidebar */}
-      <div className="h-full border-l border-gray-100 mainScrollBar max-h-[800px] overflow-y-auto overflow-x-hidden ">
-        <ul className=" font-medium pt-[4px] min-w-72">
-          <li className="border-b border-gray-100 hover:bg-gray-100 ">
-            <button className=" p-4 w-full text-left">Themes settings</button>
-          </li>
-          <li className="">
-            <Colors />
-          </li>
-          <li className="">
-            <Typography />
-          </li>
-          <li className="">
-            <Buttons />
-          </li>
-          <li className="">
-            <ProductCard />
-          </li>
-        </ul>
-      </div>
+      {/* big sidebars */}
+
+      {/* Section */}
+      {sidebarType === "Section" ? (
+        <div className="h-full border-l pt-[4px] border-gray-100 mainScrollBar max-h-[800px] overflow-y-auto overflow-x-hidden ">
+          <ul className=" font-medium min-w-72">
+            <li className="border-b border-gray-100 hover:bg-gray-100 ">
+              <button className=" p-4 w-full text-left">Section</button>
+            </li>
+          </ul>
+        </div>
+      ) : (
+        ""
+      )}
+
+      {/* Settings */}
+      {sidebarType === "Settings" ? (
+        <div className="h-full border-l pt-[4px] border-gray-100 mainScrollBar max-h-[800px] overflow-y-auto overflow-x-hidden ">
+          <ul className=" font-medium min-w-72">
+            <li className="border-b border-gray-100 hover:bg-gray-100 ">
+              <button className=" p-4 w-full text-left">Themes settings</button>
+            </li>
+            <li className="">
+              <Colors />
+            </li>
+            <li className="">
+              <Typography />
+            </li>
+            <li className="">
+              <Buttons />
+            </li>
+            <li className="">
+              <ProductCard />
+            </li>
+          </ul>
+        </div>
+      ) : (
+        ""
+      )}
+
+      {/* Categories */}
+      {sidebarType === "Categories" ? (
+        <div className="h-full border-l pt-[4px] border-gray-100 mainScrollBar max-h-[800px] overflow-y-auto overflow-x-hidden ">
+          <ul className=" font-medium min-w-72">
+            <li className="border-b border-gray-100 hover:bg-gray-100 ">
+              <button className=" p-4 w-full text-left">Categories</button>
+            </li>
+            <li>
+              <StoreDetails />
+            </li>
+          </ul>
+        </div>
+      ) : (
+        ""
+      )}
     </aside>
   );
 }
