@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
@@ -1315,6 +1315,7 @@ export function ProductCard() {
 
 export function StoreDetails() {
   const [file, setFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [stName, setStName] = useState("");
   const [stDetails, setStDetails] = useState("");
   const [stSocialMedia, setStSocialMedia] = useState("");
@@ -1332,6 +1333,10 @@ export function StoreDetails() {
   // handle cancle button
   const handleImgClick = () => {
     setFile(null);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   // store name handler
@@ -1358,6 +1363,21 @@ export function StoreDetails() {
     }
   };
 
+  // file submit
+  const handleFileSubmit = () => {
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        dispatch(setStoreImg(reader.result as string));
+        setFile(null);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div className="py-1 px-4 space-y-8  border-gray-100">
       {/* Store Image */}
@@ -1366,6 +1386,7 @@ export function StoreDetails() {
         <h1 className="pb-1">Store Image</h1>
         <input
           type="file"
+          ref={fileInputRef}
           accept="image/*"
           onChange={handlFileChange}
           className="border p-2 w-full outline-none rounded-md"
@@ -1389,16 +1410,7 @@ export function StoreDetails() {
         )}
 
         <button
-          onClick={() => {
-            if (file) {
-              const reader = new FileReader();
-              reader.onloadend = () => {
-                dispatch(setStoreImg(reader.result as string));
-                setFile(null); 
-              };
-              reader.readAsDataURL(file);
-            }
-          }}
+          onClick={handleFileSubmit}
           className="mt-2 p-2 bg-blue-500 text-white w-full hover:bg-blue-600 transition-colors"
         >
           Upload Store Image

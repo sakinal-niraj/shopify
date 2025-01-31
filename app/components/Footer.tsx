@@ -16,6 +16,7 @@ export const Footer = () => {
   const storeDetails = useAppSelector(selectStoreDetails);
   const storeSocialMedia = useAppSelector(selectStoreSocialMedia);
   const storeImg = useAppSelector(selectStoreImg);
+  console.log(storeImg)
   return (
     <div className="bg-[#81689d]">
       <div className="px-10 pt-10 pb-5 flex justify-center">
