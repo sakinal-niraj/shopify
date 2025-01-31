@@ -133,6 +133,11 @@ body {
   color: var(--mrp-Text-Color);
 }
 
+.footer{
+  background-color: var(--headerFooter-Color);
+  color: var(--head-Text-Color);
+}
+
  .mainScrollBar::-webkit-scrollbar {
   width: 5px;
 }
@@ -149,3 +154,11 @@ body {
 .mainScrollBar::-webkit-scrollbar-track {
   background: #f1f1f1;
 } 
+
+
+.dotClip{
+  white-space: nowrap; 
+  width: 90%; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}

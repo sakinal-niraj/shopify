@@ -33,7 +33,7 @@ export default function SideBar() {
   return (
     <aside
       id="logo-sidebar"
-      className="flex-1 flex fixed top-0 left-0 z-40 h-screen w-[340px] pt-10 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0"
+      className="flex-1 flex fixed top-0 left-0 z-40 h-screen max-w-[340px] 2xl:max-w-[350px] w-full pt-10 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0"
       aria-label="Sidebar"
     >
       {/* first sldebar */}
@@ -84,7 +84,7 @@ export default function SideBar() {
 
       {/* Settings */}
       {sidebarType === "Settings" ? (
-        <div className="h-full border-l pt-[4px] border-gray-100 mainScrollBar max-h-[800px] overflow-y-auto overflow-x-hidden ">
+        <div className="h-full border-l pt-[4px]  border-gray-100 mainScrollBar 2xl:max-h-[90vh] max-h-[800px] overflow-y-auto overflow-x-hidden ">
           <ul className=" font-medium min-w-72">
             <li className="border-b border-gray-100 hover:bg-gray-100 ">
               <button className=" p-4 w-full text-left">Themes settings</button>

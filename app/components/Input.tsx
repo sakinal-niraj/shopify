@@ -8,9 +8,10 @@ interface InputBox{
     btnText?:string,
     placeholder?:string,
     type?:string,
+    disable?:boolean,
 };
 
-const Input: React.FC<InputBox> = ({label,value,onChange,onClick,btnText,placeholder,type}) => {
+const Input: React.FC<InputBox> = ({label,value,onChange,onClick,btnText,placeholder,type,disable}) => {
   return (
     <div className="font-medium mt-2 text-sm space-y-1">
       <h1 className="pb-1">{label}</h1>
@@ -23,6 +24,7 @@ const Input: React.FC<InputBox> = ({label,value,onChange,onClick,btnText,placeho
       />
       <button
         onClick={onClick}
+        disabled={disable}
         className="mt-2 p-2 bg-blue-500 text-white w-full"
       >
         {btnText}

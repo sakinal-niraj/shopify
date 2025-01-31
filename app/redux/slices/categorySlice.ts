@@ -31,9 +31,19 @@ const categorySlice = createSlice({
         setStoreSocialMedia:(state,action:PayloadAction<string>)=>{
             state.storeSocialMedia.push(action.payload);
         },
+        removeStoreSocialMedia: (state, action: PayloadAction<string>) => {
+            state.storeSocialMedia = state.storeSocialMedia.filter(
+              (item) => item !== action.payload
+            );
+          },
+          removeStoreDetails: (state, action: PayloadAction<string>) => {
+            state.storeDetails = state.storeDetails.filter(
+              (item) => item !== action.payload
+            );
+          },
     }
 });
 
 
-export const {setStoreImg,setStoreDetails,setStoreName,setStoreSocialMedia} = categorySlice.actions;
+export const {setStoreImg,setStoreDetails,setStoreName,setStoreSocialMedia,removeStoreSocialMedia,removeStoreDetails} = categorySlice.actions;
 export default categorySlice.reducer;

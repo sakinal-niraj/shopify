@@ -22,7 +22,7 @@ interface productState {
 const initialState: productState = {
     imgPadding: getInitialProduct("imgPadding", "2px"),
     imgRadius: getInitialProduct("imgRadius", "2px"),
-    textAlignment: getInitialProduct("textAlignment", "left"),
+    textAlignment: getInitialProduct("textAlignment", "center"),
     productBorderThickness: getInitialProduct('productBorderThickness', '2px'),
     productBorderStyle: getInitialProduct("productBorderStyle", 'none'),
     productBorderRadius: getInitialProduct("productBorderRadius", "2px"),

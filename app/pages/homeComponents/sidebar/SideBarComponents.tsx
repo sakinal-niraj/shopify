@@ -5,6 +5,8 @@ import { MdKeyboardArrowUp } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 import ColorSelector from "@/app/components/ColorSelector";
 import { IoClose } from "react-icons/io5";
+import logo from "@/public/images/t-shirt.jpg";
+import { IoCloseCircle } from "react-icons/io5";
 
 // import Select from "react-select";
 
@@ -95,6 +97,8 @@ import {
   setTextAlignment,
 } from "@/app/redux/slices/productSlice";
 import {
+  removeStoreDetails,
+  removeStoreSocialMedia,
   setStoreDetails,
   setStoreImg,
   setStoreName,
@@ -102,6 +106,13 @@ import {
 } from "@/app/redux/slices/categorySlice";
 import Input from "@/app/components/Input";
 import Image from "next/image";
+import {
+  selectStoreDetails,
+  selectStoreName,
+  selectStoreSocialMedia,
+} from "@/app/redux/selectors/categorySelector";
+import { handleError } from "@/app/util/toast";
+import { ToastContainer } from "react-toastify";
 
 interface Options {
   value: string;
@@ -757,12 +768,12 @@ export function Buttons() {
               <FontScale
                 value={btnThickness}
                 label="Thickness"
-                min="2"
-                max="12"
-                step="2"
+                min="0"
+                max="5"
+                step="1"
                 sizes={Sizes}
                 onChange={handleBtnBorderThickness}
-                className="absolute top-2 left-[0.2px] right-0 flex gap-[19px] text-[10px] text-gray-600"
+                className="absolute top-2 left-[4px] right-0 flex gap-[17px] text-[10px] text-gray-600"
               />
 
               <CustomSelect
@@ -783,10 +794,13 @@ export function Buttons() {
               {/* btn border types */}
               <FontScale
                 label="Border radius"
+                min="0"
+                max="10"
+                step="2"
                 sizes={RadiusSizes}
                 onChange={handleBtnBorderRadius}
                 value={btnBorderRadius}
-                className="absolute top-2 left-[0.2px] right-0 flex gap-[19px] text-[10px] text-gray-600"
+                className="absolute top-2 left-[4.5px] right-0 flex gap-[16.9px] text-[10px] text-gray-600"
               />
 
               {/* btn border color */}
@@ -843,12 +857,12 @@ export function Buttons() {
               <FontScale
                 label="Blur"
                 min="0"
-                max="25"
+                max="20"
                 step="5"
                 sizes={blueSize}
                 onChange={handleBtnBlue}
                 value={btnBlur}
-                className="absolute top-2 left-[0.2px] right-0 flex gap-[19px] text-[10px] text-gray-600"
+                className="absolute top-2 left-[3px] right-0 flex gap-[22px] text-[10px] text-gray-600"
               />
 
               {/* btn border color */}
@@ -968,10 +982,7 @@ export function ProductCard() {
 
   // text alignment types
   const textAlignments: Options[] = [
-    { value: "left", label: "Left" },
     { value: "center", label: "Center" },
-    { value: "right", label: "Right" },
-    { value: "justify", label: "Justify" },
     { value: "start", label: "Start" },
     { value: "end", label: "End" },
   ];
@@ -1164,7 +1175,7 @@ export function ProductCard() {
                 step="4"
                 sizes={imgPaddingSizes}
                 onChange={handleProductImgPadding}
-                className="absolute top-2 left-[0.2px] right-0 flex gap-[17px] text-[10px] text-gray-600"
+                className="absolute top-2 left-[2px] right-0 flex gap-[16px] text-[10px] text-gray-600"
               />
 
               {/* image radius */}
@@ -1263,9 +1274,9 @@ export function ProductCard() {
               <FontScale
                 value={productHorizontalOffset}
                 label="Horizontal offset"
-                min="-20"
-                max="20"
-                step="5"
+                min="-8"
+                max="8"
+                step="2"
                 sizes={shadowOffset}
                 onChange={handleProductHorizontalOffset}
                 className="absolute top-2 left-[0.2px] right-0 flex gap-[7px] text-[10px] text-gray-600"
@@ -1274,8 +1285,8 @@ export function ProductCard() {
               {/* btn border types */}
               <FontScale
                 label="Vertical offset"
-                min="-20"
-                max="20"
+                min="-8"
+                max="8"
                 step="2"
                 sizes={shadowOffset}
                 onChange={handleProductVerticalOffset}
@@ -1287,7 +1298,7 @@ export function ProductCard() {
               <FontScale
                 label="Blur"
                 min="0"
-                max="25"
+                max="20"
                 step="5"
                 sizes={blueSize}
                 onChange={handleProductBlue}
@@ -1321,6 +1332,9 @@ export function StoreDetails() {
   const [stSocialMedia, setStSocialMedia] = useState("");
 
   const dispatch = useAppDispatch();
+  const storeName = useAppSelector(selectStoreName);
+  const storeSocialMedia = useAppSelector(selectStoreSocialMedia);
+  const storeDetails = useAppSelector(selectStoreDetails);
   // store file change
   const handlFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -1333,7 +1347,7 @@ export function StoreDetails() {
   // handle cancle button
   const handleImgClick = () => {
     setFile(null);
-
+    dispatch(setStoreImg(""));
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -1349,16 +1363,31 @@ export function StoreDetails() {
 
   // store details handler
   const handleStoreDetails = () => {
+    const strlen = storeDetails.length;
     if (stDetails.trim()) {
-      dispatch(setStoreDetails(stDetails));
+      if (strlen < 5) {
+        dispatch(setStoreDetails(stDetails));
+        setStDetails("");
+      } else {
+        handleError("you can only add 5 Details");
+      }
+    } else {
       setStDetails("");
     }
   };
 
   // store social media
   const handleStoreSocialMedia = () => {
+    const strlen = storeSocialMedia.length;
     if (stSocialMedia.trim()) {
-      dispatch(setStoreSocialMedia(stSocialMedia));
+      if (strlen < 5) {
+        dispatch(setStoreSocialMedia(stSocialMedia));
+        setStSocialMedia("");
+      } else {
+        handleError("you can only add 5 social media");
+      }
+    } else {
+      // alert("You can only add 5 social media links");
       setStSocialMedia("");
     }
   };
@@ -1369,13 +1398,20 @@ export function StoreDetails() {
       const reader = new FileReader();
       reader.onloadend = () => {
         dispatch(setStoreImg(reader.result as string));
-        setFile(null);
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleMediaCancel = (item: string) => {
+    dispatch(removeStoreSocialMedia(item));
+  };
+
+  const handleDetailsCancel = (item: string) => {
+    dispatch(removeStoreDetails(item));
   };
 
   return (
@@ -1393,6 +1429,16 @@ export function StoreDetails() {
         />
 
         {/* Image Preview */}
+        <div className={`mt-2 relative ${file ? "hidden" : "block"}`}>
+          <Image
+            src={logo}
+            alt="Store preview"
+            width={270}
+            height={128}
+            className="max-h-32 object-cover rounded-md"
+          />
+        </div>
+
         {file && (
           <div className="mt-2 relative ">
             <Image
@@ -1419,30 +1465,78 @@ export function StoreDetails() {
       {/* Store Name */}
       <Input
         label="Store Name"
-        value={stName}
+        value={storeName}
         onChange={(e) => setStName(e.target.value)}
         onClick={handleStoreName}
         btnText="Submit"
         placeholder="My store name"
       />
       {/* Store detials */}
-      <Input
-        label="Store details"
-        value={stDetails}
-        onChange={(e) => setStDetails(e.target.value)}
-        onClick={handleStoreDetails}
-        btnText="Submit"
-        placeholder="addres"
-      />
+      <div>
+        <Input
+          label="Store details"
+          value={stDetails}
+          onChange={(e) => setStDetails(e.target.value)}
+          onClick={handleStoreDetails}
+          btnText="Submit"
+          placeholder="address"
+        />
+        <ul className="text-black pl-0.5 space-y-2 pt-2">
+          {storeDetails.map((item, index) => (
+            <li
+              key={index}
+              className="pr-2 px-1 flex items-center justify-between hover:bg-gray-200"
+            >
+               <span className="flex items-center max-w-[200px] w-full ">
+                {index + 1 + " "}
+                <span className="dotClip pl-1">{item}</span>
+              </span>
+              <span
+                className="cursor-pointer"
+                onClick={() => {
+                  handleDetailsCancel(item);
+                }}
+              >
+                <IoCloseCircle className="text-red-600 hover:scale-110" />
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
       {/* Store Social media */}
-      <Input
-        label="Store Social Media"
-        value={stSocialMedia}
-        onChange={(e) => setStSocialMedia(e.target.value)}
-        onClick={handleStoreSocialMedia}
-        btnText="Submit"
-        placeholder="store@gmail.com"
-      />
+      <div>
+        <Input
+          label="Store Social Media"
+          value={stSocialMedia}
+          onChange={(e) => setStSocialMedia(e.target.value)}
+          onClick={handleStoreSocialMedia}
+          btnText="Submit"
+          placeholder="store@gmail.com"
+        />
+        {/* store social meadias */}
+        <ul className="text-black pl-0.5 space-y-2 pt-2">
+          {storeSocialMedia.map((item, index) => (
+            <li
+              key={index}
+              className="pr-2 px-1 flex items-center justify-between hover:bg-gray-200"
+            >
+              <span className="flex items-center max-w-[200px] w-full ">
+                {index + 1 + " "}
+                <span className="dotClip pl-1">{item}</span>
+              </span>
+              <span
+                className="cursor-pointer"
+                onClick={() => {
+                  handleMediaCancel(item);
+                }}
+              >
+                <IoCloseCircle className="text-red-600 hover:scale-110" />
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <ToastContainer style={{ zIndex: 9999 }} />
     </div>
   );
 }

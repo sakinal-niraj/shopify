@@ -3,6 +3,7 @@ import { FiSearch } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa6";
 import { FiMinus } from "react-icons/fi";
 import { FiPlus } from "react-icons/fi";
+import logo from '@/public/images/t-shirt.jpg';
 
 import { LiaShoppingBagSolid } from "react-icons/lia";
 import Image from "next/image";
@@ -46,17 +47,17 @@ export function NavBar() {
           <div className="flex items-center">
             {/* logo */}
             <div className="flex items-center gap-3">
-              {storeImg && (
-                <div className="mt-2">
+              {
+                <div className="mt-2 aspect-h-5">
                   <Image
-                    src={storeImg || ""}
+                    src={storeImg || logo}
                     alt="Current store"
-                    width={58}
-                    height={28}
-                    className="max-h-32 object-cover rounded-md mb-2.5"
+                    width={100}
+                    height={100}
+                    className="max-w-16 max-h-10 object-cover rounded-md mb-2.5"
                   />
                 </div>
-              )}
+              }
               <h2 className="mr-3 mb-1 text-xl hover:text-black">
                 {storeName}
               </h2>
@@ -130,7 +131,7 @@ export function HomeBody() {
     }
   };
   return (
-    <div className="homeBody py-2">
+    <div className="homeBody py-2  w-full">
       {/* hero section */}
       <section className="aspect-w-6 aspect-h-3 mx-10">
         <Image src={hero1} alt="Hero1" className="w-full h-full rounded-md" />
@@ -189,9 +190,9 @@ export function HomeBody() {
                   onClick={() => {
                     handleProductClick(item.id);
                   }}
-                  className="px-2 rounded-sm btn-Custome mb-3"
+                  className="px-2 rounded-sm btn-Custome mb-3 mx-1.5"
                 >
-                  Buy
+                  Show
                 </button>
               </div>
             ))
@@ -281,9 +282,9 @@ export function Categories() {
                   onClick={() => {
                     handleProductClick(item.id);
                   }}
-                  className="px-2 rounded-sm btn-Custome mb-3"
+                  className="px-2 rounded-sm btn-Custome mb-3 mx-1.5"
                 >
-                  Buy
+                  show
                 </button>
               </div>
             ))
