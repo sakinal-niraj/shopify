@@ -1,12 +1,14 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit"
 
 interface CategoryState{
+    storeImg:string | null;
     storeName:string;
     storeDetails:string[];
     storeSocialMedia:string[];
 }
 
 const initialState:CategoryState = {
+    storeImg:"",
     storeName:"My store",
     storeDetails: ["first"],
     storeSocialMedia:["niraj@gmail.com"],
@@ -17,6 +19,9 @@ const categorySlice = createSlice({
     name:'category',
     initialState,
     reducers:{
+        setStoreImg:(state,action:PayloadAction<string>)=>{
+            state.storeImg = action.payload;
+        },
         setStoreName:(state,action:PayloadAction<string>)=>{
             state.storeName = action.payload;
         },
@@ -30,5 +35,5 @@ const categorySlice = createSlice({
 });
 
 
-export const {setStoreDetails,setStoreName,setStoreSocialMedia} = categorySlice.actions;
+export const {setStoreImg,setStoreDetails,setStoreName,setStoreSocialMedia} = categorySlice.actions;
 export default categorySlice.reducer;

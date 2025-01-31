@@ -5,16 +5,17 @@ interface InputBox{
     value?:string,
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,
     onClick?: () => void;
-    btnText:string,
+    btnText?:string,
     placeholder?:string,
+    type?:string,
 };
 
-const Input: React.FC<InputBox> = ({label,value,onChange,onClick,btnText,placeholder}) => {
+const Input: React.FC<InputBox> = ({label,value,onChange,onClick,btnText,placeholder,type}) => {
   return (
     <div className="font-medium mt-2 text-sm space-y-1">
       <h1 className="pb-1">{label}</h1>
       <input
-        type="text"
+        type={type || "text"}
         value={value}
         onChange={onChange}
         className="border p-2 w-full outline-none rounded-md"

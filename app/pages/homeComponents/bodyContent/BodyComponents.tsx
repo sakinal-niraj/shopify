@@ -9,7 +9,10 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useAppSelector } from "@/app/redux/hooks";
 import { selectScreenType } from "@/app/redux/slices/screenSizeSlice";
-import { selectStoreName } from "@/app/redux/selectors/categorySelector";
+import {
+  selectStoreImg,
+  selectStoreName,
+} from "@/app/redux/selectors/categorySelector";
 
 interface Product {
   id: number;
@@ -19,17 +22,37 @@ interface Product {
 }
 
 export function NavBar() {
-    const screenType = useAppSelector(selectScreenType);
-    const storeName = useAppSelector(selectStoreName);
+  const screenType = useAppSelector(selectScreenType);
+  const storeName = useAppSelector(selectStoreName);
+  const storeImg = useAppSelector(selectStoreImg);
   return (
     <>
       {/* navbar */}
       <nav className="w-full rounded-lg">
-        <div className={`flex ${screenType === 'mobile' ? 'hidden':''} items-center justify-between py-3 px-10 navBar`}>
+        <div
+          className={`flex ${
+            screenType === "mobile" ? "hidden" : ""
+          } items-center justify-between py-3 px-10 navBar`}
+        >
           {/* left side */}
           <div className="flex items-center">
             {/* logo */}
-            <h1 className="mr-3 mb-1 text-xl hover:text-black">{storeName}</h1>
+            <div className="flex items-center gap-3">
+              {storeImg && (
+                <div className="mt-2">
+                  <Image
+                    src={storeImg || ""}
+                    alt="Current store"
+                    width={58}
+                    height={28}
+                    className="max-h-32 object-cover rounded-md mb-2.5"
+                  />
+                </div>
+              )}
+              <h2 className="mr-3 mb-1 text-xl hover:text-black">
+                {storeName}
+              </h2>
+            </div>
 
             {/* links */}
             <ul className="flex ml-7 gap-6 ">

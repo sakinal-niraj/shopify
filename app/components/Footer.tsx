@@ -1,6 +1,8 @@
+import Image from "next/image";
 import { useAppSelector } from "../redux/hooks";
 import {
   selectStoreDetails,
+  selectStoreImg,
   selectStoreName,
   selectStoreSocialMedia,
 } from "../redux/selectors/categorySelector";
@@ -13,7 +15,7 @@ export const Footer = () => {
   const storeName = useAppSelector(selectStoreName);
   const storeDetails = useAppSelector(selectStoreDetails);
   const storeSocialMedia = useAppSelector(selectStoreSocialMedia);
-
+  const storeImg = useAppSelector(selectStoreImg);
   return (
     <div className="bg-[#81689d]">
       <div className="px-10 pt-10 pb-5 flex justify-center">
@@ -27,7 +29,22 @@ export const Footer = () => {
             }`}
           >
             {/* logo */}
-            <div className="text-white font-semibold text-2xl">{storeName}</div>
+            <div className="flex items-center gap-3">
+                          {storeImg && (
+                            <div className="mt-2">
+                              <Image
+                                src={storeImg || ""}
+                                alt="Current store"
+                                width={58}
+                                height={28}
+                                className="max-h-32 object-cover rounded-md mb-2.5"
+                              />
+                            </div>
+                          )}
+                          <h2 className="mr-3 mb-1 text-xl hover:text-black">
+                            {storeName}
+                          </h2>
+                        </div>
             <div>
               <h1 className="font-bold text-white">COMPANY</h1>
               <ul className="text-white pl-0.5">

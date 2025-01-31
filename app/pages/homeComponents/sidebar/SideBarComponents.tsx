@@ -4,6 +4,8 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { IoMdArrowDropdown } from "react-icons/io";
 import ColorSelector from "@/app/components/ColorSelector";
+import { IoClose } from "react-icons/io5";
+
 // import Select from "react-select";
 
 import FontScale from "@/app/components/FontScaleBox";
@@ -94,10 +96,12 @@ import {
 } from "@/app/redux/slices/productSlice";
 import {
   setStoreDetails,
+  setStoreImg,
   setStoreName,
   setStoreSocialMedia,
 } from "@/app/redux/slices/categorySlice";
 import Input from "@/app/components/Input";
+import Image from "next/image";
 
 interface Options {
   value: string;
@@ -1310,12 +1314,25 @@ export function ProductCard() {
 // Category
 
 export function StoreDetails() {
+  const [file, setFile] = useState<File | null>(null);
   const [stName, setStName] = useState("");
   const [stDetails, setStDetails] = useState("");
   const [stSocialMedia, setStSocialMedia] = useState("");
 
   const dispatch = useAppDispatch();
-  // const storeDetails = useAppSelector(selectStoreDetails);
+  // store file change
+  const handlFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+
+    if (selectedFile) {
+      setFile(selectedFile);
+    }
+  };
+
+  // handle cancle button
+  const handleImgClick = () => {
+    setFile(null);
+  };
 
   // store name handler
   const handleStoreName = () => {
@@ -1340,8 +1357,53 @@ export function StoreDetails() {
       setStSocialMedia("");
     }
   };
+
   return (
     <div className="py-1 px-4 space-y-8  border-gray-100">
+      {/* Store Image */}
+      {/* // StoreDetails.tsx (image section) */}
+      <div className="font-medium mt-2 text-sm space-y-1">
+        <h1 className="pb-1">Store Image</h1>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handlFileChange}
+          className="border p-2 w-full outline-none rounded-md"
+        />
+
+        {/* Image Preview */}
+        {file && (
+          <div className="mt-2 relative ">
+            <Image
+              src={URL.createObjectURL(file)}
+              alt="Store preview"
+              width={270}
+              height={128}
+              className="max-h-32 object-cover rounded-md"
+            />
+            <IoClose
+              onClick={handleImgClick}
+              className="absolute top-0 right-0 text-black text-2xl"
+            />
+          </div>
+        )}
+
+        <button
+          onClick={() => {
+            if (file) {
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                dispatch(setStoreImg(reader.result as string));
+                setFile(null); 
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
+          className="mt-2 p-2 bg-blue-500 text-white w-full hover:bg-blue-600 transition-colors"
+        >
+          Upload Store Image
+        </button>
+      </div>
       {/* Store Name */}
       <Input
         label="Store Name"
@@ -1351,7 +1413,6 @@ export function StoreDetails() {
         btnText="Submit"
         placeholder="My store name"
       />
-
       {/* Store detials */}
       <Input
         label="Store details"
@@ -1361,7 +1422,6 @@ export function StoreDetails() {
         btnText="Submit"
         placeholder="addres"
       />
-
       {/* Store Social media */}
       <Input
         label="Store Social Media"

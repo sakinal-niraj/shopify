@@ -14,6 +14,7 @@ import {
   selectScreenType,
   setScreenSize,
 } from "../redux/slices/screenSizeSlice";
+import { Tooltip } from "react-tooltip";
 
 interface NavItem {
   id: number;
@@ -104,6 +105,8 @@ export default function Header() {
           <div className="flex items-center gap-2 bg-gray-100 px-2.5 py-1.5 rounded-sm">
             {screenSizes.map((item) => (
               <span
+                data-tooltip-id={`${item.id}`}
+                data-tooltip-content={item.name}
                 onClick={() => {
                   handleScreenSize(item.name);
                 }}
@@ -116,6 +119,15 @@ export default function Header() {
                   className={`${
                     screenType === item.name ? "text-green-500" : ""
                   }`}
+                />
+                <Tooltip
+                  id={`${item.id}`}
+                  place="bottom"
+                  style={{
+                    backgroundColor: "black",
+                    color: "white",
+                    fontSize: "14px",
+                  }}
                 />
               </span>
             ))}

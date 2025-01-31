@@ -47,23 +47,23 @@ export default function SideBar() {
               className={`p-2 hover:bg-gray-200 ${
                 sidebarType === item.name ? "bg-gray-200" : ""
               }  rounded-md`}
-              data-tooltip-id="custom-tooltip"
+              data-tooltip-id={`${item.id}`}
               data-tooltip-content={item.name}
               key={item.id}
             >
               {<item.icon size={23} />}
+              <Tooltip
+                id={`${item.id}`}
+                place="bottom"
+                style={{
+                  backgroundColor: "black",
+                  color: "white",
+                  fontSize: "14px",
+                }}
+              />
             </li>
           ))}
 
-          <Tooltip
-            id="custom-tooltip"
-            place="bottom"
-            style={{
-              backgroundColor: "black",
-              color: "white",
-              fontSize: "14px",
-            }}
-          />
         </ul>
       </div>
 
