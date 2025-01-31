@@ -108,6 +108,26 @@ body {
   border-radius: var(--img-radius);
 }
 
+.btn-Custome{
+  /* --btn-constrast-border-color:'#000000'; */
+  background-color: var(--button-Color);
+  border: var(--btn-border-thickness) var(--btn-border-color);
+  border-style: var(--btn-border-style);
+  border-radius: var(--btn-border-radius);
+  box-shadow: var(--btn-horizontal-offset) var(--btn-vertical-offset) var(--btn-blur) var(--btn-shadow-color);
+}
+
+
+.addCartBtn{
+  background-color: var(--button-Color);
+  border-radius: 8px;
+}
+
+.buyBtn{
+ background-color: var(--btn-constrast-border-color);
+ border-radius: 8px;
+ color: white; 
+}
 
 .mrp{
   color: var(--mrp-Text-Color);

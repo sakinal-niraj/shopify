@@ -1,18 +1,26 @@
 "use client";
 import { FiSearch } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa6";
+import { FiMinus } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
+
 import { LiaShoppingBagSolid } from "react-icons/lia";
 import Image from "next/image";
 import hero1 from "@/public/images/hero1.jpg";
 // import tshirt from "@/public/images/t-shirt.jpg";
 import { useEffect } from "react";
 import { useState } from "react";
-import { useAppSelector } from "@/app/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { selectScreenType } from "@/app/redux/slices/screenSizeSlice";
 import {
   selectStoreImg,
   selectStoreName,
 } from "@/app/redux/selectors/categorySelector";
+import {
+  selectProductId,
+  setPageName,
+  setProductId,
+} from "@/app/redux/slices/pageSlice";
 
 interface Product {
   id: number;
@@ -94,6 +102,7 @@ export function NavBar() {
 
 export function HomeBody() {
   const [productsData, setProductsData] = useState<Product[]>([]);
+  const dispatch = useAppDispatch();
   const screenType = useAppSelector(selectScreenType);
 
   useEffect(() => {
@@ -109,6 +118,17 @@ export function HomeBody() {
 
     getProducts();
   }, []);
+
+  const handleProductClick = (id: number) => {
+    if (id) {
+      dispatch(setPageName("Product Details Page"));
+      dispatch(setProductId(id));
+      localStorage.setItem("currentPage", "Product Details Page");
+      window.dispatchEvent(
+        new CustomEvent("pageChange", { detail: "Product Details Page" })
+      );
+    }
+  };
   return (
     <div className="homeBody py-2">
       {/* hero section */}
@@ -156,13 +176,23 @@ export function HomeBody() {
                     className="object-cover productImg"
                   />
                 </div>
-                {/* content */}
-                <p className="w-full">
-                  <span className="cursor-pointer">{item?.title}</span>
-                </p>
-                <p className="w-full mrp">
-                  <span className="cursor-pointer">{item?.price}</span>
-                </p>
+                <div className="px-2 pb-2">
+                  {/* content */}
+                  <p className="w-full">
+                    <span className="cursor-pointer">{item?.title}</span>
+                  </p>
+                  <p className="w-full mrp">
+                    <span className="cursor-pointer">{item?.price}</span>
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    handleProductClick(item.id);
+                  }}
+                  className="px-2 rounded-sm btn-Custome mb-3"
+                >
+                  Buy
+                </button>
               </div>
             ))
           ) : (
@@ -177,6 +207,7 @@ export function HomeBody() {
 export function Categories() {
   const screenType = useAppSelector(selectScreenType);
   const [productsData, setProductsData] = useState<Product[]>([]);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     async function getProducts() {
@@ -191,6 +222,13 @@ export function Categories() {
 
     getProducts();
   }, []);
+
+  const handleProductClick = (id: number) => {
+    if (id) {
+      dispatch(setPageName("Product Details Page"));
+      dispatch(setProductId(id));
+    }
+  };
   return (
     <div className="homeBody py-2">
       <div className="mt-10 mx-10">
@@ -239,6 +277,14 @@ export function Categories() {
                 <p className="w-full mrp">
                   <span className="cursor-pointer">{item?.price}</span>
                 </p>
+                <button
+                  onClick={() => {
+                    handleProductClick(item.id);
+                  }}
+                  className="px-2 rounded-sm btn-Custome mb-3"
+                >
+                  Buy
+                </button>
               </div>
             ))
           ) : (
@@ -250,6 +296,101 @@ export function Categories() {
   );
 }
 
+interface Product {
+  id: number;
+  title: string;
+  price: number;
+  thumbnail: string;
+  description: string;
+}
 export function PageDetailsPage() {
-  return <div className="homeBody flex flex-col"></div>;
+  const productId = useAppSelector(selectProductId);
+  const [product, setProduct] = useState<Product | null>();
+  const [totalProduct, setTotalProduct] = useState<number | null>(1);
+  useEffect(() => {
+    const showSingleProduct = async () => {
+      try {
+        const res = await fetch(`https://dummyjson.com/products/${productId}`);
+        const data = await res.json();
+        setProduct(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (productId) showSingleProduct();
+  }, [productId]);
+
+  const handleMinus = () => {
+    if (totalProduct) {
+      if (totalProduct > 1) {
+        setTotalProduct(totalProduct - 1);
+      }
+    }
+  };
+
+  const handleAdd = () => {
+    if (totalProduct) {
+      if (totalProduct >= 0 && totalProduct < 10) {
+        setTotalProduct(totalProduct + 1);
+      }
+    }
+  };
+  return (
+    <div className="homeBody flex flex-col">
+      <div>
+        {product ? (
+          <div className="ml-10 flex gap-10">
+            {/* img container */}
+            <div className="w-[500px] h-auto text-left px-10 py-5">
+              <Image
+                src={product?.thumbnail}
+                alt="product image"
+                width={100}
+                height={100}
+                layout="responsive"
+                className="object-cover rounded-2xl"
+              />
+            </div>
+
+            {/* content container */}
+            <div className="mt-6 flex flex-col space-y-4">
+              <h1 className="text-4xl font-semibold">{product.title}</h1>
+              <span className="text-2xl font-medium">${product.price}</span>
+              <p className="w-[450px] mr-[100px] text-base">
+                {product.description}
+              </p>
+
+              {/* quentity */}
+              <div className="flex items-center w-fit pb-10">
+                <button
+                  onClick={handleMinus}
+                  className="bg-white border p-2 border-black w-full h-full"
+                >
+                  <FiMinus />
+                </button>
+                <span className="border-t bg-white border-b  h-full w-full p-2 px-4 border-black">
+                  {totalProduct}
+                </span>
+                <button
+                  onClick={handleAdd}
+                  className="bg-white border p-2 border-black h-full w-full"
+                >
+                  <FiPlus />
+                </button>
+              </div>
+
+              {/* buttons */}
+              <div className="w-full h-10 flex gap-1">
+                <button className="w-full h-full addCartBtn">ADD TO CART</button>
+                <button className="w-full h-full buyBtn">BUY NOW</button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          "Loading..."
+        )}
+      </div>
+    </div>
+  );
 }

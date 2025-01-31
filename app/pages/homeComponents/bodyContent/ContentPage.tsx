@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
 import {
   Categories,
   HomeBody,
@@ -10,27 +9,13 @@ import UndoRedoButtons from "@/app/components/UndoRedoButtons";
 import { Footer } from "@/app/components/Footer";
 import { useAppSelector } from "@/app/redux/hooks";
 import { selectScreenType } from "@/app/redux/slices/screenSizeSlice";
+import { selectPageName } from "@/app/redux/slices/pageSlice";
 
 export default function ContentPage() {
-  const [isCurrentPage, setIsCurrentPage] = useState("Home Page");
   const screenType = useAppSelector(selectScreenType);
 
-  useEffect(() => {
-    const currentPage = localStorage.getItem("currentPage");
-    setIsCurrentPage(currentPage || "Home Page");
+  const pageName = useAppSelector(selectPageName);
 
-    const handlePageChange = (event: Event) => {
-      const detail = (event as CustomEvent).detail;
-      setIsCurrentPage(detail);
-    };
-
-    window.addEventListener("pageChange", handlePageChange);
-
-    // Cleanup the event listener on component unmount
-    return () => {
-      window.removeEventListener("pageChange", handlePageChange);
-    };
-  }, []);
   return (
     <main
       id="logo-sidebar"
@@ -54,9 +39,9 @@ export default function ContentPage() {
     >
       <NavBar />
       <UndoRedoButtons />
-      {isCurrentPage === "Home Page" && <HomeBody />}
-      {isCurrentPage === "Categories" && <Categories />}
-      {isCurrentPage === "Product Details Page" && <PageDetailsPage />}
+      {pageName === "Home Page" && <HomeBody />}
+      {pageName === "Categories" && <Categories />}
+      {pageName === "Product Details Page" && <PageDetailsPage />}
       <Footer />
     </main>
   );

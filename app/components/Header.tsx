@@ -15,6 +15,7 @@ import {
   setScreenSize,
 } from "../redux/slices/screenSizeSlice";
 import { Tooltip } from "react-tooltip";
+import { selectPageName, setPageName } from "../redux/slices/pageSlice";
 
 interface NavItem {
   id: number;
@@ -27,6 +28,7 @@ export default function Header() {
 
   const dispatch = useAppDispatch();
   const screenType = useAppSelector(selectScreenType);
+  const pageName = useAppSelector(selectPageName);
 
   const screenSizes: NavItem[] = [
     { id: 1, name: "screen", icon: HiOutlineComputerDesktop },
@@ -57,6 +59,7 @@ export default function Header() {
     if (target.tagName === "LI") {
       const currentPage = target.textContent as string;
       setIsPageSelected(currentPage);
+      dispatch(setPageName(currentPage));
       localStorage.setItem("currentPage", currentPage);
       window.dispatchEvent(
         new CustomEvent("pageChange", { detail: currentPage })
@@ -64,6 +67,7 @@ export default function Header() {
       setIsDropOpen(false);
     }
   };
+  console.log(isPageSelected);
   return (
     <header className="bg-white fixed top-0 z-50 w-full border-b border-gray-100">
       <nav className="w-full flex justify-between items-center px-3 py-1.5">
@@ -80,7 +84,7 @@ export default function Header() {
             className="flex items-center gap-2 hover:bg-gray-100 px-2 py-1 rounded-md cursor-pointer"
           >
             <FiHome />
-            {isPageSelected}
+            {pageName}
             <span className="pt-[4px]">
               <TiArrowSortedDown />
             </span>
