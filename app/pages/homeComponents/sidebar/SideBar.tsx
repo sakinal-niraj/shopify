@@ -2,7 +2,13 @@
 import { TbSection } from "react-icons/tb";
 import { CiSettings } from "react-icons/ci";
 import { TbCategoryPlus } from "react-icons/tb";
-import { Buttons, Colors, ProductCard, StoreDetails, Typography } from "./SideBarComponents";
+import {
+  Buttons,
+  Colors,
+  ProductCard,
+  StoreDetails,
+  Typography,
+} from "./SideBarComponents";
 import { Tooltip } from "react-tooltip";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import {
@@ -10,6 +16,11 @@ import {
   setSidebarType,
 } from "@/app/redux/slices/sidebarSlice";
 import { IconType } from "react-icons";
+import { useState } from "react";
+import { SidebarData } from "@/app/constant/type";
+import HeaderDrag from "@/app/components/HeaderDrag";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 
 interface SidebarItems {
   id: number;
@@ -17,7 +28,14 @@ interface SidebarItems {
   icon: IconType;
 }
 
+const headSideData: SidebarData[] = [
+  { id: 1, name: "marquee" },
+  { id: 2, name: "header" },
+];
+
 export default function SideBar() {
+  const [headData, setHeadData] = useState<SidebarData[]>(headSideData);
+
   const dispatch = useAppDispatch();
   const sidebarType = useAppSelector(selectSidebarType);
 
@@ -30,10 +48,24 @@ export default function SideBar() {
   const handleSidebarChange = (name: string) => {
     dispatch(setSidebarType(name));
   };
+
+
+  const handleDrageEnd = (event: DragEndEvent)=>{
+    const {active,over} = event;
+    if (over && active.id !== over.id) {
+      setHeadData(items => {
+        const oldIndex = items.findIndex(item => item.id === active.id);
+        const newIndex = items.findIndex(item => item.id === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  }
+
+  console.log({headData})
   return (
     <aside
       id="logo-sidebar"
-      className="flex-1 flex fixed top-0 left-0 z-40 h-screen max-w-[340px] 2xl:max-w-[350px] w-full pt-10 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0"
+      className="flex-1 flex fixed top-0 left-0 z-40 h-screen max-w-[340px] 3xl:max-w-[400px] w-full pt-10 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0"
       aria-label="Sidebar"
     >
       {/* first sldebar */}
@@ -63,19 +95,29 @@ export default function SideBar() {
               />
             </li>
           ))}
-
         </ul>
       </div>
 
       {/* big sidebars */}
-
       {/* Section */}
       {sidebarType === "Section" ? (
         <div className="h-full border-l pt-[4px] border-gray-100 mainScrollBar max-h-[800px] overflow-y-auto overflow-x-hidden ">
           <ul className=" font-medium min-w-72">
-            <li className="border-b border-gray-100 hover:bg-gray-100 ">
-              <button className=" p-4 w-full text-left">Section</button>
+            <li className="border-b border-gray-100  ">
+              <button className=" p-4 w-full text-left">Sections</button>
             </li>
+            <li className="space-y-2 mx-2">
+              <DndContext
+              onDragEnd={handleDrageEnd}
+              >
+                <SortableContext items={headData}>
+                  {headData.map((item) => (
+                    <HeaderDrag sideHead={item} key={item.id} />
+                  ))}
+                </SortableContext>
+              </DndContext>
+            </li>
+            
           </ul>
         </div>
       ) : (
@@ -84,9 +126,9 @@ export default function SideBar() {
 
       {/* Settings */}
       {sidebarType === "Settings" ? (
-        <div className="h-full border-l pt-[4px]  border-gray-100 mainScrollBar 2xl:max-h-[90vh] max-h-[800px] overflow-y-auto overflow-x-hidden ">
+        <div className="h-full border-l pt-[4px]  border-gray-100 w-full max-w-full mainScrollBar 2xl:max-h-[90vh] max-h-[800px] overflow-y-auto overflow-x-hidden ">
           <ul className=" font-medium min-w-72">
-            <li className="border-b border-gray-100 hover:bg-gray-100 ">
+            <li className="border-b border-gray-100">
               <button className=" p-4 w-full text-left">Themes settings</button>
             </li>
             <li className="">

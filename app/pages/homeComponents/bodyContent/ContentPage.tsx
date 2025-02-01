@@ -29,7 +29,7 @@ export default function ContentPage() {
 
         ${
           screenType === "screen"
-            ? "w-[76.5vw] left-[310px] 2xl:left-[17.5%]"
+            ? "w-[76.5vw] left-[310px] 3xl:left-[18.5%]"
             : ""
         }
 
@@ -37,8 +37,10 @@ export default function ContentPage() {
         `}
       aria-label="Sidebar"
     >
-      <NavBar />
-      <UndoRedoButtons />
+      <div>
+        <NavBar />
+        <UndoRedoButtons />
+      </div>
       <div className="flex ">
         {pageName === "Home Page" && <HomeBody />}
         {pageName === "Categories" && <Categories />}
