@@ -3,7 +3,7 @@ import { FiSearch } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa6";
 import { FiMinus } from "react-icons/fi";
 import { FiPlus } from "react-icons/fi";
-import logo from '@/public/images/t-shirt.jpg';
+import logo from "@/public/images/t-shirt.jpg";
 
 import { LiaShoppingBagSolid } from "react-icons/lia";
 import Image from "next/image";
@@ -30,14 +30,27 @@ interface Product {
   price: number;
 }
 
-export function NavBar() {
+interface Product {
+  id: number;
+  title: string;
+  price: number;
+  thumbnail: string;
+  description: string;
+}
+
+interface NavBar{
+  visible?:boolean,
+  visible1?:boolean,
+}
+
+export const NavBar: React.FC<NavBar> =({visible,visible1})=> {
   const screenType = useAppSelector(selectScreenType);
   const storeName = useAppSelector(selectStoreName);
   const storeImg = useAppSelector(selectStoreImg);
   return (
     <>
       {/* navbar */}
-      <nav className="w-full rounded-lg">
+      <nav className={`w-full rounded-lg ${visible ? 'block' : 'hidden'}`}>
         <div
           className={`flex ${
             screenType === "mobile" ? "hidden" : ""
@@ -64,7 +77,7 @@ export function NavBar() {
             </div>
 
             {/* links */}
-            <ul className="flex ml-7 gap-6 ">
+            <ul className={`flex ml-7 gap-6 ${visible1 ? 'block' : 'hidden'} `}>
               <li className="relative group cursor-pointer menuLinks">
                 Home
                 <span className="absolute -bottom-1 left-0 bg-gray-600 group-hover:bg-black w-0 h-[2px] group-hover:w-full duration-700" />
@@ -297,13 +310,6 @@ export function Categories() {
   );
 }
 
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  thumbnail: string;
-  description: string;
-}
 export function PageDetailsPage() {
   const productId = useAppSelector(selectProductId);
   const [product, setProduct] = useState<Product | null>();
@@ -383,7 +389,9 @@ export function PageDetailsPage() {
 
               {/* buttons */}
               <div className="w-full h-10 flex gap-1">
-                <button className="w-full h-full addCartBtn">ADD TO CART</button>
+                <button className="w-full h-full addCartBtn">
+                  ADD TO CART
+                </button>
                 <button className="w-full h-full buyBtn">BUY NOW</button>
               </div>
             </div>

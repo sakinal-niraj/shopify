@@ -9,6 +9,8 @@ import pageReducer from './slices/pageSlice';
 import screenReducer from './slices/screenSizeSlice';
 import sidebarReducer from './slices/sidebarSlice';
 import categoryReducer from './slices/categorySlice';
+// import layoutReducer from './slices/layoutSlice';
+import headerSectionReducer from './slices/layoutSlice';
 
 const store = configureStore({
     reducer:{
@@ -21,6 +23,8 @@ const store = configureStore({
         screen:screenReducer,
         sidebar:sidebarReducer,
         category:categoryReducer,
+        // layout:layoutReducer,
+        headerSection: headerSectionReducer,
     },
     middleware:(getDefaultMiddleware)=>
         getDefaultMiddleware().concat(historyMiddleware)

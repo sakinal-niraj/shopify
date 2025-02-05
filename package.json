@@ -22,6 +22,7 @@
     "react-select": "^5.10.0",
     "react-toastify": "^11.0.3",
     "react-tooltip": "^5.28.0",
+    "sweetalert2": "^11.15.10",
     "tailwind-scrollbar": "^3.1.0"
   },
   "devDependencies": {

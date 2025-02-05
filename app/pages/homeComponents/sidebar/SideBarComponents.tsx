@@ -6,7 +6,6 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import ColorSelector from "@/app/components/ColorSelector";
 import { IoClose } from "react-icons/io5";
 import logo from "@/public/images/t-shirt.jpg";
-import { IoCloseCircle } from "react-icons/io5";
 
 // import Select from "react-select";
 
@@ -97,8 +96,6 @@ import {
   setTextAlignment,
 } from "@/app/redux/slices/productSlice";
 import {
-  removeStoreDetails,
-  removeStoreSocialMedia,
   setStoreDetails,
   setStoreImg,
   setStoreName,
@@ -111,8 +108,8 @@ import {
   selectStoreName,
   selectStoreSocialMedia,
 } from "@/app/redux/selectors/categorySelector";
-import { handleError } from "@/app/util/toast";
-import { ToastContainer } from "react-toastify";
+// import { handleError } from "@/app/util/toast";
+// import { ToastContainer } from "react-toastify";
 
 interface Options {
   value: string;
@@ -1322,6 +1319,12 @@ export function ProductCard() {
   );
 }
 
+interface DropdownState {
+  storeImg: boolean;
+  storeName: boolean;
+  storeDetails: boolean;
+  storeSocialMedia: boolean;
+}
 // Category
 
 export function StoreDetails() {
@@ -1329,12 +1332,37 @@ export function StoreDetails() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [stName, setStName] = useState("");
   const [stDetails, setStDetails] = useState("");
-  const [stSocialMedia, setStSocialMedia] = useState("");
+  const [stSocialMedia, setStSocialMedia] = useState({
+    google: "",
+    whatsapp: "",
+    instagram: "",
+    pinterest: "",
+    twitter: "",
+  });
+  const [isClicked, setIsClicked] = useState<DropdownState>({
+    storeImg: false,
+    storeName: false,
+    storeDetails: false,
+    storeSocialMedia: false,
+  });
 
   const dispatch = useAppDispatch();
   const storeName = useAppSelector(selectStoreName);
   const storeSocialMedia = useAppSelector(selectStoreSocialMedia);
   const storeDetails = useAppSelector(selectStoreDetails);
+
+  useEffect(() => {
+    setStName(storeName);
+
+    setStDetails(storeDetails);
+    setStSocialMedia({
+      google: storeSocialMedia[0],
+      whatsapp: storeSocialMedia[1],
+      instagram: storeSocialMedia[2],
+      pinterest: storeSocialMedia[3],
+      twitter: storeSocialMedia[4],
+    });
+  }, [storeName, storeDetails, storeSocialMedia]);
   // store file change
   const handlFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -1357,40 +1385,29 @@ export function StoreDetails() {
   const handleStoreName = () => {
     if (stName.trim()) {
       dispatch(setStoreName(stName));
-      setStName("");
+      // setStName("");
     }
   };
 
   // store details handler
   const handleStoreDetails = () => {
-    const strlen = storeDetails.length;
     if (stDetails.trim()) {
-      if (strlen < 5) {
-        dispatch(setStoreDetails(stDetails));
-        setStDetails("");
-      } else {
-        handleError("you can only add 5 Details");
-      }
-    } else {
-      setStDetails("");
+      dispatch(setStoreDetails(stDetails));
+      // setStDetails("");
     }
   };
 
   // store social media
   const handleStoreSocialMedia = () => {
-    const strlen = storeSocialMedia.length;
-    if (stSocialMedia.trim()) {
-      if (strlen < 5) {
-        dispatch(setStoreSocialMedia(stSocialMedia));
-        setStSocialMedia("");
-      } else {
-        handleError("you can only add 5 social media");
-      }
-    } else {
-      // alert("You can only add 5 social media links");
-      setStSocialMedia("");
-    }
-  };
+    dispatch(setStoreSocialMedia([
+      stSocialMedia.google,
+      stSocialMedia.whatsapp,
+      stSocialMedia.instagram,
+      stSocialMedia.pinterest,
+      stSocialMedia.twitter
+    ]));
+};
+
 
   // file submit
   const handleFileSubmit = () => {
@@ -1406,137 +1423,220 @@ export function StoreDetails() {
     }
   };
 
-  const handleMediaCancel = (item: string) => {
-    dispatch(removeStoreSocialMedia(item));
-  };
-
-  const handleDetailsCancel = (item: string) => {
-    dispatch(removeStoreDetails(item));
-  };
-
   return (
-    <div className="py-1 px-4 space-y-8  border-gray-100">
+    <div className=" space-y-4  border-gray-100 w-full">
       {/* Store Image */}
       {/* // StoreDetails.tsx (image section) */}
-      <div className="font-medium mt-2 text-sm space-y-1">
-        <h1 className="pb-1">Store Image</h1>
-        <input
-          type="file"
-          ref={fileInputRef}
-          accept="image/*"
-          onChange={handlFileChange}
-          className="border p-2 w-full outline-none rounded-md"
-        />
-
-        {/* Image Preview */}
-        <div className={`mt-2 relative ${file ? "hidden" : "block"}`}>
-          <Image
-            src={logo}
-            alt="Store preview"
-            width={270}
-            height={128}
-            className="max-h-32 object-cover rounded-md"
-          />
+      <div className="font-medium mt-2 text-sm space-y-1   border-b pb-2.5 py-1 pl-1">
+        <div
+          className="flex  items-center justify-between w-full px-3 "
+          onClick={() => {
+            setIsClicked((prev) => ({
+              ...prev,
+              storeImg: !prev.storeImg,
+            }));
+          }}
+        >
+          <h1 className="pb-1">Store Image</h1>
+          <span
+            className={`transition-transform ${
+              isClicked.storeImg ? "rotate-180" : "rotate-0"
+            } duration-300`}
+          >
+            <MdKeyboardArrowDown size={25} />
+          </span>
         </div>
-
-        {file && (
-          <div className="mt-2 relative ">
-            <Image
-              src={URL.createObjectURL(file)}
-              alt="Store preview"
-              width={270}
-              height={128}
-              className="max-h-32 object-cover rounded-md"
+        {isClicked.storeImg && (
+          <>
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/*"
+              onChange={handlFileChange}
+              className="border p-2 w-full outline-none rounded-md"
             />
-            <IoClose
-              onClick={handleImgClick}
-              className="absolute top-0 right-0 text-black text-2xl"
+
+            {/* Image Preview */}
+            <div className={`mt-2 relative ${file ? "hidden" : "block"}`}>
+              <Image
+                src={logo}
+                alt="Store preview"
+                width={270}
+                height={128}
+                className="max-h-32 object-cover rounded-md"
+              />
+            </div>
+
+            {file && (
+              <div className="mt-2 relative ">
+                <Image
+                  src={URL.createObjectURL(file)}
+                  alt="Store preview"
+                  width={275}
+                  height={128}
+                  className="max-h-32 object-cover rounded-md"
+                />
+                <IoClose
+                  onClick={handleImgClick}
+                  className="absolute top-0 right-2 text-black text-2xl"
+                />
+              </div>
+            )}
+
+            <button
+              onClick={handleFileSubmit}
+              className="mt-2 p-2 bg-blue-300 text-white w-full hover:bg-blue-600 transition-colors"
+            >
+              Upload Store Image
+            </button>
+          </>
+        )}
+      </div>
+      {/* Store Name */}
+      <div
+        className="border-b  pb-2.5 pl-1"
+        onClick={() => {
+          setIsClicked((prev) => ({
+            ...prev,
+            storeName: !prev.storeName,
+          }));
+        }}
+      >
+        <div className="flex items-center justify-between pr-2.5">
+          <h1 className="pb-1 pl-2.5">Store Name</h1>
+          <span
+            className={`transition-transform ${
+              isClicked.storeName ? "rotate-180" : "rotate-0"
+            } duration-300`}
+          >
+            <MdKeyboardArrowDown size={25} />
+          </span>
+        </div>
+        {isClicked.storeName && (
+          <div>
+            <Input
+              value={stName}
+              onChange={(e) => setStName(e.target.value)}
+              onClick={handleStoreName}
+              btnText="Submit"
+              placeholder="My store name"
             />
           </div>
         )}
-
-        <button
-          onClick={handleFileSubmit}
-          className="mt-2 p-2 bg-blue-500 text-white w-full hover:bg-blue-600 transition-colors"
-        >
-          Upload Store Image
-        </button>
       </div>
-      {/* Store Name */}
-      <Input
-        label="Store Name"
-        value={storeName}
-        onChange={(e) => setStName(e.target.value)}
-        onClick={handleStoreName}
-        btnText="Submit"
-        placeholder="My store name"
-      />
       {/* Store detials */}
-      <div>
-        <Input
-          label="Store details"
-          value={stDetails}
-          onChange={(e) => setStDetails(e.target.value)}
-          onClick={handleStoreDetails}
-          btnText="Submit"
-          placeholder="address"
-        />
-        <ul className="text-black pl-0.5 space-y-2 pt-2">
-          {storeDetails.map((item, index) => (
-            <li
-              key={index}
-              className="pr-2 px-1 flex items-center justify-between hover:bg-gray-200"
-            >
-               <span className="flex items-center max-w-[200px] w-full ">
-                {index + 1 + " "}
-                <span className="dotClip pl-1">{item}</span>
-              </span>
-              <span
-                className="cursor-pointer"
-                onClick={() => {
-                  handleDetailsCancel(item);
-                }}
-              >
-                <IoCloseCircle className="text-red-600 hover:scale-110" />
-              </span>
-            </li>
-          ))}
-        </ul>
+      <div
+        className="border-b  pb-2.5 pl-1"
+        onClick={() => {
+          setIsClicked((prev) => ({
+            ...prev,
+            storeDetails: !prev.storeDetails,
+          }));
+        }}
+      >
+        <div className="flex items-center justify-between pr-2.5">
+          <h1 className="pb-1 pl-2.5">Store details</h1>
+          <span
+            className={`transition-transform ${
+              isClicked.storeDetails ? "rotate-180" : "rotate-0"
+            } duration-300`}
+          >
+            <MdKeyboardArrowDown size={25} />
+          </span>
+        </div>
+        {isClicked.storeDetails && (
+          <Input
+            value={stDetails}
+            onChange={(e) => setStDetails(e.target.value)}
+            onClick={handleStoreDetails}
+            btnText="Submit"
+            placeholder="address"
+          />
+        )}
       </div>
       {/* Store Social media */}
-      <div>
-        <Input
-          label="Store Social Media"
-          value={stSocialMedia}
-          onChange={(e) => setStSocialMedia(e.target.value)}
-          onClick={handleStoreSocialMedia}
-          btnText="Submit"
-          placeholder="store@gmail.com"
-        />
-        {/* store social meadias */}
-        <ul className="text-black pl-0.5 space-y-2 pt-2">
-          {storeSocialMedia.map((item, index) => (
-            <li
-              key={index}
-              className="pr-2 px-1 flex items-center justify-between hover:bg-gray-200"
-            >
-              <span className="flex items-center max-w-[200px] w-full ">
-                {index + 1 + " "}
-                <span className="dotClip pl-1">{item}</span>
-              </span>
-              <span
-                className="cursor-pointer"
-                onClick={() => {
-                  handleMediaCancel(item);
-                }}
+      <div className="border-b  pb-2.5 pl-1">
+        <div
+          className="flex items-center justify-between pr-2.5"
+          onClick={() => {
+            setIsClicked((prev) => ({
+              ...prev,
+              storeSocialMedia: !prev.storeSocialMedia,
+            }));
+          }}
+        >
+          <h1 className="pb-1 pl-2.5">Store Social Media</h1>
+          <span
+            className={`transition-transform ${
+              isClicked.storeSocialMedia ? "rotate-180" : "rotate-0"
+            } duration-300`}
+          >
+            <MdKeyboardArrowDown size={25} />
+          </span>
+        </div>
+        {isClicked.storeSocialMedia && (
+          <div>
+            <Input
+              value={stSocialMedia.google}
+              onChange={(e) =>
+                setStSocialMedia((prev) => ({
+                  ...prev,
+                  google: e.target.value,
+                }))
+              }
+              placeholder="Facebook"
+            />
+            <Input
+              value={stSocialMedia.whatsapp}
+              onChange={(e) =>
+                setStSocialMedia((prev) => ({
+                  ...prev,
+                  whatsapp: e.target.value,
+                }))
+              }
+              placeholder="WhatsApp link"
+            />
+            <Input
+              value={stSocialMedia.instagram}
+              onChange={(e) =>
+                setStSocialMedia((prev) => ({
+                  ...prev,
+                  instagram: e.target.value,
+                }))
+              }
+              placeholder="Instagram link"
+            />
+            <Input
+              value={stSocialMedia.pinterest}
+              onChange={(e) =>
+                setStSocialMedia((prev) => ({
+                  ...prev,
+                  pinterest: e.target.value,
+                }))
+              }
+              placeholder="Pinterest link"
+            />
+            <Input
+              value={stSocialMedia.twitter}
+              onChange={(e) =>
+                setStSocialMedia((prev) => ({
+                  ...prev,
+                  twitter: e.target.value,
+                }))
+              }
+              placeholder="Twitter link"
+            />
+            <div className="pr-4">
+              <button
+                className="mt-2 p-2 bg-blue-500 text-white w-full"
+                onClick={handleStoreSocialMedia}
               >
-                <IoCloseCircle className="text-red-600 hover:scale-110" />
-              </span>
-            </li>
-          ))}
-        </ul>
+                Submit
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-      <ToastContainer style={{ zIndex: 9999 }} />
     </div>
   );
 }

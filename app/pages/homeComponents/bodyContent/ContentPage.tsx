@@ -4,18 +4,32 @@ import {
   HomeBody,
   NavBar,
   PageDetailsPage,
-} from "./BodyComponents";
-import UndoRedoButtons from "@/app/components/UndoRedoButtons";
+} from "../bodyContent/BodyComponents";
+// import UndoRedoButtons from "@/app/components/UndoRedoButtons";
 import { Footer } from "@/app/components/Footer";
 import { useAppSelector } from "@/app/redux/hooks";
 import { selectScreenType } from "@/app/redux/slices/screenSizeSlice";
 import { selectPageName } from "@/app/redux/slices/pageSlice";
+// import { selectHeadComponent } from "@/app/redux/slices/layoutSlice";
+// import { componentsConfig } from "@/app/constant/componentsConfig";
+import { Anouncment } from "@/app/components/Anouncment";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
 
 export default function ContentPage() {
   const screenType = useAppSelector(selectScreenType);
 
   const pageName = useAppSelector(selectPageName);
+  // const componentOrder = useAppSelector(selectHeadComponent);
 
+  // selector
+  const { sections } = useSelector((state: RootState) => state.headerSection);
+
+  const headerSection = sections.find((s) => s.type === "header");
+  // const announcementSection = sections.find(
+  //   (s) => s.type === "announcementbar"
+  // );
+  
   return (
     <main
       id="logo-sidebar"
@@ -37,9 +51,27 @@ export default function ContentPage() {
         `}
       aria-label="Sidebar"
     >
-      <div>
-        <NavBar />
-        <UndoRedoButtons />
+      {sections
+  .filter((s) => s.type === "announcementbar")
+  .map((section) => (
+    <div key={section.id} className={section.visible ? 'block' : 'hidden'}>
+      <Anouncment
+       visible={section.subSections.some((s) => s.visible)} 
+       content={section.subSections.find((s)=>s.id)?.content}
+       />
+    </div>
+  ))
+}
+
+      <div className="">
+        {/* {componentOrder.map((id:number) => {
+          const Component = componentsConfig[id]?.component;
+          return <Component key={id} />;
+        })} */}
+        <NavBar
+          visible={headerSection?.visible}
+          visible1={headerSection?.subSections[0]?.visible}
+        />
       </div>
       <div className="flex ">
         {pageName === "Home Page" && <HomeBody />}

@@ -1,12 +1,17 @@
 import Image from "next/image";
 import { useAppSelector } from "../redux/hooks";
 import logo from "@/public/images/t-shirt.jpg";
+import { FaFacebook } from "react-icons/fa";
+
+
+
 import {
   selectStoreDetails,
   selectStoreImg,
   selectStoreName,
   selectStoreSocialMedia,
 } from "../redux/selectors/categorySelector";
+import { FaInstagram, FaPinterest, FaWhatsapp, FaXTwitter } from "react-icons/fa6";
 
 export const Footer = () => {
   // selector
@@ -39,22 +44,22 @@ export const Footer = () => {
               </h2>
             </div>
             <div>
-              <ul className="text-black pl-0.5">
-                {storeDetails.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
+              <ul className="text-black pl-0.5 max-w-[300px] w-full">
+                {storeDetails}
               </ul>
             </div>
           </div>
 
           {/* right side */}
           <div className="grid grid-cols-2">
-            <div>
+            <div className="space-y-5">
               <h1 className="font-bold text-black">Social Media links</h1>
-              <ul className="text-black pl-0.5">
-                {storeSocialMedia.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
+              <ul className="text-black pl-0.5 flex flex-col gap-y-2">
+                {storeSocialMedia[0] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[0]}><FaFacebook />Facebook</a></li>}
+                {storeSocialMedia[1] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[1]}><FaWhatsapp />Whatsapp</a></li>}
+                {storeSocialMedia[2] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[2]}><FaInstagram />Instagram</a></li>}
+                {storeSocialMedia[3] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[3]}><FaPinterest />Pinterest</a></li>}
+                {storeSocialMedia[4] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[4]}><FaXTwitter />Twitter</a></li>}
               </ul>
             </div>
             <div className="flex gap-2">

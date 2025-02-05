@@ -16,11 +16,12 @@ import {
   setSidebarType,
 } from "@/app/redux/slices/sidebarSlice";
 import { IconType } from "react-icons";
-import { useState } from "react";
-import { SidebarData } from "@/app/constant/type";
+// import { useState } from "react";
+// import { SidebarData } from "@/app/constant/type";
 import HeaderDrag from "@/app/components/HeaderDrag";
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
-import { arrayMove, SortableContext } from "@dnd-kit/sortable";
+// import { DndContext, DragEndEvent } from "@dnd-kit/core";
+// import { arrayMove, SortableContext } from "@dnd-kit/sortable";
+// import { reorderComponents, selectHeadComponent } from "@/app/redux/slices/layoutSlice";
 
 interface SidebarItems {
   id: number;
@@ -28,16 +29,17 @@ interface SidebarItems {
   icon: IconType;
 }
 
-const headSideData: SidebarData[] = [
-  { id: 1, name: "marquee" },
-  { id: 2, name: "header" },
-];
+// const headSideData: SidebarData[] = [
+//   { id: 1, name: "marquee" },
+//   { id: 2, name: "header" },
+// ];
 
 export default function SideBar() {
-  const [headData, setHeadData] = useState<SidebarData[]>(headSideData);
+  // const [headData, setHeadData] = useState<SidebarData[]>(headSideData);
 
   const dispatch = useAppDispatch();
   const sidebarType = useAppSelector(selectSidebarType);
+  // const componentOrder = useAppSelector(selectHeadComponent);
 
   const sidebarItems: SidebarItems[] = [
     { id: 1, name: "Section", icon: TbSection },
@@ -49,19 +51,24 @@ export default function SideBar() {
     dispatch(setSidebarType(name));
   };
 
+  // const handleDragEnd = (event: DragEndEvent) => {
+  //   const { active, over } = event;
+  //   if (over && active.id !== over.id) {
+  //     // Compute indexes from the current headData (assuming headData is in scope)
+  //     const oldIndex = headData.findIndex(item => item.id === active.id);
+  //     const newIndex = headData.findIndex(item => item.id === over.id);
 
-  const handleDrageEnd = (event: DragEndEvent)=>{
-    const {active,over} = event;
-    if (over && active.id !== over.id) {
-      setHeadData(items => {
-        const oldIndex = items.findIndex(item => item.id === active.id);
-        const newIndex = items.findIndex(item => item.id === over.id);
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
-  }
+  //     // Dispatch the Redux action first
+  //     dispatch(reorderComponents({ oldIndex, newIndex }));
 
-  console.log({headData})
+  //     // Then update the local state
+  //     setHeadData(arrayMove(headData, oldIndex, newIndex));
+  //   }
+  // };
+
+  // console.log(componentOrder)
+
+  // console.log({headData})
   return (
     <aside
       id="logo-sidebar"
@@ -107,17 +114,18 @@ export default function SideBar() {
               <button className=" p-4 w-full text-left">Sections</button>
             </li>
             <li className="space-y-2 mx-2">
-              <DndContext
-              onDragEnd={handleDrageEnd}
-              >
-                <SortableContext items={headData}>
-                  {headData.map((item) => (
-                    <HeaderDrag sideHead={item} key={item.id} />
-                  ))}
-                </SortableContext>
-              </DndContext>
+              {/* <DndContext
+              onDragEnd={handleDragEnd}
+              > */}
+              {/* <SortableContext items={headData}> */}
+              {/* {headData.map((item) => ( */}
+              <HeaderDrag
+              // sideHead={item} key={item.id}
+              />
+              {/* ))} */}
+              {/* </SortableContext>
+              </DndContext> */}
             </li>
-            
           </ul>
         </div>
       ) : (
