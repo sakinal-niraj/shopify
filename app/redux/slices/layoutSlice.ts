@@ -26,19 +26,20 @@
 // export default layoutSlice.reducer;
 // export const selectHeadComponent = (state:RootState) => state.layout.componentOrder;
 
+import { arrayMove } from "@dnd-kit/sortable";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const num = 0;
 interface SubSection {
   id: string;
-  type: string;
   visible: boolean;
   content?: string;
 }
 
 interface Section {
   id: string;
+  content: string;
   type: string;
+  contentType: string;
   visible: boolean;
   subSections: SubSection[];
 }
@@ -51,12 +52,14 @@ const initialState: InitialState = {
   sections: [
     {
       id: "header",
+      content: "header",
       type: "header",
       visible: true,
+      contentType: "",
       subSections: [
         {
           id: "menu-links",
-          type: "menu-links",
+          // type: "menu-links",
           visible: true,
         },
       ],
@@ -64,13 +67,14 @@ const initialState: InitialState = {
     {
       id: "Announcement bar",
       type: "announcementbar",
+      content: "Announcement bar",
+      contentType: "marquee",
       visible: true,
       subSections: [
         {
           id: "Add your content",
-          type: "text",
           visible: true,
-          content:"welcome to the website",
+          content: "welcome to the website",
         },
       ],
     },
@@ -90,21 +94,43 @@ const headerSectionSlice = createSlice({
       }
 
       state.sections.push({
-        id: `Announcement bar ${num + 1}`,
+        id: `Announcement bar ${Date.now()}`,
+        content: 'Announcement Bar',
+        contentType: "marquee",
         type: action.payload.type,
         visible: true,
         subSections: [
           {
-            id: `Add your content ${num +1}`,
-            type: "text",
-            content:'Welcome to the hood',
+            id: `Add your content ${Date.now()}`,
+            content: 'Welcome to the hood',
             visible: true,
           }
         ],
       });
     },
+    addsubSection: (state, action: PayloadAction<{ sectionId: string }>) => {
+
+      const section = state.sections.find((s) => s.id === action.payload.sectionId);
+
+      if (section) {
+        section.subSections.push({
+          id: `Add your content ${Date.now()}`,
+          content: 'Welcome to the hood',
+          visible: true,
+        })
+      }
+    },
     deleteSection: (state, action: PayloadAction<string>) => {
       state.sections = state.sections.filter((s) => s.id !== action.payload);
+    },
+    deleteSubSection: (state, action: PayloadAction<{
+      sectionId: string;
+      subSectionId: string;
+    }>) => {
+      const section = state.sections.find((s) => s.id === action.payload.sectionId);
+      if (section) {
+        section.subSections = section.subSections.filter((sub) => sub.id !== action.payload.subSectionId);
+      }
     },
     toggleVisiblity: (state, action: PayloadAction<string>) => {
       const section = state.sections.find((s) => s.id === action.payload);
@@ -135,9 +161,24 @@ const headerSectionSlice = createSlice({
         }
       }
     },
+    updateAnnouncementType: (state, action: PayloadAction<{
+      sectionId: string;
+      type: string;
+    }>) => {
+      const section = state.sections.find(s => s.id === action.payload.sectionId);
+      if (section) {
+        section.contentType = action.payload.type;
+      }
+    },
+    reorderSections: (
+      state,
+      action: PayloadAction<{ oldIndex: number; newIndex: number }>
+    ) => {
+      state.sections = arrayMove(state.sections, action.payload.oldIndex, action.payload.newIndex);
+    },
   },
 });
 
 
-export const { addSection, deleteSection, toggleVisiblity, toggleSubSectoinVisiblity,updateSubSectionContent } = headerSectionSlice.actions;
+export const { addSection, addsubSection, deleteSection, deleteSubSection, toggleVisiblity, toggleSubSectoinVisiblity, updateSubSectionContent, updateAnnouncementType, reorderSections } = headerSectionSlice.actions;
 export default headerSectionSlice.reducer;
