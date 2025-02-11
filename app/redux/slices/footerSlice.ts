@@ -17,23 +17,18 @@ interface Section {
 }
 
 interface InitialState {
-  sections: Section[];
+  footerSections: Section[];
 }
 
 const initialState: InitialState = {
-  sections: [
+  footerSections: [
     {
-      id: "header",
-      content: "header",
-      type: "header",
+      id: "footer",
+      content: "footer",
+      type: "footer",
       visible: true,
       contentType: "",
       subSections: [
-        {
-          id: "menu-links",
-          // type: "menu-links",
-          visible: true,
-        },
       ],
     },
     {
@@ -46,26 +41,26 @@ const initialState: InitialState = {
         {
           id: "Add your content",
           visible: true,
-          content: "welcome to the website",
+          content: "Footer",
         },
       ],
     },
   ],
 };
 
-const headerSectionSlice = createSlice({
-  name: "headerSection",
+const footerSectionSlice = createSlice({
+  name: "footerSection",
   initialState,
   reducers: {
-    addSection: (state, action: PayloadAction<{ type: string }>) => {
+    addFooterSection: (state, action: PayloadAction<{ type: string }>) => {
       if (
-        action.payload.type === "header" &&
-        state.sections.some((s) => s.type === "header")
+        action.payload.type === "footer" &&
+        state.footerSections.some((s) => s.type === "footer")
       ) {
         return;
       }
 
-      state.sections.push({
+      state.footerSections.push({
         id: `Announcement bar ${Date.now()}`,
         content: 'Announcement Bar',
         contentType: "marquee",
@@ -74,44 +69,44 @@ const headerSectionSlice = createSlice({
         subSections: [
           {
             id: `Add your content ${Date.now()}`,
-            content: 'Welcome to the hood',
+            content: 'Footer content',
             visible: true,
           }
         ],
       });
     },
-    addsubSection: (state, action: PayloadAction<{ sectionId: string }>) => {
+    addFooterSubSection: (state, action: PayloadAction<{ sectionId: string }>) => {
 
-      const section = state.sections.find((s) => s.id === action.payload.sectionId);
+      const section = state.footerSections.find((s) => s.id === action.payload.sectionId);
 
       if (section) {
         section.subSections.push({
           id: `Add your content ${Date.now()}`,
-          content: 'Welcome to the hood',
+          content: 'Footer',
           visible: true,
         })
       }
     },
-    deleteSection: (state, action: PayloadAction<string>) => {
-      state.sections = state.sections.filter((s) => s.id !== action.payload);
+    deleteFooterSection: (state, action: PayloadAction<string>) => {
+      state.footerSections = state.footerSections.filter((s) => s.id !== action.payload);
     },
-    deleteSubSection: (state, action: PayloadAction<{
+    deleteFooterSubSection: (state, action: PayloadAction<{
       sectionId: string;
       subSectionId: string;
     }>) => {
-      const section = state.sections.find((s) => s.id === action.payload.sectionId);
+      const section = state.footerSections.find((s) => s.id === action.payload.sectionId);
       if (section) {
         section.subSections = section.subSections.filter((sub) => sub.id !== action.payload.subSectionId);
       }
     },
-    toggleVisiblity: (state, action: PayloadAction<string>) => {
-      const section = state.sections.find((s) => s.id === action.payload);
+    footerToggleVisiblity: (state, action: PayloadAction<string>) => {
+      const section = state.footerSections.find((s) => s.id === action.payload);
       if (section) {
         section.visible = !section.visible;
       }
     },
-    toggleSubSectoinVisiblity: (state, action: PayloadAction<{ sectionId: string; subSectionId: string }>) => {
-      const section = state.sections.find((s) => s.id === action.payload.sectionId);
+    footerToggleSubSectoinVisiblity: (state, action: PayloadAction<{ sectionId: string; subSectionId: string }>) => {
+      const section = state.footerSections.find((s) => s.id === action.payload.sectionId);
       if (section) {
         const subSection = section.subSections.find((s) => s.id === action.payload.subSectionId);
 
@@ -120,12 +115,12 @@ const headerSectionSlice = createSlice({
         }
       }
     },
-    updateSubSectionContent: (state, action: PayloadAction<{
+    footerUdateSubSectionContent: (state, action: PayloadAction<{
       sectionId: string;
       subSectionId: string;
       content: string;
     }>) => {
-      const section = state.sections.find(s => s.id === action.payload.sectionId);
+      const section = state.footerSections.find(s => s.id === action.payload.sectionId);
       if (section) {
         const subSection = section.subSections.find(ss => ss.id === action.payload.subSectionId);
         if (subSection) {
@@ -133,24 +128,24 @@ const headerSectionSlice = createSlice({
         }
       }
     },
-    updateAnnouncementType: (state, action: PayloadAction<{
+    footerUpdateAnnouncementType: (state, action: PayloadAction<{
       sectionId: string;
       type: string;
     }>) => {
-      const section = state.sections.find(s => s.id === action.payload.sectionId);
+      const section = state.footerSections.find(s => s.id === action.payload.sectionId);
       if (section) {
         section.contentType = action.payload.type;
       }
     },
-    reorderSections: (
+    footerReorderSections: (
       state,
       action: PayloadAction<{ oldIndex: number; newIndex: number }>
     ) => {
-      state.sections = arrayMove(state.sections, action.payload.oldIndex, action.payload.newIndex);
+      state.footerSections = arrayMove(state.footerSections, action.payload.oldIndex, action.payload.newIndex);
     },
   },
 });
 
 
-export const { addSection, addsubSection, deleteSection, deleteSubSection, toggleVisiblity, toggleSubSectoinVisiblity, updateSubSectionContent, updateAnnouncementType, reorderSections } = headerSectionSlice.actions;
-export default headerSectionSlice.reducer;
+export const { addFooterSection, addFooterSubSection, deleteFooterSection, deleteFooterSubSection, footerToggleVisiblity, footerToggleSubSectoinVisiblity, footerUpdateAnnouncementType, footerUdateSubSectionContent, footerReorderSections } = footerSectionSlice.actions;
+export default footerSectionSlice.reducer;

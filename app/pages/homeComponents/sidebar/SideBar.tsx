@@ -18,7 +18,8 @@ import {
 import { IconType } from "react-icons";
 // import { useState } from "react";
 // import { SidebarData } from "@/app/constant/type";
-import HeaderDrag from "@/app/components/HeaderDrag";
+import HeaderDrag from "@/app/components/dragdrop/HeaderDrag";
+import FooterDrag from "@/app/components/dragdrop/FooterDrag";
 // import { DndContext, DragEndEvent } from "@dnd-kit/core";
 // import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 // import { reorderComponents, selectHeadComponent } from "@/app/redux/slices/layoutSlice";
@@ -119,9 +120,8 @@ export default function SideBar() {
               > */}
               {/* <SortableContext items={headData}> */}
               {/* {headData.map((item) => ( */}
-              <HeaderDrag
-              // sideHead={item} key={item.id}
-              />
+              <HeaderDrag/>
+              <FooterDrag />
               {/* ))} */}
               {/* </SortableContext>
               </DndContext> */}

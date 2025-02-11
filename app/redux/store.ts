@@ -11,22 +11,24 @@ import sidebarReducer from './slices/sidebarSlice';
 import categoryReducer from './slices/categorySlice';
 // import layoutReducer from './slices/layoutSlice';
 import headerSectionReducer from './slices/layoutSlice';
+import footerSectionReducer from './slices/footerSlice';
 
 const store = configureStore({
-    reducer:{
+    reducer: {
         color: colorReducer,
         typography: typographyReducer,
         button: buttonReducer,
-        product:productReducer,
+        product: productReducer,
         history: historyReducer,
-        page:pageReducer,
-        screen:screenReducer,
-        sidebar:sidebarReducer,
-        category:categoryReducer,
+        page: pageReducer,
+        screen: screenReducer,
+        sidebar: sidebarReducer,
+        category: categoryReducer,
         // layout:layoutReducer,
         headerSection: headerSectionReducer,
+        footerSection: footerSectionReducer,
     },
-    middleware:(getDefaultMiddleware)=>
+    middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(historyMiddleware)
 });
 

@@ -18,12 +18,17 @@ export default function ContentPage() {
   const screenType = useAppSelector(selectScreenType);
   const pageName = useAppSelector(selectPageName);
   const { sections } = useSelector((state: RootState) => state.headerSection);
+  const { footerSections } = useSelector((state:RootState)=> state.footerSection);
 
   // Get only the sections that are draggable (header and announcementbar)
   const dragSections = sections.filter(
     (s) => s.type === "announcementbar" || s.type === "header"
   );
 
+
+  const footerDragSections = footerSections.filter(
+    (s)=> s.type === 'announcementbar' || s.type === "footer"
+  )
  
   return (
     <main
@@ -75,7 +80,34 @@ export default function ContentPage() {
         {pageName === "Categories" && <Categories />}
         {pageName === "Product Details Page" && <PageDetailsPage />}
       </div>
-      <Footer />
+
+
+      {footerDragSections.map((section) => {
+            if (section.type === "announcementbar") {
+              return (
+                <div key={section.id} >
+                  <div className={section.visible ? "block" : "hidden"}>
+                    <Anouncment
+                      visible={section.subSections.some((s) => s.visible)}
+                      section={[section]}
+                    />
+                  </div>
+                </div>
+              );
+            } else if (section.type === "footer") {
+              return (
+                <div key={section.id}>
+                  <Footer
+                    visible={section.visible}
+                  />
+                </div>
+              );
+            } else {
+              return null;
+            }
+          })}
+
+
     </main>
   );
 }

@@ -13,7 +13,11 @@ import {
 } from "../redux/selectors/categorySelector";
 import { FaInstagram, FaPinterest, FaWhatsapp, FaXTwitter } from "react-icons/fa6";
 
-export const Footer = () => {
+interface NavBar{
+  visible?:boolean,
+  // visible1?:boolean,
+}
+export const Footer: React.FC<NavBar> =({visible})=> {
   // selector
   const storeName = useAppSelector(selectStoreName);
   const storeDetails = useAppSelector(selectStoreDetails);
@@ -21,7 +25,7 @@ export const Footer = () => {
   const storeImg = useAppSelector(selectStoreImg);
   console.log(storeImg);
   return (
-    <div className="footer w-full">
+    <div className={`footer w-full ${visible ? 'block' : 'hidden'}`} >
       <div className="px-10 pt-10 pb-5 flex justify-center">
         <div className="max-w-[1080px]   2xl:w-[1800px] w-full flex justify-between">
           {/* left side */}

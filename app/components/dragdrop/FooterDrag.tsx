@@ -26,19 +26,30 @@ import { PiDotsSixVerticalBold } from "react-icons/pi";
 import { IoTrashOutline } from "react-icons/io5";
 import { FiPlusCircle } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { RootState } from "../../redux/store";
+// import {
+//   addSection,
+//   addsubSection,
+//   deleteSection,
+//   deleteSubSection,
+//   toggleSubSectoinVisiblity,
+//   toggleVisiblity,
+//   updateAnnouncementType,
+//   updateSubSectionContent,
+//   reorderSections,
+// } from "../../redux/slices/layoutSlice";
+import { InputSection } from "../InputSection";
 import {
-  addSection,
-  addsubSection,
-  deleteSection,
-  deleteSubSection,
-  toggleSubSectoinVisiblity,
-  toggleVisiblity,
-  updateAnnouncementType,
-  updateSubSectionContent,
-  reorderSections,
-} from "../redux/slices/layoutSlice";
-import { InputSection } from "./InputSection";
+  addFooterSection,
+  addFooterSubSection,
+  deleteFooterSection,
+  deleteFooterSubSection,
+  footerReorderSections,
+  footerToggleSubSectoinVisiblity,
+  footerToggleVisiblity,
+  footerUdateSubSectionContent,
+  footerUpdateAnnouncementType,
+} from "@/app/redux/slices/footerSlice";
 
 interface SubSection {
   id: string;
@@ -62,9 +73,10 @@ interface DraggableSectionProps {
 }
 
 function SortableSection({ section, children }: DraggableSectionProps) {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-    id: section.id,
-  });
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: section.id,
+    });
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -76,9 +88,9 @@ function SortableSection({ section, children }: DraggableSectionProps) {
   );
 }
 
-export default function HeaderDrag() {
+export default function FooterDrag() {
   const dispatch = useDispatch();
-  const { sections } = useSelector((state: RootState) => state.headerSection);
+  const { footerSections } = useSelector((state: RootState) => state.footerSection);
 
   // Set up a sensor with an activation constraint to require a small movement before dragging starts
   const sensors = useSensors(
@@ -90,11 +102,18 @@ export default function HeaderDrag() {
   );
 
   // Local state for dropdowns and menus
-  const [headerDropDown, setHeaderDropDown] = useState(false);
-  const [announcementDropDown, setAnnouncementDropDown] = useState<Record<string, boolean>>({});
-  const [isheaderMenubar, setIsHeaderMenubar] = useState(false);
-  const [isSubMenubar, setIsSubMenubar] = useState<{ sectionId?: string; subSectionId?: string }>({});
-  const [isSectoinMenubar, setIsSectoinMenubar] = useState<{ sectionId?: string }>({});
+  const [footerDropDown, setFooterDropDown] = useState(false);
+  const [announcementDropDown, setAnnouncementDropDown] = useState<
+    Record<string, boolean>
+  >({});
+  const [isfooterMenubar, setIsFooterMenubar] = useState(false);
+  const [isSubMenubar, setIsSubMenubar] = useState<{
+    sectionId?: string;
+    subSectionId?: string;
+  }>({});
+  const [isSectoinMenubar, setIsSectoinMenubar] = useState<{
+    sectionId?: string;
+  }>({});
 
   const handleAnnouncementDelete = (sectionId: string) => {
     Swal.fire({
@@ -105,12 +124,15 @@ export default function HeaderDrag() {
       confirmButtonColor: "#dc3545",
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(deleteSection(sectionId));
+        dispatch(deleteFooterSection(sectionId));
       }
     });
   };
 
-  const handleSubSectionAnnouncementDelete = (sectionId: string, subSectionId: string) => {
+  const handleSubSectionAnnouncementDelete = (
+    sectionId: string,
+    subSectionId: string
+  ) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You want to delete the announcement bar?",
@@ -119,7 +141,7 @@ export default function HeaderDrag() {
       confirmButtonColor: "#dc3545",
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(deleteSubSection({ sectionId, subSectionId }));
+        dispatch(deleteFooterSubSection({ sectionId, subSectionId }));
       }
     });
   };
@@ -127,19 +149,26 @@ export default function HeaderDrag() {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (active.id !== over?.id) {
-      const oldIndex = sections.findIndex((s) => s.id === active.id);
-      const newIndex = sections.findIndex((s) => s.id === over?.id);
-      dispatch(reorderSections({ oldIndex, newIndex }));
+      const oldIndex = footerSections.findIndex((s) => s.id === active.id);
+      const newIndex = footerSections.findIndex((s) => s.id === over?.id);
+      dispatch(footerReorderSections({ oldIndex, newIndex }));
     }
   };
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-      <SortableContext items={sections.map((s) => s.id)} strategy={verticalListSortingStrategy}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext
+        items={footerSections.map((s) => s.id)}
+        strategy={verticalListSortingStrategy}
+      >
         <div>
-          <h1 className="text-[#222222] text-sm font-medium pb-1">Header</h1>
-          {sections.map((section) => {
-            if (section.type === "header") {
+          <h1 className="text-[#222222] text-sm font-medium pb-1">Footer</h1>
+          {footerSections.map((section) => {
+            if (section.type === "footer") {
               return (
                 <SortableSection key={section.id} section={section}>
                   <div className="flex items-center justify-between px-1 hover:bg-gray-100 rounded-lg group">
@@ -148,28 +177,29 @@ export default function HeaderDrag() {
                         className="hover:bg-gray-200 rounded-xl text-gray-800"
                         onClick={(e) => {
                           e.stopPropagation();
-                          setHeaderDropDown(!headerDropDown);
+                          setFooterDropDown(!footerDropDown);
                         }}
                         onMouseDown={(e) => e.stopPropagation()}
                       >
-                        {headerDropDown ? (
+                        {footerDropDown ? (
                           <MdKeyboardArrowDown className="mb-0.5" size={20} />
                         ) : (
                           <MdKeyboardArrowRight size={20} />
                         )}
                       </span>
+
                       <span className="flex items-center gap-1 cursor-grab text-sm w-full">
                         <span className="py-2 px-1 hover:bg-gray-200 rounded-2xl text-gray-800 pt-2">
                           <PiDotsSixVerticalBold className="group-hover:block hidden" />
                           <RiLayoutTopFill className="group-hover:hidden block" />
                         </span>
-                        Header
+                        Footer
                       </span>
                     </div>
                     <span
                       onClick={(e) => {
                         e.stopPropagation();
-                        dispatch(toggleVisiblity(section.id));
+                        dispatch(footerToggleVisiblity(section.id));
                       }}
                       className="hover:bg-gray-200 p-1 rounded-lg cursor-pointer"
                       onMouseDown={(e) => e.stopPropagation()}
@@ -181,7 +211,7 @@ export default function HeaderDrag() {
                       )}
                     </span>
                   </div>
-                  {headerDropDown &&
+                  {footerDropDown &&
                     section.subSections.map((subSection: SubSection) => (
                       <div key={subSection.id}>
                         <div className="p-1 ml-6 rounded-lg hover:bg-gray-100 flex items-center justify-between w-[80%] gap-1.5 font-normal cursor-pointer text-sm group">
@@ -197,7 +227,7 @@ export default function HeaderDrag() {
                               className="text-xs w-fit"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setIsHeaderMenubar(true);
+                                setIsFooterMenubar(true);
                               }}
                               onMouseDown={(e) => e.stopPropagation()}
                             >
@@ -209,7 +239,7 @@ export default function HeaderDrag() {
                               onClick={(e) => {
                                 e.stopPropagation();
                                 dispatch(
-                                  toggleSubSectoinVisiblity({
+                                  footerToggleSubSectoinVisiblity({
                                     sectionId: section.id,
                                     subSectionId: subSection.id,
                                   })
@@ -228,7 +258,7 @@ export default function HeaderDrag() {
                         </div>
                         <div
                           className={`fixed top-12 right-0 z-40 h-screen overflow-y-auto transition-transform bg-white w-[83%] duration-500 ${
-                            isheaderMenubar ? "block" : "hidden"
+                            isfooterMenubar ? "block" : "hidden"
                           }`}
                           role="dialog"
                           aria-labelledby="drawer-right-label"
@@ -237,19 +267,28 @@ export default function HeaderDrag() {
                             <span
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setIsHeaderMenubar(false);
+                                setIsFooterMenubar(false);
                               }}
                               className="cursor-pointer"
                               onMouseDown={(e) => e.stopPropagation()}
                             >
-                              <MdKeyboardArrowLeft size={23} className="pt-0.5" />
+                              <MdKeyboardArrowLeft
+                                size={23}
+                                className="pt-0.5"
+                              />
                             </span>
                             Menu Links
                           </div>
                           <div className="mt-8 mx-2">
                             <div className="flex flex-col gap-y-6">
-                              <InputSection label="Text" placeholder="Enter Link Name" />
-                              <InputSection label="Link" placeholder="Paste link" />
+                              <InputSection
+                                label="Text"
+                                placeholder="Enter Link Name"
+                              />
+                              <InputSection
+                                label="Link"
+                                placeholder="Paste link"
+                              />
                             </div>
                             <div className="mt-6">
                               <ul className="space-y-2">
@@ -317,7 +356,7 @@ export default function HeaderDrag() {
                         <span
                           onClick={(e) => {
                             e.stopPropagation();
-                            dispatch(toggleVisiblity(section.id));
+                            dispatch(footerToggleVisiblity(section.id));
                           }}
                           className="hover:bg-gray-200 p-1 rounded-lg cursor-pointer"
                           onMouseDown={(e) => e.stopPropagation()}
@@ -346,7 +385,10 @@ export default function HeaderDrag() {
                                 className="text-xs w-fit"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  setIsSubMenubar({ sectionId: section.id, subSectionId: subSection.id });
+                                  setIsSubMenubar({
+                                    sectionId: section.id,
+                                    subSectionId: subSection.id,
+                                  });
                                 }}
                                 onMouseDown={(e) => e.stopPropagation()}
                               >
@@ -358,7 +400,10 @@ export default function HeaderDrag() {
                                 <span
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    handleSubSectionAnnouncementDelete(section.id, subSection.id);
+                                    handleSubSectionAnnouncementDelete(
+                                      section.id,
+                                      subSection.id
+                                    );
                                   }}
                                   className="group-hover:block hidden cursor-pointer"
                                   onMouseDown={(e) => e.stopPropagation()}
@@ -370,7 +415,7 @@ export default function HeaderDrag() {
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   dispatch(
-                                    toggleSubSectoinVisiblity({
+                                    footerToggleSubSectoinVisiblity({
                                       sectionId: section.id,
                                       subSectionId: subSection.id,
                                     })
@@ -389,7 +434,9 @@ export default function HeaderDrag() {
                           </div>
                           <div
                             className={`fixed top-12 right-0 z-40 h-screen overflow-y-auto transition-transform bg-white w-[83%] duration-500 ${
-                              isSectoinMenubar.sectionId === section.id ? "block" : "hidden"
+                              isSectoinMenubar.sectionId === section.id
+                                ? "block"
+                                : "hidden"
                             }`}
                             role="dialog"
                             aria-labelledby="drawer-right-label"
@@ -403,7 +450,10 @@ export default function HeaderDrag() {
                                 className="cursor-pointer"
                                 onMouseDown={(e) => e.stopPropagation()}
                               >
-                                <MdKeyboardArrowLeft size={23} className="pt-0.5" />
+                                <MdKeyboardArrowLeft
+                                  size={23}
+                                  className="pt-0.5"
+                                />
                               </span>
                               {section.content}
                             </div>
@@ -417,7 +467,7 @@ export default function HeaderDrag() {
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   dispatch(
-                                    updateAnnouncementType({
+                                    footerUpdateAnnouncementType({
                                       sectionId: section.id,
                                       type: "marquee",
                                     })
@@ -431,7 +481,7 @@ export default function HeaderDrag() {
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   dispatch(
-                                    updateAnnouncementType({
+                                    footerUpdateAnnouncementType({
                                       sectionId: section.id,
                                       type: "slider",
                                     })
@@ -467,7 +517,10 @@ export default function HeaderDrag() {
                                 className="cursor-pointer"
                                 onMouseDown={(e) => e.stopPropagation()}
                               >
-                                <MdKeyboardArrowLeft size={23} className="pt-0.5" />
+                                <MdKeyboardArrowLeft
+                                  size={23}
+                                  className="pt-0.5"
+                                />
                               </span>
                               {subSection.content}
                             </div>
@@ -479,7 +532,7 @@ export default function HeaderDrag() {
                                   value={subSection.content}
                                   onChange={(e) => {
                                     dispatch(
-                                      updateSubSectionContent({
+                                      footerUdateSubSectionContent({
                                         sectionId: section.id,
                                         subSectionId: subSection.id,
                                         content: e.target.value,
@@ -496,7 +549,9 @@ export default function HeaderDrag() {
                     <div
                       onClick={(e) => {
                         e.stopPropagation();
-                        dispatch(addsubSection({ sectionId: section.id }));
+                        dispatch(
+                          addFooterSubSection({ sectionId: section.id })
+                        );
                       }}
                       className={`${
                         announcementDropDown[section.id] ? "block" : "hidden"
@@ -519,7 +574,7 @@ export default function HeaderDrag() {
             className="pt-2 flex items-center justify-center w-full px-1 hover:bg-gray-100 rounded-lg group"
             onClick={(e) => {
               e.stopPropagation();
-              dispatch(addSection({ type: "announcementbar" }));
+              dispatch(addFooterSection({ type: "announcementbar" }));
             }}
             onMouseDown={(e) => e.stopPropagation()}
           >
