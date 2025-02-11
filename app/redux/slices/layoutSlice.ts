@@ -30,8 +30,15 @@ const initialState: InitialState = {
       contentType: "",
       subSections: [
         {
-          id: "menu-links",
-          // type: "menu-links",
+          id: "Img-Name",
+          visible: true,
+        },
+        {
+          id: "Menu-links",
+          visible: true,
+        },
+        {
+          id: "Icons",
           visible: true,
         },
       ],

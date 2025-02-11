@@ -214,13 +214,13 @@ export default function HeaderDrag() {
                             </span>
                             <span
                               className="text-xs w-fit"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setIsHeaderMenubar(true);
-                              }}
+                              // onClick={(e) => {
+                              //   e.stopPropagation();
+                              //   setIsHeaderMenubar(true);
+                              // }}
                               onMouseDown={(e) => e.stopPropagation()}
                             >
-                              Menu links
+                              {subSection.id}
                             </span>
                           </p>
                           <div className="flex items-center justify-between">

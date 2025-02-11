@@ -41,9 +41,11 @@ interface Product {
 interface NavBar{
   visible?:boolean,
   visible1?:boolean,
+  visible2?:boolean,
+  visible3?:boolean,
 }
 
-export const NavBar: React.FC<NavBar> =({visible,visible1})=> {
+export const NavBar: React.FC<NavBar> =({visible,visible1,visible2,visible3})=> {
   const screenType = useAppSelector(selectScreenType);
   const storeName = useAppSelector(selectStoreName);
   const storeImg = useAppSelector(selectStoreImg);
@@ -59,7 +61,7 @@ export const NavBar: React.FC<NavBar> =({visible,visible1})=> {
           {/* left side */}
           <div className="flex items-center">
             {/* logo */}
-            <div className="flex items-center gap-3">
+            <div className={`flex items-center gap-3 ${visible1 ? 'block' : 'hidden'}`}>
               {
                 <div className="mt-2 aspect-h-5">
                   <Image
@@ -77,7 +79,7 @@ export const NavBar: React.FC<NavBar> =({visible,visible1})=> {
             </div>
 
             {/* links */}
-            <ul className={`flex ml-7 gap-6 ${visible1 ? 'block' : 'hidden'} `}>
+            <ul className={`flex ml-7 gap-6 ${visible2 ? 'block' : 'hidden'} `}>
               <li className="relative group cursor-pointer menuLinks">
                 Home
                 <span className="absolute -bottom-1 left-0 bg-gray-600 group-hover:bg-black w-0 h-[2px] group-hover:w-full duration-700" />
@@ -94,7 +96,7 @@ export const NavBar: React.FC<NavBar> =({visible,visible1})=> {
           </div>
 
           {/* right side */}
-          <div className="flex items-center gap-5">
+          <div className={`flex items-center gap-5 ${visible3 ? 'block' : 'hidden'}`}>
             <span className="hover:scale-125 duration-300 cursor-pointer">
               <FiSearch className="icons" />
             </span>

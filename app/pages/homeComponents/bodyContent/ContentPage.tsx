@@ -66,6 +66,8 @@ export default function ContentPage() {
                   <NavBar
                     visible={section.visible}
                     visible1={section.subSections[0]?.visible}
+                    visible2={section.subSections[1]?.visible}
+                    visible3={section.subSections[2]?.visible}
                   />
                 </div>
               );
@@ -99,6 +101,9 @@ export default function ContentPage() {
                 <div key={section.id}>
                   <Footer
                     visible={section.visible}
+                    visible1={section.subSections[0]?.visible}
+                    visible2={section.subSections[1]?.visible}
+                    visible3={section.subSections[2]?.visible}
                   />
                 </div>
               );

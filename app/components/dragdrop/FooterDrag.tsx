@@ -225,13 +225,13 @@ export default function FooterDrag() {
                             </span>
                             <span
                               className="text-xs w-fit"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setIsFooterMenubar(true);
-                              }}
+                            //   onClick={(e) => {
+                            //     e.stopPropagation();
+                            //     setIsFooterMenubar(true);
+                            //   }}
                               onMouseDown={(e) => e.stopPropagation()}
                             >
-                              Menu links
+                              {subSection.id}
                             </span>
                           </p>
                           <div className="flex items-center justify-between">

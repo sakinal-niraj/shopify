@@ -15,9 +15,11 @@ import { FaInstagram, FaPinterest, FaWhatsapp, FaXTwitter } from "react-icons/fa
 
 interface NavBar{
   visible?:boolean,
-  // visible1?:boolean,
+  visible1?:boolean,
+  visible2?:boolean,
+  visible3?:boolean,
 }
-export const Footer: React.FC<NavBar> =({visible})=> {
+export const Footer: React.FC<NavBar> =({visible,visible1,visible2,visible3})=> {
   // selector
   const storeName = useAppSelector(selectStoreName);
   const storeDetails = useAppSelector(selectStoreDetails);
@@ -29,7 +31,7 @@ export const Footer: React.FC<NavBar> =({visible})=> {
       <div className="px-10 pt-10 pb-5 flex justify-center">
         <div className="max-w-[1080px]   2xl:w-[1800px] w-full flex justify-between">
           {/* left side */}
-          <div className={`flex flex-col`}>
+          <div className={`flex flex-col ${visible1 ? 'block' : 'hidden'}`}>
             {/* logo */}
             <div className="flex items-center gap-3">
               {
@@ -56,7 +58,7 @@ export const Footer: React.FC<NavBar> =({visible})=> {
 
           {/* right side */}
           <div className="grid grid-cols-2">
-            <div className="space-y-5">
+            <div className={`space-y-5 ${visible2 ? 'block' : 'hidden'}`}>
               <h1 className="font-bold text-black">Social Media links</h1>
               <ul className="text-black pl-0.5 flex flex-col gap-y-2">
                 {storeSocialMedia[0] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[0]}><FaFacebook />Facebook</a></li>}
@@ -66,7 +68,7 @@ export const Footer: React.FC<NavBar> =({visible})=> {
                 {storeSocialMedia[4] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[4]}><FaXTwitter />Twitter</a></li>}
               </ul>
             </div>
-            <div className="flex gap-2">
+            <div className={`flex gap-2 ${visible3 ? 'block' : 'hidden'}`}>
               <div className="w-11 h-11  text-black p-[1px] rounded-md">
                 <svg
                   stroke="currentColor"
