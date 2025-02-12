@@ -14,7 +14,7 @@ interface SlideHight {
 export const Slider = () => {
   const dispatch = useDispatch();
   const slideHight: SlideHight[] = [
-    { id: 1, height: "Small", size:9/2.5 },
+    { id: 1, height: "Small", size:9/3.5 },
     { id: 2, height: "Medium", size: 9 / 5},
     { id: 3, height: "Large",size:9/6 },
   ];

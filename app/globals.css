@@ -79,7 +79,6 @@ body {
 /* aspect-ratio: var(--slider-Height); */
 .sliderCss {
   aspect-ratio: var(--slider-Height);
-  max-width: 91%;
 }
 
 .icons{

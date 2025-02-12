@@ -210,7 +210,7 @@ export function HomeBody() {
         ) : (
           <section
             key={section.id}
-            className={`aspect-w-6 aspect-h-3 mx-10 sliderCss ${
+            className={`aspect-w-6 aspect-h mx-10 sliderCss ${
               section.visible ? "block" : "hidden"
             }`}
           >
