@@ -36,10 +36,9 @@
   --product-vertical-offset:"2px";
   --product-blur:"2px";
   --product-shadow-color:"#000000";
-
-
   --background: #ffffff;
   --foreground: #171717;
+  --slider-Height: 9 / 6;
 }
 
 /*
@@ -76,6 +75,11 @@ body {
   color: var(--body-Text-Color);
   font-size: var(--body-font-scale-Size);
   font-family: var(--font-body-family);
+}
+/* aspect-ratio: var(--slider-Height); */
+.sliderCss {
+  aspect-ratio: var(--slider-Height);
+  max-width: 91%;
 }
 
 .icons{

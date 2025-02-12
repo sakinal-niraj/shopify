@@ -1,4 +1,7 @@
 "use client";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { FiSearch } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa6";
 import { FiMinus } from "react-icons/fi";
@@ -22,6 +25,8 @@ import {
   setPageName,
   setProductId,
 } from "@/app/redux/slices/pageSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
 
 interface Product {
   id: number;
@@ -38,21 +43,26 @@ interface Product {
   description: string;
 }
 
-interface NavBar{
-  visible?:boolean,
-  visible1?:boolean,
-  visible2?:boolean,
-  visible3?:boolean,
+interface NavBar {
+  visible?: boolean;
+  visible1?: boolean;
+  visible2?: boolean;
+  visible3?: boolean;
 }
 
-export const NavBar: React.FC<NavBar> =({visible,visible1,visible2,visible3})=> {
+export const NavBar: React.FC<NavBar> = ({
+  visible,
+  visible1,
+  visible2,
+  visible3,
+}) => {
   const screenType = useAppSelector(selectScreenType);
   const storeName = useAppSelector(selectStoreName);
   const storeImg = useAppSelector(selectStoreImg);
   return (
     <>
       {/* navbar */}
-      <nav className={`w-full rounded-lg ${visible ? 'block' : 'hidden'}`}>
+      <nav className={`w-full rounded-lg ${visible ? "block" : "hidden"}`}>
         <div
           className={`flex ${
             screenType === "mobile" ? "hidden" : ""
@@ -61,7 +71,11 @@ export const NavBar: React.FC<NavBar> =({visible,visible1,visible2,visible3})=> 
           {/* left side */}
           <div className="flex items-center">
             {/* logo */}
-            <div className={`flex items-center gap-3 ${visible1 ? 'block' : 'hidden'}`}>
+            <div
+              className={`flex items-center gap-3 ${
+                visible1 ? "block" : "hidden"
+              }`}
+            >
               {
                 <div className="mt-2 aspect-h-5">
                   <Image
@@ -79,7 +93,7 @@ export const NavBar: React.FC<NavBar> =({visible,visible1,visible2,visible3})=> 
             </div>
 
             {/* links */}
-            <ul className={`flex ml-7 gap-6 ${visible2 ? 'block' : 'hidden'} `}>
+            <ul className={`flex ml-7 gap-6 ${visible2 ? "block" : "hidden"} `}>
               <li className="relative group cursor-pointer menuLinks">
                 Home
                 <span className="absolute -bottom-1 left-0 bg-gray-600 group-hover:bg-black w-0 h-[2px] group-hover:w-full duration-700" />
@@ -96,7 +110,11 @@ export const NavBar: React.FC<NavBar> =({visible,visible1,visible2,visible3})=> 
           </div>
 
           {/* right side */}
-          <div className={`flex items-center gap-5 ${visible3 ? 'block' : 'hidden'}`}>
+          <div
+            className={`flex items-center gap-5 ${
+              visible3 ? "block" : "hidden"
+            }`}
+          >
             <span className="hover:scale-125 duration-300 cursor-pointer">
               <FiSearch className="icons" />
             </span>
@@ -114,7 +132,7 @@ export const NavBar: React.FC<NavBar> =({visible,visible1,visible2,visible3})=> 
       </nav>
     </>
   );
-}
+};
 
 export function HomeBody() {
   const [productsData, setProductsData] = useState<Product[]>([]);
@@ -145,12 +163,69 @@ export function HomeBody() {
       );
     }
   };
+
+  const { tamplateSection } = useSelector(
+    (state: RootState) => state.tamplateSection
+  );
+
+  const sliderSections = tamplateSection.filter((s) => s.type === "Slider");
+
+  const sliderSettings = {
+    dots: false,
+    arrows: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    pauseOnHover: true,
+  };
   return (
     <div className="homeBody py-2  w-full">
       {/* hero section */}
-      <section className="aspect-w-6 aspect-h-3 mx-10">
-        <Image src={hero1} alt="Hero1" className="w-full h-full rounded-md" />
-      </section>
+      {sliderSections.map((section) =>
+        section.id === "slider" && section.subSections.length > 1 ? (
+          <section
+            key={section.id}
+            className={`mx-10 ${section.visible ? "block" : "hidden"}`}
+          >
+            <Slider {...sliderSettings}>
+              {section.subSections.map((sub) => (
+                <div
+                  key={sub.id}
+                  className={`${sub.visible ? "block" : "hidden"} sliderCss`}
+                >
+                  <Image
+                    src={sub.sliderImg || hero1}
+                    alt="Hero Slider"
+                    className={`w-full h-full ${
+                      sub.visible ? "block" : "hidden"
+                    }`}
+                  />
+                </div>
+              ))}
+            </Slider>
+          </section>
+        ) : (
+          <section
+            key={section.id}
+            className={`aspect-w-6 aspect-h-3 mx-10 sliderCss ${
+              section.visible ? "block" : "hidden"
+            }`}
+          >
+            <div>
+              <Image
+                src={section.subSections[0].sliderImg || hero1}
+                alt="Hero Slider"
+                className={`w-full h-full rounded-md ${
+                  section.subSections[0].visible ? "block" : "hidden"
+                }`}
+              />
+            </div>
+          </section>
+        )
+      )}
 
       {/* Products section */}
       <div className="mt-10 mx-10">
