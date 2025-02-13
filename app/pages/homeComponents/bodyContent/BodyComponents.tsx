@@ -171,64 +171,127 @@ export function HomeBody() {
 
   const sliderSections = tamplateSection.filter((s) => s.type === "Slider");
 
-  const sliderSettings = {
-    dots: false,
-    arrows: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    pauseOnHover: true,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-  };
+  // const sliderSettings = {
+  //   dots: false,
+  //   arrows: true,
+  //   infinite: true,
+  //   speed: 500,
+  //   slidesToShow: 1,
+  //   slidesToScroll: 1,
+  //   autoplay: true,
+  //   autoplaySpeed: 3000,
+  //   pauseOnHover: true,
+  //   nextArrow: <NextArrow />,
+  //   prevArrow: <PrevArrow />,
+  // };
+
   return (
     <div className="homeBody py-2  w-full">
       {/* hero section */}
-      {sliderSections.map((section) =>
-        section.id === "slider" && section.subSections.length > 1 ? (
-          <section
-            key={section.id}
-            className={`mx-10 ${section.visible ? "block" : "hidden"}`}
-          >
-            <Slider {...sliderSettings}>
-              {section.subSections.map((sub) => (
-                <div
-                  key={sub.id}
-                  className={`${sub.visible ? "block" : "hidden"} sliderCss`}
-                >
-                  <Image
-                    src={sub.sliderImg || hero1}
-                    alt="Hero Slider"
-                    className={`w-full h-full ${
-                      sub.visible ? "block" : "hidden"
-                    }`}
-                  />
+      {sliderSections.map((section) => {
+        if (section.type === "Slider" && section.subSections.length > 1) {
+          const sliderSettings = {
+            dots: false,
+            arrows: true,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: section.autoplay === "on",
+            autoplaySpeed: section.autoplaySpeed,
+            pauseOnHover: false,
+            nextArrow: <NextArrow />,
+            prevArrow: <PrevArrow />,
+            fade: section.animation === "fade",
+            cssEase: section.animation === "fade" ? "linear" : "ease",
+            swipe: section.animation !== "none",
+            draggable: section.animation !== "none",
+          };
+
+          return (
+            <section
+              key={section.id}
+              className={`mx-10 ${
+                section.visible ? "block" : "hidden"
+              } `}
+            >
+              <Slider {...sliderSettings}>
+                {section.subSections.map((sub) => (
+                  <div
+                    key={sub.id}
+                    className={`relative ${sub.visible ? "block" : "hidden"}
+                       ${
+                         section.slideHight === "Small"
+                           ? "aspect-[9/3.5]"
+                           : "aspect-[9/5]"
+                       } 
+                       ${
+                         section.slideHight === "Medium"
+                           ? "aspect-[9/4.5]"
+                           : "aspect-[9/5]"
+                       } 
+                       ${
+                         section.slideHight === "Large"
+                           ? "aspect-[9/6]"
+                           : "aspect-[9/5]"
+                       } `}
+                    style={{ aspectRatio: section.slideHight }}
+                  >
+                    <Image
+                      src={sub.sliderImg || hero1}
+                      alt="Hero Slider"
+                      className={`w-full h-full ${
+                        sub.visible ? "block" : "hidden"
+                      }`}
+                    />
+                    <div className="absolute bottom-28 left-1/2 transform -translate-x-1/2 text-3xl">
+                      {sub.content}
+                    </div>
+                    <div className="absolute bottom-[86px] left-1/2 transform -translate-x-1/2">
+                    {sub.description}
+                    </div>
+                  </div>
+                ))}
+              </Slider>
+            </section>
+          );
+        } else {
+          return (
+            <section
+              key={section.id}
+              className={`aspect-w-6 aspect-h mx-10 
+              ${
+                section.slideHight === "Small" ? "aspect-[9/3]" : "aspect-[9/5]"
+              } 
+              ${
+                section.slideHight === "Medium"
+                  ? "aspect-[9/4.5]"
+                  : "aspect-[9/5]"
+              } 
+              ${
+                section.slideHight === "Large" ? "aspect-[9/6]" : "aspect-[9/5]"
+              } 
+              ${section.visible ? "block" : "hidden"}`}
+            >
+              <div>
+                <Image
+                  src={section.subSections[0].sliderImg || hero1}
+                  alt="Hero Slider"
+                  className={`w-full h-full rounded-md relative ${
+                    section.subSections[0].visible ? "block" : "hidden"
+                  }`}
+                />
+                <div className="absolute bottom-28 left-1/2 transform -translate-x-1/2 text-3xl">
+                  {section?.subSections[0].content}
                 </div>
-              ))}
-            </Slider>
-          </section>
-        ) : (
-          <section
-            key={section.id}
-            className={`aspect-w-6 aspect-h mx-10 sliderCss ${
-              section.visible ? "block" : "hidden"
-            }`}
-          >
-            <div>
-              <Image
-                src={section.subSections[0].sliderImg || hero1}
-                alt="Hero Slider"
-                className={`w-full h-full rounded-md ${
-                  section.subSections[0].visible ? "block" : "hidden"
-                }`}
-              />
-            </div>
-          </section>
-        )
-      )}
+                <div className="absolute bottom-[86px] left-1/2 transform -translate-x-1/2">
+                  {section?.subSections[0].description}
+                </div>
+              </div>
+            </section>
+          );
+        }
+      })}
 
       {/* Products section */}
       <div className="mt-10 mx-10">

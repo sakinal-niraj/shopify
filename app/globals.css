@@ -77,9 +77,8 @@ body {
   font-family: var(--font-body-family);
 }
 /* aspect-ratio: var(--slider-Height); */
-.sliderCss {
-  aspect-ratio: var(--slider-Height);
-}
+/* .sliderCss {
+} */
 
 .icons{
   color: var(--icons-Color);

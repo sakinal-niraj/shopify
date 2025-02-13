@@ -2,12 +2,14 @@ import { arrayMove } from "@dnd-kit/sortable";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { StaticImageData } from "next/image";
 import hero1 from '@/public/images/hero1.jpg';
+import hero2 from '@/public/images/t-shirt.jpg';
 
 interface SubSection {
   id: string;
   visible: boolean;
   sliderImg?: string | StaticImageData;
   content?: string;
+  description?:string;
 }
 
 interface Section {
@@ -36,14 +38,15 @@ const initialState: InitialState = {
       visible: true,
       contentType: "",
       slideHight: "Medium",
-      animation: "Slide",
+      animation: "slide",
       autoplay: "on",
-      autoplaySpeed: 1,
+      autoplaySpeed: 1000,
       subSections: [
         {
           id: "slider",
           visible: true,
           content: "slider",
+          description:"hello world",
           sliderImg: hero1,
         },
       ],
@@ -106,9 +109,12 @@ const tamplateSectionSlice = createSlice({
     addTamplateSection: (state, action: PayloadAction<{ type: string }>) => {
       state.tamplateSection.push({
         id: `${action.payload.type} ${Date.now()}`,
-        content: `${action.payload.type}`,
+        content: `${action.payload.type} ${slider = slider + 1}`,
         contentType: "marquee",
         type: action.payload.type,
+        slideHight:'Medium',
+        animation:'slide',
+        autoplay:'on',
         visible: true,
         subSections: [
           {
@@ -127,7 +133,8 @@ const tamplateSectionSlice = createSlice({
         section.subSections.push({
           id: `slider ${Date.now()}`,
           content: `slider ${slider = slider + 1}`,
-          sliderImg: hero1,
+          description:'Sldier description',
+          sliderImg: hero2,
           visible: true,
         });
       }
@@ -186,15 +193,6 @@ const tamplateSectionSlice = createSlice({
       }
     },
 
-    tamplateUpdateAnnouncementType: (
-      state,
-      action: PayloadAction<{ sectionId: string; type: string }>
-    ) => {
-      const section = state.tamplateSection.find((s) => s.id === action.payload.sectionId);
-      if (section) {
-        section.contentType = action.payload.type;
-      }
-    },
 
     tamplateReorderSections: (
       state,
@@ -212,6 +210,24 @@ const tamplateSectionSlice = createSlice({
       if (section) {
         section.slideHight = action.payload.height;
       }
+    },
+    tamplateSlideAnimation: (state, action: PayloadAction<{ sectionId: string; animate: string }>) => {
+      const section = state.tamplateSection.find((s) => s.id === action.payload.sectionId);
+      if (section) {
+        section.animation = action.payload.animate;
+      }
+    },
+    tamplateSlideAutoplay: (state,action:PayloadAction<{sectionId:string; autoplay:string}>)=>{
+      const section = state.tamplateSection.find((s)=> s.id === action.payload.sectionId);
+      if(section){
+        section.autoplay = action.payload.autoplay;
+      }
+    },
+    tamplateSlideAutoplaySpeed: (state,action:PayloadAction<{sectionId:string; autoplaySpeed:number;}>)=>{
+      const section = state.tamplateSection.find((s)=> s.id === action.payload.sectionId);
+      if(section){
+        section.autoplaySpeed = action.payload.autoplaySpeed;
+      }
     }
   },
 
@@ -225,10 +241,12 @@ export const {
   deleteTamplateSubSection,
   tamplateToggleVisibility,
   tamplateToggleSubSectionVisibility,
-  tamplateUpdateAnnouncementType,
   tamplateUpdateSubSectionContent,
   tamplateReorderSections,
-  tamplateSelectChanger
+  tamplateSelectChanger,
+  tamplateSlideAnimation,
+  tamplateSlideAutoplay,
+  tamplateSlideAutoplaySpeed,
 } = tamplateSectionSlice.actions;
 
 export default tamplateSectionSlice.reducer;

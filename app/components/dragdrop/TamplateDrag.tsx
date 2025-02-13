@@ -38,6 +38,7 @@ import {
   tamplateToggleVisibility,
 } from "@/app/redux/slices/tamplateSlice";
 import { FeaturedCollection, Slider } from "./TamplateSubComponents";
+import { secTypes } from "@/app/constant/type";
 
 interface SubSection {
   id: string;
@@ -98,7 +99,10 @@ export default function TamplateDrag() {
   // >({});
 
   // Slider
-  const [isSliderMenubar, setIsSliderMenubar] = useState(false);
+  const [isSliderMenubar, setIsSliderMenubar] = useState<{
+    sectionId?: string;
+    subSectionId?: string;
+  }>({});
   const [isSectoinMenubar, setIsSectoinMenubar] = useState<{
     sectionId?: string;
   }>({});
@@ -161,55 +165,74 @@ export default function TamplateDrag() {
           {tamplateSection.map((section) => {
             if (section.type === "Slider") {
               return (
-                <SortableSection key={section.id} section={section}>
-                  <div className="flex items-center justify-between px-1 hover:bg-gray-100 rounded-lg group">
-                    <div className="flex items-center gap-0.5 cursor-pointer w-full">
-                      <span
-                        className="hover:bg-gray-200 rounded-xl text-gray-800"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setTamplateDropDown(!tamplateDropDown);
-                        }}
-                        onMouseDown={(e) => e.stopPropagation()}
-                      >
-                        {tamplateDropDown ? (
-                          <MdKeyboardArrowDown className="mb-0.5" size={20} />
-                        ) : (
-                          <MdKeyboardArrowRight size={20} />
-                        )}
-                      </span>
-
-                      <span className="flex items-center gap-1 cursor-grab text-sm w-full">
-                        <span className="py-2 px-1 hover:bg-gray-200 rounded-2xl text-gray-800 pt-2">
-                          <PiDotsSixVerticalBold className="group-hover:block hidden" />
-                          <RiLayoutTopFill className="group-hover:hidden block" />
-                        </span>
+                <div key={section.id}>
+                  <SortableSection key={section.id} section={section}>
+                    <div className="flex items-center justify-between px-1 hover:bg-gray-100 rounded-lg group">
+                      <div className="flex items-center gap-0.5 cursor-pointer w-full">
                         <span
+                          className="hover:bg-gray-200 rounded-xl text-gray-800"
                           onClick={(e) => {
                             e.stopPropagation();
-                            setIsSectoinMenubar({ sectionId: section.id });
+                            setTamplateDropDown(!tamplateDropDown);
                           }}
                           onMouseDown={(e) => e.stopPropagation()}
                         >
-                          {section.content}
+                          {tamplateDropDown ? (
+                            <MdKeyboardArrowDown className="mb-0.5" size={20} />
+                          ) : (
+                            <MdKeyboardArrowRight size={20} />
+                          )}
                         </span>
+
+                        <span className="flex items-center gap-1 cursor-grab text-sm w-full">
+                          <span className="py-2 px-1 hover:bg-gray-200 rounded-2xl text-gray-800 pt-2">
+                            <PiDotsSixVerticalBold className="group-hover:block hidden" />
+                            <RiLayoutTopFill className="group-hover:hidden block" />
+                          </span>
+                          <span
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsSectoinMenubar({ sectionId: section.id });
+                            }}
+                            onMouseDown={(e) => e.stopPropagation()}
+                          >
+                            {section.content}
+                          </span>
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        {section.type === "Slider" && (
+                          <div>
+                            <span
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                dispatch(deleteTamplateSection(section.id));
+                              }}
+                              className="group-hover:block hidden cursor-pointer"
+                              onMouseDown={(e) => e.stopPropagation()}
+                            >
+                              <IoTrashOutline />
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          dispatch(tamplateToggleVisibility(section.id));
+                        }}
+                        className="hover:bg-gray-200 p-1 rounded-lg cursor-pointer"
+                        onMouseDown={(e) => e.stopPropagation()}
+                      >
+                        {section.visible ? (
+                          <LuEye className="hidden group-hover:block" />
+                        ) : (
+                          <LuEyeOff className="hidden group-hover:block" />
+                        )}
                       </span>
                     </div>
-                    <span
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        dispatch(tamplateToggleVisibility(section.id));
-                      }}
-                      className="hover:bg-gray-200 p-1 rounded-lg cursor-pointer"
-                      onMouseDown={(e) => e.stopPropagation()}
-                    >
-                      {section.visible ? (
-                        <LuEye className="hidden group-hover:block" />
-                      ) : (
-                        <LuEyeOff className="hidden group-hover:block" />
-                      )}
-                    </span>
-                  </div>
+                  </SortableSection>
+
                   <div
                     className={`fixed top-12 right-0 z-40 h-screen overflow-y-auto transition-transform bg-white w-[83%] duration-500 ${
                       isSectoinMenubar.sectionId === section.id
@@ -232,7 +255,7 @@ export default function TamplateDrag() {
                       </span>
                       {section.content}
                     </div>
-                    <Slider />
+                    <Slider secId={isSectoinMenubar.sectionId || section.id} />
                   </div>
                   {tamplateDropDown &&
                     section.subSections.map((subSection: SubSection) => (
@@ -250,7 +273,11 @@ export default function TamplateDrag() {
                               className="text-xs w-fit"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setIsSliderMenubar(true);
+                                setIsSliderMenubar((prev) => ({
+                                  ...prev,
+                                  sectionId: section.id,
+                                  subSectionId: subSection.id,
+                                }));
                               }}
                               onMouseDown={(e) => e.stopPropagation()}
                             >
@@ -280,7 +307,10 @@ export default function TamplateDrag() {
                         </div>
                         <div
                           className={`fixed top-12 right-0 z-40 h-screen overflow-y-auto transition-transform bg-white w-[83%] duration-500 ${
-                            isSliderMenubar ? "block" : "hidden"
+                            isSliderMenubar.sectionId === section.id &&
+                            isSliderMenubar.subSectionId === subSection.id
+                              ? "block"
+                              : "hidden"
                           }`}
                           role="dialog"
                           aria-labelledby="drawer-right-label"
@@ -289,7 +319,7 @@ export default function TamplateDrag() {
                             <span
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setIsSliderMenubar(false);
+                                setIsSliderMenubar({});
                               }}
                               className="cursor-pointer"
                               onMouseDown={(e) => e.stopPropagation()}
@@ -299,25 +329,19 @@ export default function TamplateDrag() {
                                 className="pt-0.5"
                               />
                             </span>
-                            Menu Links
+                            {subSection.id}
                           </div>
                           <div className="mt-8 mx-2">
                             <div className="flex flex-col gap-y-6">
                               <InputSection
                                 label="Text"
                                 placeholder="Enter Link Name"
+                                // value={}
                               />
                               <InputSection
                                 label="Link"
                                 placeholder="Paste link"
                               />
-                            </div>
-                            <div className="mt-6">
-                              <ul className="space-y-2">
-                                <li>Home</li>
-                                <li>Categories</li>
-                                <li>Product Details</li>
-                              </ul>
                             </div>
                           </div>
                         </div>
@@ -340,27 +364,14 @@ export default function TamplateDrag() {
                     </span>
                     Add section
                   </div>
-                </SortableSection>
+                </div>
               );
             } else if (section.type !== "Slider") {
               return (
-                <SortableSection key={section.id} section={section}>
-                  <div>
+                <div key={section.id}>
+                  <SortableSection key={section.id} section={section}>
                     <div className="flex items-center justify-between px-1 hover:bg-gray-100 rounded-lg group">
                       <div className="flex items-center gap-0.5 cursor-pointer w-full">
-                        {/* <span
-                          className="py-1.5 pl-5"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setAnnouncementDropDown((prev) => ({
-                              ...prev,
-                              [section.id]: !prev[section.id],
-                            }));
-                          }}
-                          onMouseDown={(e) => e.stopPropagation()}
-                        > 
-
-                        </span> */}
                         <div className="flex items-center gap-1  text-sm w-full ml-5">
                           <div className="py-2 px-1 hover:bg-gray-200 rounded-2xl text-gray-800">
                             <PiDotsSixVerticalBold className="group-hover:block hidden hover:cursor-grab" />
@@ -406,35 +417,37 @@ export default function TamplateDrag() {
                         </span>
                       </p>
                     </div>
-                    {/* section menu bar */}
-                    <div
-                      className={`fixed top-12 right-0 z-40 h-screen overflow-y-auto transition-transform bg-white w-[83%] duration-500 ${
-                        isSectoinMenubar.sectionId === section.id
-                          ? "block"
-                          : "hidden"
-                      }`}
-                      role="dialog"
-                      aria-labelledby="drawer-right-label"
-                    >
-                      <div className="flex items-center font-semibold text-base mt-4">
-                        <span
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setIsSectoinMenubar({});
-                          }}
-                          className="cursor-pointer"
-                          onMouseDown={(e) => e.stopPropagation()}
-                        >
-                          <MdKeyboardArrowLeft size={23} className="pt-0.5" />
-                        </span>
-                        {section.content}
-                      </div>
-                      {section.type === "Featured Collection" && (
-                        <FeaturedCollection />
-                      )}
+                  </SortableSection>
+                  {/* section menu bar */}
+                  <div
+                    className={`fixed top-12 right-0 z-40 h-screen overflow-y-auto transition-transform bg-white w-[83%] duration-500 ${
+                      isSectoinMenubar.sectionId === section.id
+                        ? "block"
+                        : "hidden"
+                    }`}
+                    role="dialog"
+                    aria-labelledby="drawer-right-label"
+                  >
+                    <div className="flex items-center font-semibold text-base mt-4">
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsSectoinMenubar({});
+                        }}
+                        className="cursor-pointer"
+                        onMouseDown={(e) => e.stopPropagation()}
+                      >
+                        <MdKeyboardArrowLeft size={23} className="pt-0.5" />
+                      </span>
+                      {section.content}
                     </div>
+                    {section.type === "Featured Collection" && (
+                      <FeaturedCollection
+                        secId={isSectoinMenubar.sectionId || section.id}
+                      />
+                    )}
                   </div>
-                </SortableSection>
+                </div>
               );
             } else {
               return null;
@@ -461,17 +474,17 @@ export default function TamplateDrag() {
               Add section
               {isAddSection && (
                 <div className="absolute top-5 -left-2 rounded-md bg-white border border-gray-200 max-w-[400px] w-full text-left">
-                  {tamplateSection.map((sec) => (
+                  {secTypes.map((sec) => (
                     <div key={sec.id} className="p-1">
                       <span
                         onClick={(e) => {
                           e.stopPropagation();
-                          dispatch(addTamplateSection({ type: sec.type }));
+                          dispatch(addTamplateSection({ type: sec.name }));
                           setIsAddSection(false);
                         }}
                         className="w-full"
                       >
-                        {sec.type}
+                        {sec.name}
                       </span>
                     </div>
                   ))}

@@ -4,23 +4,24 @@ import { useSelector } from "react-redux";
 
 interface SlideHight {
   id: number;
-  height: string;
-  size:number;
+  name: string;
+  value:string;
 }
 
 
 interface SelectType {
   title?: string;
-  slideHight?: SlideHight[];
-  onClick?: (sectionId: string, height: string,size:number) => void;
+  options?: SlideHight[];
+  onClick?: (sectionId: string, name: string,value:string) => void;
   sectionType?: string;
+  sectionName?:string;
 }
-
 export const SelectType: React.FC<SelectType> = ({
   title,
-  slideHight,
+  options,
   onClick,
   sectionType,
+  sectionName
 }) => {
   const { tamplateSection } = useSelector(
     (state: RootState) => state.tamplateSection
@@ -32,21 +33,21 @@ export const SelectType: React.FC<SelectType> = ({
 
       {/* Changer */}
       {tamplateSection.map((sec) => {
-        if (sec.type === sectionType) {
+        if (sec.id === sectionType) {
           return (
             <div
               key={sec.id}
               className="mx-1 w-full bg-gray-200 flex p-1 rounded-md"
             >
-              {slideHight?.map((h) => (
+              {options?.map((h) => (
                 <p
                   key={h.id}
-                  className={`px-4 py-3 rounded-md font-normal ${
-                    sec.slideHight == h.height ? "bg-white" : "bg-none"
+                  className={`px-4 py-3 rounded-md font-normal first-letter:uppercase ${
+                    sectionName === h.name ? "bg-white" : "bg-none"
                   }`}
-                  onClick={() => onClick && onClick(sec.id, h.height,h.size)}
+                  onClick={() => onClick && onClick(sectionType, h?.name,h?.value)}
                 >
-                  {h.height}
+                  {h.name}
                 </p>
               ))}
             </div>

@@ -41,6 +41,11 @@ export default {
           '100%': { transform: 'translateX(100%)' },
         }
       },
+      aspectRatio: {
+        "9/3.5": "9 / 3.5",
+        "9/5": "9 / 5",
+        "9/6": "9 / 6",
+      },
     },
   },
   plugins: [
