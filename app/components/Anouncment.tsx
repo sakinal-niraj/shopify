@@ -4,6 +4,7 @@ import React from "react";
 import Slider from 'react-slick'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { NextArrow, PrevArrow } from "../constant/Arrows";
 
 
 interface SubSection {
@@ -42,6 +43,8 @@ export const Anouncment: React.FC<AnnouncementBarProps> = ({
     autoplay: true,         
     autoplaySpeed: 3000,    
     pauseOnHover: true,
+    nextArrow:<NextArrow />,
+    prevArrow:<PrevArrow />,
   };
 
   return (

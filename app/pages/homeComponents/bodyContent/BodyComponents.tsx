@@ -27,6 +27,7 @@ import {
 } from "@/app/redux/slices/pageSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
+import { NextArrow, PrevArrow } from "@/app/constant/Arrows";
 
 interface Product {
   id: number;
@@ -180,6 +181,8 @@ export function HomeBody() {
     autoplay: true,
     autoplaySpeed: 3000,
     pauseOnHover: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
   };
   return (
     <div className="homeBody py-2  w-full">
