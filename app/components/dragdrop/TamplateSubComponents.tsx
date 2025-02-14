@@ -211,13 +211,17 @@ export const SliderSub: React.FC<SliderSubProps> = ({ secId, subSecId }) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setPreviewImg(imageUrl);
+      // const imageUrl = URL.createObjectURL(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImg(reader.result as string);
+      };
+      reader.readAsDataURL(file);
       dispatch(
         tamplateSlideImage({
           sectionId: secId,
           subSectionId: subSecId,
-          image: imageUrl,
+          image: reader.result as string,
         })
       );
     }
@@ -233,13 +237,24 @@ export const SliderSub: React.FC<SliderSubProps> = ({ secId, subSecId }) => {
             htmlFor="dropzone-file"
             className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
           >
-            <Image
-              src={previewImg || hero2}
-              alt="Uploaded Preview"
-              width={100}
-              height={100}
-              className="object-cover rounded-lg"
-            />
+            {previewImg ? (
+              <Image
+                src={previewImg}
+                alt="Uploaded Preview"
+                width={100}
+                height={100}
+                unoptimized
+                className="object-cover rounded-lg"
+              />
+            ) : (
+              <Image
+                src={hero2}
+                alt="Uploaded Preview"
+                width={100}
+                height={100}
+                className="object-cover rounded-lg"
+              />
+            )}
             <input
               id="dropzone-file"
               type="file"
@@ -453,7 +468,7 @@ export const RichTextSection = ({ secId }: { secId: string }) => {
       setSecondButton(richTextSection.buttonText1);
     }
 
-    if(richTextSection?. buttonLink1){
+    if (richTextSection?.buttonLink1) {
       setSecondButtonLink(richTextSection.buttonLink1);
     }
   }, [richTextSection]);
@@ -533,11 +548,18 @@ export const RichTextSection = ({ secId }: { secId: string }) => {
   };
 
   // handle second button link change
-  const handleSecondButtonLinkChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
+  const handleSecondButtonLinkChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const newButtonLink = e.target.value;
     setSecondButtonLink(newButtonLink);
-    dispatch(tamplateRicthTextSecondButtonLink({sectionId:secId, secButtonLink:newButtonLink}));
-  }
+    dispatch(
+      tamplateRicthTextSecondButtonLink({
+        sectionId: secId,
+        secButtonLink: newButtonLink,
+      })
+    );
+  };
   return (
     <div className="flex gap-2 mt-5 px-2 w-full flex-col gap-y-5">
       {/* Rich text alignment */}
