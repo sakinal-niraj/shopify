@@ -25,7 +25,7 @@ export const Footer: React.FC<NavBar> =({visible,visible1,visible2,visible3})=> 
   const storeDetails = useAppSelector(selectStoreDetails);
   const storeSocialMedia = useAppSelector(selectStoreSocialMedia);
   const storeImg = useAppSelector(selectStoreImg);
-  console.log(storeImg);
+  console.log(storeSocialMedia[0]);
   return (
     <div className={`footer w-full ${visible ? 'block' : 'hidden'}`} >
       <div className="px-10 pt-10 pb-5 flex justify-center">
@@ -61,11 +61,11 @@ export const Footer: React.FC<NavBar> =({visible,visible1,visible2,visible3})=> 
             <div className={`space-y-5 ${visible2 ? 'block' : 'hidden'}`}>
               <h1 className="font-bold text-black">Social Media links</h1>
               <ul className="text-black pl-0.5 flex flex-col gap-y-2">
-                {storeSocialMedia[0] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[0]}><FaFacebook />Facebook</a></li>}
-                {storeSocialMedia[1] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[1]}><FaWhatsapp />Whatsapp</a></li>}
-                {storeSocialMedia[2] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[2]}><FaInstagram />Instagram</a></li>}
-                {storeSocialMedia[3] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[3]}><FaPinterest />Pinterest</a></li>}
-                {storeSocialMedia[4] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[4]}><FaXTwitter />Twitter</a></li>}
+                {storeSocialMedia[0] && <li className="hover:text-blue-950"><a className="flex items-center gap-1"  href={storeSocialMedia[0].startsWith("http") ? storeSocialMedia[0] : `https://${storeSocialMedia[0]}`}><FaFacebook />Facebook</a></li>}
+                {storeSocialMedia[1] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[1].startsWith('http') ? storeSocialMedia[1] : `https://${storeSocialMedia[1]}`}><FaWhatsapp />Whatsapp</a></li>}
+                {storeSocialMedia[2] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[2].startsWith('http') ? storeSocialMedia[2] : `https://${storeSocialMedia[2]}`}><FaInstagram />Instagram</a></li>}
+                {storeSocialMedia[3] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[3].startsWith('http') ? storeSocialMedia[3] : `https://${storeSocialMedia[3]}`}><FaPinterest />Pinterest</a></li>}
+                {storeSocialMedia[4] && <li className="hover:text-blue-950"><a className="flex items-center gap-1" href={storeSocialMedia[4].startsWith('http') ? storeSocialMedia[4] : `https://${storeSocialMedia[4]}`}><FaXTwitter />Twitter</a></li>}
               </ul>
             </div>
             <div className={`flex gap-2 ${visible3 ? 'block' : 'hidden'}`}>

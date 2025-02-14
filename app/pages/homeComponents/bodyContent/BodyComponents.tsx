@@ -12,7 +12,7 @@ import { LiaShoppingBagSolid } from "react-icons/lia";
 import Image from "next/image";
 import hero1 from "@/public/images/hero1.jpg";
 // import tshirt from "@/public/images/t-shirt.jpg";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { selectScreenType } from "@/app/redux/slices/screenSizeSlice";
@@ -28,6 +28,7 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { NextArrow, PrevArrow } from "@/app/constant/Arrows";
+import { RichText } from "./RichText";
 
 interface Product {
   id: number;
@@ -170,21 +171,30 @@ export function HomeBody() {
   );
 
   const sliderSections = tamplateSection.filter((s) => s.type === "Slider");
+  const FeaturedCollections = tamplateSection.filter(
+    (s) => s.type === "Featured Collection"
+  );
+  const RichTextSection = tamplateSection.filter((s) => s.type === "Rich Text");
 
-  // const sliderSettings = {
-  //   dots: false,
-  //   arrows: true,
-  //   infinite: true,
-  //   speed: 500,
-  //   slidesToShow: 1,
-  //   slidesToScroll: 1,
-  //   autoplay: true,
-  //   autoplaySpeed: 3000,
-  //   pauseOnHover: true,
-  //   nextArrow: <NextArrow />,
-  //   prevArrow: <PrevArrow />,
-  // };
+  interface SlickSlider {
+    slickPlay: () => void;
+    slickPause: () => void;
+  }
+  const sliderRef = useRef<(Slider & SlickSlider) | null>(null);
+  useEffect(() => {
+    if (sliderRef.current) {
+      // Handle autoplay changes
+      const currentSection = sliderSections.find(
+        (section) => section.type === "Slider" && section.subSections.length > 1
+      );
 
+      if (currentSection?.autoplay === "on") {
+        sliderRef.current.slickPlay();
+      } else {
+        sliderRef.current.slickPause();
+      }
+    }
+  }, [sliderSections]);
   return (
     <div className="homeBody py-2  w-full">
       {/* hero section */}
@@ -211,18 +221,20 @@ export function HomeBody() {
           return (
             <section
               key={section.id}
-              className={`mx-10 ${
-                section.visible ? "block" : "hidden"
-              } `}
+              className={`mx-10 ${section.visible ? "block" : "hidden"} `}
             >
-              <Slider {...sliderSettings}>
+              <Slider
+                {...sliderSettings}
+                ref={sliderRef}
+                key={`slider-${section.id}-${section.autoplay}`}
+              >
                 {section.subSections.map((sub) => (
                   <div
                     key={sub.id}
                     className={`relative ${sub.visible ? "block" : "hidden"}
                        ${
                          section.slideHight === "Small"
-                           ? "aspect-[9/3.5]"
+                           ? "aspect-[9/4]"
                            : "aspect-[9/5]"
                        } 
                        ${
@@ -248,7 +260,7 @@ export function HomeBody() {
                       {sub.content}
                     </div>
                     <div className="absolute bottom-[86px] left-1/2 transform -translate-x-1/2">
-                    {sub.description}
+                      {sub.description}
                     </div>
                   </div>
                 ))}
@@ -261,7 +273,7 @@ export function HomeBody() {
               key={section.id}
               className={`aspect-w-6 aspect-h mx-10 
               ${
-                section.slideHight === "Small" ? "aspect-[9/3]" : "aspect-[9/5]"
+                section.slideHight === "Small" ? "aspect-[9/4]" : "aspect-[9/5]"
               } 
               ${
                 section.slideHight === "Medium"
@@ -294,69 +306,121 @@ export function HomeBody() {
       })}
 
       {/* Products section */}
-      <div className="mt-10 mx-10">
-        {/* filter */}
-        <div className="flex justify-between items-center">
-          <div>
-            <p>All Products</p>
-            <p>24 items</p>
-          </div>
-
-          <div>
-            <label htmlFor="">Sorted by:</label>
-            <select name="" id="" className="bg-white">
-              <option value="Newest Arrival">Newest Arrival</option>
-              <option value="Newest Arrival">Trending</option>
-              <option value="Newest Arrival">latest</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Products */}
-        <div
-          className={`mt-10 grid  ${
-            screenType === "mobile" ? "grid-cols-1" : "grid-cols-4"
-          } text-center gap-10`}
-        >
-          {/* single product container */}
-          {productsData.length > 0 ? (
-            productsData.map((item) => (
-              <div className="max-w-full products" key={item?.id}>
-                {/* img container */}
-                <div className="w-full h-auto text-left imgContainer">
-                  <Image
-                    src={item?.thumbnail}
-                    alt="product image"
-                    width={200} // Set the width of the image (e.g., 200px)
-                    height={200} // Set the height of the image (e.g., 200px)
-                    layout="responsive" // Makes the image responsive and adjusts automatically
-                    className="object-cover productImg"
-                  />
-                </div>
-                <div className="px-2 pb-2">
-                  {/* content */}
-                  <p className="w-full">
-                    <span className="cursor-pointer">{item?.title}</span>
-                  </p>
-                  <p className="w-full mrp">
-                    <span className="cursor-pointer">{item?.price}</span>
-                  </p>
-                </div>
-                <button
-                  onClick={() => {
-                    handleProductClick(item.id);
-                  }}
-                  className="px-2 rounded-sm btn-Custome mb-3 mx-1.5"
-                >
-                  Show
-                </button>
+      {FeaturedCollections.map((fsec) => {
+        return (
+          <div
+            className={`mt-10 mx-10 ${fsec.visible ? "block" : "hidden"}`}
+            key={fsec.id}
+          >
+            {/* filter */}
+            <div className="flex justify-between items-center">
+              <div>
+                <p>{fsec.content}</p>
+                <p>24 items</p>
+                <p>{fsec.description}</p>
               </div>
-            ))
-          ) : (
-            <div className="text-center text-4xl">Loading...</div>
-          )}
-        </div>
-      </div>
+
+              <div>
+                <label htmlFor="">Sorted by:</label>
+                <select name="" id="" className="bg-white">
+                  <option value="Newest Arrival">Newest Arrival</option>
+                  <option value="Newest Arrival">Trending</option>
+                  <option value="Newest Arrival">latest</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Products */}
+            <div
+              className={`mt-10 grid  ${
+                screenType === "mobile" ? "grid-cols-1" : ""
+              } text-center gap-10
+              ${
+                screenType !== "mobile" && fsec.totalProduct === 1
+                  ? "grid-cols-1"
+                  : ""
+              }
+              ${
+                screenType !== "mobile" && fsec.totalProduct === 2
+                  ? "grid-cols-2"
+                  : ""
+              }
+              ${
+                screenType !== "mobile" && fsec.totalProduct === 3
+                  ? "grid-cols-3"
+                  : ""
+              }
+              ${
+                screenType !== "mobile" && fsec.totalProduct === 4
+                  ? "grid-cols-4"
+                  : ""
+              }
+              ${
+                screenType !== "mobile" && fsec.totalProduct === 5
+                  ? "grid-cols-5"
+                  : ""
+              }
+              ${
+                screenType !== "mobile" && fsec.totalProduct === 6
+                  ? "grid-cols-6"
+                  : ""
+              }
+              `}
+            >
+              {/* single product container */}
+              {productsData.length > 0 ? (
+                productsData.map((item) => (
+                  <div className="max-w-full products" key={item?.id}>
+                    {/* img container */}
+                    <div className="w-full h-auto text-left imgContainer">
+                      <Image
+                        src={item?.thumbnail}
+                        alt="product image"
+                        width={200} // Set the width of the image (e.g., 200px)
+                        height={200} // Set the height of the image (e.g., 200px)
+                        layout="responsive" // Makes the image responsive and adjusts automatically
+                        className="object-cover productImg"
+                      />
+                    </div>
+                    <div className="px-2 pb-2">
+                      {/* content */}
+                      <p className="w-full">
+                        <span className="cursor-pointer">{item?.title}</span>
+                      </p>
+                      <p className="w-full mrp">
+                        <span className="cursor-pointer">{item?.price}</span>
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        handleProductClick(item.id);
+                      }}
+                      className="px-2 rounded-sm btn-Custome mb-3 mx-1.5"
+                    >
+                      Show
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-4xl">Loading...</div>
+              )}
+            </div>
+            <div className="w-full text-center my-4 mt-6">
+              <button
+                className={`bg-black text-white rounded-sm ${
+                  fsec.buttonText ? "px-4 py-1" : "px-0 py-0"
+                }`}
+              >
+                {fsec.buttonText}
+              </button>
+            </div>
+          </div>
+        );
+      })}
+
+      {RichTextSection.map((section) => {
+        return <RichText key={section.id} RichTextSection={section} />;
+      })}
     </div>
   );
 }

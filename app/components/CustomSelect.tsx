@@ -12,7 +12,7 @@ interface CustomSelectProps {
   options?: Options<OptionType>;   // `Options` is a type from react-select
   onChange?: (selectedOption: SingleValue<OptionType>) => void; // Replace `any` with `SingleValue<OptionType>`
   className?: string;
-  className1:string;
+  className1?:string;
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({

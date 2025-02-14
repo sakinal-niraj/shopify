@@ -39,6 +39,7 @@
   --background: #ffffff;
   --foreground: #171717;
   --slider-Height: 9 / 4.5;
+  --number-of-product-grid:4;
 }
 
 /*
@@ -135,6 +136,10 @@ body {
   color: var(--mrp-Text-Color);
 }
 
+.richText{
+  font-family: var(--font-body-family);
+  color: var(--body-Text-Color);
+}
 .footer{
   background-color: var(--headerFooter-Color);
   color: var(--head-Text-Color);

@@ -27,7 +27,7 @@ import { IoTrashOutline } from "react-icons/io5";
 import { FiPlusCircle } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { InputSection } from "../InputSection";
+// import { InputSection } from "../InputSection";
 import {
   addTamplateSection,
   addTamplateSubSection,
@@ -37,7 +37,7 @@ import {
   // tamplateToggleSubSectionVisibility,
   tamplateToggleVisibility,
 } from "@/app/redux/slices/tamplateSlice";
-import { FeaturedCollection, Slider } from "./TamplateSubComponents";
+import { FeaturedCollection, RichTextSection, Slider, SliderSub } from "./TamplateSubComponents";
 import { secTypes } from "@/app/constant/type";
 
 interface SubSection {
@@ -331,19 +331,10 @@ export default function TamplateDrag() {
                             </span>
                             {subSection.id}
                           </div>
-                          <div className="mt-8 mx-2">
-                            <div className="flex flex-col gap-y-6">
-                              <InputSection
-                                label="Text"
-                                placeholder="Enter Link Name"
-                                // value={}
-                              />
-                              <InputSection
-                                label="Link"
-                                placeholder="Paste link"
-                              />
-                            </div>
-                          </div>
+                          <SliderSub 
+                          secId={isSliderMenubar.sectionId || section.id}
+                          subSecId={isSliderMenubar.subSectionId || subSection.id}
+                          />
                         </div>
                       </div>
                     ))}
@@ -420,7 +411,7 @@ export default function TamplateDrag() {
                   </SortableSection>
                   {/* section menu bar */}
                   <div
-                    className={`fixed top-12 right-0 z-40 h-screen overflow-y-auto transition-transform bg-white w-[83%] duration-500 ${
+                    className={`fixed top-12 right-0 z-40 max-h-[95%] h-full 3xl:max-h-[98%] pb-10 mainScrollBar overflow-y-auto transition-transform bg-white w-[83%] 3xl:w-[85%]  duration-500 ${
                       isSectoinMenubar.sectionId === section.id
                         ? "block"
                         : "hidden"
@@ -446,6 +437,13 @@ export default function TamplateDrag() {
                         secId={isSectoinMenubar.sectionId || section.id}
                       />
                     )}
+                    {
+                      section.type === "Rich Text" && (
+                       <RichTextSection 
+                       secId={section.id}
+                        /> 
+                      )
+                    }
                   </div>
                 </div>
               );
