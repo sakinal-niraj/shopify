@@ -7,9 +7,9 @@ import hero2 from '@/public/images/t-shirt.jpg';
 interface SubSection {
   id: string;
   visible: boolean;
-  sliderImg?: string | StaticImageData;
+  sliderImg?: File | string | StaticImageData;
   content?: string;
-  description?:string;
+  description?: string;
 }
 
 interface Section {
@@ -17,20 +17,20 @@ interface Section {
   content: string;
   type: string;
   contentType: string;
-  heading?:string;
+  heading?: string;
   visible: boolean;
-  description?:string;
+  description?: string;
   slideHight?: string;
   animation?: string;
   autoplay?: string;
   autoplaySpeed?: number;
-  buttonText?:string,
-  buttonLink?:string,
-  buttonText1?:string,
-  buttonLink1?:string,
-  tagLine?:string,
-  totalProduct?:number,
-  alignment?:string,
+  buttonText?: string,
+  buttonLink?: string,
+  buttonText1?: string,
+  buttonLink1?: string,
+  tagLine?: string,
+  totalProduct?: number,
+  alignment?: string,
   subSections: SubSection[];
 }
 
@@ -52,10 +52,10 @@ const initialState: InitialState = {
       autoplaySpeed: 1000,
       subSections: [
         {
-          id: "slider",
+          id: "subslider",
           visible: true,
           content: "slider",
-          description:"hello world",
+          description: "hello world",
           sliderImg: hero1,
         },
       ],
@@ -64,9 +64,9 @@ const initialState: InitialState = {
       id: "Featured Collection",
       type: "Featured Collection",
       content: "Featured Collection",
-      description:"this is featured collection description",
-      buttonText:"first",
-      totalProduct:4,
+      description: "this is featured collection description",
+      buttonText: "first",
+      totalProduct: 4,
       contentType: "marquee",
       visible: true,
       subSections: [
@@ -76,7 +76,7 @@ const initialState: InitialState = {
       id: "Featured Product",
       type: "Featured Product",
       content: "Featured Product",
-      description:"this is featured product description",
+      description: "this is featured product description",
       contentType: "marquee",
       visible: true,
       subSections: [
@@ -86,15 +86,15 @@ const initialState: InitialState = {
       id: "Rich Text",
       type: "Rich Text",
       content: "Rich Text",
-      description:"this is rich text description",
-      heading:"Talk about you brand",
-      buttonText:"Simple button",
-      buttonLink:"",
-      buttonText1:"",
-      buttonLink1:"",
+      description: "this is rich text description",
+      heading: "Talk about you brand",
+      buttonText: "Simple button",
+      buttonLink: "",
+      buttonText1: "",
+      buttonLink1: "",
       contentType: "Talk about you brand",
-      tagLine:"Add a tag line",
-      alignment:'center',
+      tagLine: "Add a tag line",
+      alignment: 'center',
       visible: true,
       subSections: [
       ],
@@ -103,7 +103,7 @@ const initialState: InitialState = {
       id: "Image banner",
       type: "Image banner",
       content: "Image banner",
-      description:"this is Image banner description",
+      description: "this is Image banner description",
       contentType: "marquee",
       visible: true,
       subSections: [
@@ -113,7 +113,7 @@ const initialState: InitialState = {
       id: "Image with text",
       type: "Image with text",
       content: "Image with text",
-      description:"this is Image with text description",
+      description: "this is Image with text description",
       contentType: "marquee",
       visible: true,
       subSections: [
@@ -135,18 +135,18 @@ const tamplateSectionSlice = createSlice({
         content: `${action.payload.type} ${slider = slider + 1}`,
         contentType: "marquee",
         type: action.payload.type,
-        slideHight:'Medium',
-        animation:'slide',
-        heading:'Give any heading',
-        autoplay:'on',
-        totalProduct:4,
-        description:"hello world",
-        buttonText:"hello",
-        buttonLink:"",
-        buttonText1:"",
-        buttonLink1:"",
-        tagLine:'add new tag line',
-        alignment:'center',
+        slideHight: 'Medium',
+        animation: 'slide',
+        heading: 'Give any heading',
+        autoplay: 'on',
+        totalProduct: 4,
+        description: "hello world",
+        buttonText: "hello",
+        buttonLink: "",
+        buttonText1: "",
+        buttonLink1: "",
+        tagLine: 'add new tag line',
+        alignment: 'center',
         visible: true,
         subSections: [
           {
@@ -163,9 +163,9 @@ const tamplateSectionSlice = createSlice({
       const section = state.tamplateSection.find((s) => s.id === action.payload.sectionId);
       if (section) {
         section.subSections.push({
-          id: `slider ${Date.now()}`,
+          id: `subslider ${Date.now()}`,
           content: `slider ${slider = slider + 1}`,
-          description:'Sldier description',
+          description: 'Sldier description',
           sliderImg: hero2,
           visible: true,
         });
@@ -249,114 +249,122 @@ const tamplateSectionSlice = createSlice({
         section.animation = action.payload.animate;
       }
     },
-    tamplateSlideAutoplay: (state,action:PayloadAction<{sectionId:string; autoplay:string}>)=>{
-      const section = state.tamplateSection.find((s)=> s.id === action.payload.sectionId);
-      if(section){
+    tamplateSlideAutoplay: (state, action: PayloadAction<{ sectionId: string; autoplay: string }>) => {
+      const section = state.tamplateSection.find((s) => s.id === action.payload.sectionId);
+      if (section) {
         section.autoplay = action.payload.autoplay;
       }
     },
-    tamplateSlideAutoplaySpeed: (state,action:PayloadAction<{sectionId:string; autoplaySpeed:number;}>)=>{
-      const section = state.tamplateSection.find((s)=> s.id === action.payload.sectionId);
-      if(section){
+    tamplateSlideAutoplaySpeed: (state, action: PayloadAction<{ sectionId: string; autoplaySpeed: number; }>) => {
+      const section = state.tamplateSection.find((s) => s.id === action.payload.sectionId);
+      if (section) {
         section.autoplaySpeed = action.payload.autoplaySpeed;
       }
     },
-    tamplateSlideContent:(state,action:PayloadAction<{sectionId:string; subSectionId:string; content:string}>)=>{
-      const section = state.tamplateSection.find((s)=> s.id === action.payload.sectionId);
-      if(section){
-        const subSection = section.subSections.find((sub)=> sub.id === action.payload.subSectionId);
-        if(subSection){
+    tamplateSlideContent: (state, action: PayloadAction<{ sectionId: string; subSectionId: string; content: string }>) => {
+      const section = state.tamplateSection.find((s) => s.id === action.payload.sectionId);
+      if (section) {
+        const subSection = section.subSections.find((sub) => sub.id === action.payload.subSectionId);
+        if (subSection) {
           subSection.content = action.payload.content;
         }
       }
     },
-    tamplateSlideDesc:(state,action:PayloadAction<{sectionId:string; subSectionId:string; description:string}>)=>{
-      const section = state.tamplateSection.find((s)=> s.id === action.payload.sectionId);
-      if(section){
-        const subSection = section.subSections.find((sub)=> sub.id === action.payload.subSectionId);
-        if(subSection){
+    tamplateSlideDesc: (state, action: PayloadAction<{ sectionId: string; subSectionId: string; description: string }>) => {
+      const section = state.tamplateSection.find((s) => s.id === action.payload.sectionId);
+      if (section) {
+        const subSection = section.subSections.find((sub) => sub.id === action.payload.subSectionId);
+        if (subSection) {
           subSection.description = action.payload.description;
         }
       }
     },
-    tamplateSlideImage:(state,action:PayloadAction<{sectionId:string; subSectionId:string; image:string}>)=>{
-      const section = state.tamplateSection.find((s)=> s.id === action.payload.sectionId);
-      if(section){
-        const subSection = section.subSections.find((sub)=> sub.id === action.payload.subSectionId);
-        if(subSection){
+    tamplateSlideImage: (
+      state,
+      action: PayloadAction<{ sectionId: string; subSectionId: string; image: File | string }>
+    ) => {
+      const section = state.tamplateSection.find(
+        (s) => s.id === action.payload.sectionId
+      );
+      if (section) {
+        const subSection = section.subSections.find(
+          (sub) => sub.id === action.payload.subSectionId
+        );
+        if (subSection) {
           subSection.sliderImg = action.payload.image;
         }
       }
     },
-    tamplateFeaturedCollectionContent:(state,action:PayloadAction<{sectoinId:string; content:string}>)=>{
-      const section = state.tamplateSection.find((s)=> s.id === action.payload.sectoinId);
-      if(section){
+
+    tamplateFeaturedCollectionContent: (state, action: PayloadAction<{ sectoinId: string; content: string }>) => {
+      const section = state.tamplateSection.find((s) => s.id === action.payload.sectoinId);
+      if (section) {
         section.content = action.payload.content;
       }
     },
-    tamplateFeaturedCollectionDescription:(state,action:PayloadAction<{sectionId:string; description:string}>)=>{
-      const section = state.tamplateSection.find((sec)=> sec.id === action.payload.sectionId);
-      if(section){
+    tamplateFeaturedCollectionDescription: (state, action: PayloadAction<{ sectionId: string; description: string }>) => {
+      const section = state.tamplateSection.find((sec) => sec.id === action.payload.sectionId);
+      if (section) {
         section.description = action.payload.description;
       }
     },
-    tamplateFeaturedCollectionButtonText:(state,action:PayloadAction<{sectionId:string; buttonText:string}>)=>{
-      const section = state.tamplateSection.find((sec)=> sec.id === action.payload.sectionId);
-      if(section){
+    tamplateFeaturedCollectionButtonText: (state, action: PayloadAction<{ sectionId: string; buttonText: string }>) => {
+      const section = state.tamplateSection.find((sec) => sec.id === action.payload.sectionId);
+      if (section) {
         section.buttonText = action.payload.buttonText;
       }
     },
-    tamplateFeaturedCollectionTotalProduct:(state,action:PayloadAction<{sectionId:string; totalProduct:number}>)=>{
-      const section = state.tamplateSection.find((sec)=>sec.id === action.payload.sectionId);
-      if(section){
-        section.totalProduct  = action.payload.totalProduct;
+    tamplateFeaturedCollectionTotalProduct: (state, action: PayloadAction<{ sectionId: string; totalProduct: number }>) => {
+      const section = state.tamplateSection.find((sec) => sec.id === action.payload.sectionId);
+      if (section) {
+        section.totalProduct = action.payload.totalProduct;
       }
     },
-    tamplateRicthTextAlignment:(state,action:PayloadAction<{sectionId:string; alignment:string}>)=>{
-      const section = state.tamplateSection.find((sec)=> sec.id === action.payload.sectionId);
-      if(section){
+    tamplateRicthTextAlignment: (state, action: PayloadAction<{ sectionId: string; alignment: string }>) => {
+      const section = state.tamplateSection.find((sec) => sec.id === action.payload.sectionId);
+      if (section) {
         section.alignment = action.payload.alignment;
       }
     },
-    tamplateRicthTextHeading:(state,action:PayloadAction<{sectionId:string; heading:string}>)=>{
-      const section = state.tamplateSection.find((sec)=> sec.id === action.payload.sectionId);
-      if(section){
+    tamplateRicthTextHeading: (state, action: PayloadAction<{ sectionId: string; heading: string }>) => {
+      const section = state.tamplateSection.find((sec) => sec.id === action.payload.sectionId);
+      if (section) {
         section.heading = action.payload.heading;
       }
     },
-    tamplateRicthTextTagline:(state,action:PayloadAction<{sectionId:string; tagline:string}>)=>{
-      const section = state.tamplateSection.find((s)=> s.id === action.payload.sectionId);
-      if(section){
+    tamplateRicthTextTagline: (state, action: PayloadAction<{ sectionId: string; tagline: string }>) => {
+      const section = state.tamplateSection.find((s) => s.id === action.payload.sectionId);
+      if (section) {
         section.tagLine = action.payload.tagline;
       }
     },
-    tamplateRicthTextDesc:(state,action:PayloadAction<{sectionId:string; desc:string}>)=>{
-      const section = state.tamplateSection.find((s)=>s.id === action.payload.sectionId);
-      if(section){
+    tamplateRicthTextDesc: (state, action: PayloadAction<{ sectionId: string; desc: string }>) => {
+      const section = state.tamplateSection.find((s) => s.id === action.payload.sectionId);
+      if (section) {
         section.description = action.payload.desc;
       }
     },
-    tamplateRicthTextFirstButton:(state,action:PayloadAction<{sectionId:string, firstButtonText:string}>)=>{
-      const section = state.tamplateSection.find((s)=> s.id === action.payload.sectionId);
-      if(section){
+    tamplateRicthTextFirstButton: (state, action: PayloadAction<{ sectionId: string, firstButtonText: string }>) => {
+      const section = state.tamplateSection.find((s) => s.id === action.payload.sectionId);
+      if (section) {
         section.buttonText = action.payload.firstButtonText;
       }
     },
-    tamplateRicthTextSecondButton:(state,action:PayloadAction<{sectionId:string, secondButtonText:string}>)=>{
-      const section = state.tamplateSection.find((s)=> s.id === action.payload.sectionId);
-      if(section){
+    tamplateRicthTextSecondButton: (state, action: PayloadAction<{ sectionId: string, secondButtonText: string }>) => {
+      const section = state.tamplateSection.find((s) => s.id === action.payload.sectionId);
+      if (section) {
         section.buttonText1 = action.payload.secondButtonText;
       }
     },
-    tamplateRicthTextFirstButtonLink : (state,action:PayloadAction<{sectionId:string; firstButtonLink:string}>)=>{
-      const section = state.tamplateSection.find((s)=> s.id === action.payload.sectionId);
-      if(section){
+    tamplateRicthTextFirstButtonLink: (state, action: PayloadAction<{ sectionId: string; firstButtonLink: string }>) => {
+      const section = state.tamplateSection.find((s) => s.id === action.payload.sectionId);
+      if (section) {
         section.buttonLink = action.payload.firstButtonLink;
       }
     },
-    tamplateRicthTextSecondButtonLink : (state, action:PayloadAction<{sectionId:string; secButtonLink:string}>)=>{
-      const section = state.tamplateSection.find((s)=> s.id === action.payload.sectionId);
-      if(section){
+    tamplateRicthTextSecondButtonLink: (state, action: PayloadAction<{ sectionId: string; secButtonLink: string }>) => {
+      const section = state.tamplateSection.find((s) => s.id === action.payload.sectionId);
+      if (section) {
         section.buttonLink1 = action.payload.secButtonLink;
       }
     }

@@ -29,7 +29,9 @@ const store = configureStore({
         tamplateSection: tamplateSectionReducer,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(historyMiddleware)
+        getDefaultMiddleware({
+            serializableCheck: false, // Disable serializable check
+        }).concat(historyMiddleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

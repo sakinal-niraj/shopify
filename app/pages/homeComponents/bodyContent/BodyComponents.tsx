@@ -250,11 +250,18 @@ export function HomeBody() {
                     style={{ aspectRatio: section.slideHight }}
                   >
                     <Image
-                      src={sub.sliderImg || hero1}
+                      src={
+                        sub.sliderImg instanceof File
+                          ? URL.createObjectURL(sub.sliderImg)
+                          : sub.sliderImg || hero1
+                      }
                       alt="Hero Slider"
+                      width={100}
+                      height={100}
                       className={`w-full h-full ${
                         sub.visible ? "block" : "hidden"
                       }`}
+                      unoptimized={sub.sliderImg instanceof File}
                     />
                     <div className="absolute bottom-28 left-1/2 transform -translate-x-1/2 text-3xl">
                       {sub.content}
@@ -287,11 +294,18 @@ export function HomeBody() {
             >
               <div>
                 <Image
-                  src={section.subSections[0].sliderImg || hero1}
+                  src={
+                    section.subSections[0].sliderImg instanceof File
+                      ? URL.createObjectURL(section.subSections[0].sliderImg)
+                      : section.subSections[0].sliderImg || hero1
+                  }
                   alt="Hero Slider"
                   className={`w-full h-full rounded-md relative ${
                     section.subSections[0].visible ? "block" : "hidden"
                   }`}
+                  width={1200}
+                  height={600}
+                  unoptimized={section.subSections[0].sliderImg instanceof File}
                 />
                 <div className="absolute bottom-28 left-1/2 transform -translate-x-1/2 text-3xl">
                   {section?.subSections[0].content}

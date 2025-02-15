@@ -25,7 +25,7 @@ import { SelectType } from "./SelectType";
 import React, { useEffect, useState } from "react";
 import { InputSection } from "../InputSection";
 import hero2 from "@/public/images/t-shirt.jpg";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { TextArea } from "../TextArea";
 import Select from "react-select";
 
@@ -155,7 +155,9 @@ export const SliderSub: React.FC<SliderSubProps> = ({ secId, subSecId }) => {
   const dispatch = useDispatch();
   const [content, setContent] = useState("slider");
   const [desc, setDesc] = useState("hello world");
-  const [previewImg, setPreviewImg] = useState<string | null>(null);
+  const [previewImg, setPreviewImg] = useState<string | StaticImageData | null>(
+    null
+  );
 
   const { tamplateSection } = useSelector(
     (state: RootState) => state.tamplateSection
@@ -173,8 +175,17 @@ export const SliderSub: React.FC<SliderSubProps> = ({ secId, subSecId }) => {
     if (subSection && subSection.description !== undefined) {
       setDesc(subSection.description);
     }
-    if (subSection?.sliderImg) {
-      setPreviewImg(subSection.sliderImg as string);
+    if (subSection && subSection.sliderImg) {
+      if (subSection.sliderImg instanceof File) {
+        // Create an object URL for the File and clean up later
+        const objectUrl = URL.createObjectURL(subSection.sliderImg);
+        setPreviewImg(objectUrl);
+        return () => {
+          URL.revokeObjectURL(objectUrl);
+        };
+      } else {
+        setPreviewImg(subSection.sliderImg);
+      }
     }
   }, [subSection]);
 
@@ -211,17 +222,13 @@ export const SliderSub: React.FC<SliderSubProps> = ({ secId, subSecId }) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // const imageUrl = URL.createObjectURL(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImg(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      const previewUrl = URL.createObjectURL(file);
+      setPreviewImg(previewUrl);
       dispatch(
         tamplateSlideImage({
           sectionId: secId,
           subSectionId: subSecId,
-          image: reader.result as string,
+          image: previewUrl, // now a string, which is serializable
         })
       );
     }
