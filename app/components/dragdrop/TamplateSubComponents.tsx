@@ -27,9 +27,9 @@ import { SelectType } from "./SelectType";
 import React, { useEffect, useState } from "react";
 import { InputSection } from "../InputSection";
 // import hero2 from "@/public/images/t-shirt.jpg";
-import { StaticImageData } from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { TextArea } from "../TextArea";
-import Select from "react-select";
+import Select, { SingleValue } from "react-select";
 import ImgComponent from "./ImgComponent";
 
 const slideHight = [
@@ -909,8 +909,8 @@ export const ImageWithTextSection = ({ secId }: { secId: string }) => {
     useState<string>("Middle Center");
   const [heading, setHeading] = useState<string | null>(null);
   const [desc, setDesc] = useState<string | null>(null);
-  const [buttonText,setButtonText] = useState<string | null>(null);
-  const [buttonLink,setButtonLink] = useState<string | null>(null);
+  const [buttonText, setButtonText] = useState<string | null>(null);
+  const [buttonLink, setButtonLink] = useState<string | null>(null);
 
   const imgPlacement = [
     { id: 1, name: "Image First", value: "Image First" },
@@ -954,12 +954,12 @@ export const ImageWithTextSection = ({ secId }: { secId: string }) => {
     if (imgWithTextSec?.description) {
       setDesc(imgWithTextSec.description);
     }
-    
-    if(imgWithTextSec?.buttonText){
+
+    if (imgWithTextSec?.buttonText) {
       setButtonText(imgWithTextSec.buttonText);
     }
 
-    if(imgWithTextSec?.buttonLink){
+    if (imgWithTextSec?.buttonLink) {
       setButtonLink(imgWithTextSec.buttonLink);
     }
   }, [imgWithTextSec]);
@@ -1016,18 +1016,28 @@ export const ImageWithTextSection = ({ secId }: { secId: string }) => {
   };
 
   // handle button text change
-  const handleButtonTextChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
+  const handleButtonTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newButtonText = e.target.value;
     setButtonText(newButtonText);
-    dispatch(tamplateRicthTextFirstButton({sectionId:secId,firstButtonText:newButtonText}));
-  }
+    dispatch(
+      tamplateRicthTextFirstButton({
+        sectionId: secId,
+        firstButtonText: newButtonText,
+      })
+    );
+  };
 
   // handle button link change
-  const handleButtonLinkChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
+  const handleButtonLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newButtonLink = e.target.value;
     setButtonLink(newButtonLink);
-    dispatch(tamplateRicthTextFirstButtonLink({sectionId:secId,firstButtonLink:newButtonLink}));
-  }
+    dispatch(
+      tamplateRicthTextFirstButtonLink({
+        sectionId: secId,
+        firstButtonLink: newButtonLink,
+      })
+    );
+  };
   return (
     <div className="space-y-5 mx-2 mt-5">
       {/* Image with text's img */}
@@ -1074,19 +1084,98 @@ export const ImageWithTextSection = ({ secId }: { secId: string }) => {
       />
 
       {/* Image with button text */}
-      <InputSection 
-      label="Button Text"
-      placeholder="Enter button text here"
-      value={buttonText || ''}
-      onChange={handleButtonTextChange}
+      <InputSection
+        label="Button Text"
+        placeholder="Enter button text here"
+        value={buttonText || ""}
+        onChange={handleButtonTextChange}
       />
 
       {/* image with button link */}
-      <InputSection 
-      label="Button link"
-      placeholder="Paste Button link here"
-      value={buttonLink || ''}
-      onChange={handleButtonLinkChange}
+      <InputSection
+        label="Button link"
+        placeholder="Paste Button link here"
+        value={buttonLink || ""}
+        onChange={handleButtonLinkChange}
+      />
+    </div>
+  );
+};
+
+interface OptionType {
+  value: number;
+  label: string;
+  image: string;
+}
+
+interface Product {
+  id: number;
+  title: string;
+  price: number;
+  thumbnail: string;
+  description: string;
+}
+export const FeaturedProductSection = ({ secId }: { secId: string }) => {
+  const dispatch = useDispatch();
+  const featuredProductSec = useSelector((state: RootState) =>
+    state.tamplateSection.tamplateSection.find((sec) => sec.id === secId)
+  );
+
+  const [productData, setProductData] = useState<OptionType[]>();
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const res = await fetch(`https://dummyjson.com/products?limit=12`);
+        const data = await res.json();
+
+        const opts: OptionType[] = data.products.map((product: Product) => ({
+          value: product.id,
+          label: product.title,
+          image: product.thumbnail,
+        }));
+
+        setProductData(opts);
+      } catch (error) {
+        console.log("Error Fetching products : ", error);
+      }
+    };
+
+    getProducts();
+  }, [featuredProductSec]);
+
+  // custome select
+  const formatOptionLabel = ({ label, image }: OptionType) => (
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <Image
+        src={image}
+        alt={label}
+        width={40}
+        height={40}
+        style={{ marginRight: 10, objectFit: "cover" }}
+      />
+      <span>{label}</span>
+    </div>
+  );
+
+  const handleProductChange = (selectedOption: SingleValue<OptionType>) => {
+    if (selectedOption) {
+      dispatch(
+        tamplateFeaturedCollectionTotalProduct({
+          sectionId: secId,
+          totalProduct: selectedOption.value,
+        })
+      );
+    }
+  };
+  return (
+    <div style={{ width: 270 }}>
+      <Select
+        options={productData}
+        formatOptionLabel={formatOptionLabel}
+        placeholder="Select a product"
+        onChange={handleProductChange}
+        value={productData?.find((p) => p.value === featuredProductSec?.totalProduct)}
       />
     </div>
   );

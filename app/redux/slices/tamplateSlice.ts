@@ -81,6 +81,7 @@ const initialState: InitialState = {
       content: "Featured Product",
       description: "this is featured product description",
       contentType: "marquee",
+      totalProduct: 1,
       visible: true,
       subSections: [
       ],

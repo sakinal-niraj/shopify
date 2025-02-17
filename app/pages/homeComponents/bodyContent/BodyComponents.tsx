@@ -31,6 +31,7 @@ import { NextArrow, PrevArrow } from "@/app/constant/Arrows";
 import { RichText } from "./RichText";
 import { ImageBanner } from "./ImageBanner";
 import { ImageWithText } from "./ImageWithText";
+import { FeaturedProduct } from "./FeaturedProduct";
 
 interface Product {
   id: number;
@@ -177,8 +178,15 @@ export function HomeBody() {
     (s) => s.type === "Featured Collection"
   );
   const RichTextSection = tamplateSection.filter((s) => s.type === "Rich Text");
-  const imgBannerSection = tamplateSection.filter((s)=> s.type === "Image banner");
-  const imgWithTextSection = tamplateSection.filter((s)=> s.type === "Image with text");
+  const imgBannerSection = tamplateSection.filter(
+    (s) => s.type === "Image banner"
+  );
+  const imgWithTextSection = tamplateSection.filter(
+    (s) => s.type === "Image with text"
+  );
+  const featuredProductSection = tamplateSection.filter(
+    (s) => s.type === "Featured Product"
+  );
 
   interface SlickSlider {
     slickPlay: () => void;
@@ -284,7 +292,9 @@ export function HomeBody() {
               key={section.id}
               className={`aspect-w-6 aspect-h mx-10 
               ${
-                section.slideHight === "Small" ? "aspect-[9/3.5]" : "aspect-[9/5]"
+                section.slideHight === "Small"
+                  ? "aspect-[9/3]"
+                  : "aspect-[9/5]"
               } 
               ${
                 section.slideHight === "Medium"
@@ -442,13 +452,18 @@ export function HomeBody() {
       })}
 
       {/* Image with banner section */}
-      {imgBannerSection.map((sec)=>{
-        return <ImageBanner key={sec.id} ImageBannerSection={sec} />
+      {imgBannerSection.map((sec) => {
+        return <ImageBanner key={sec.id} ImageBannerSection={sec} />;
       })}
 
       {/* Image with text section */}
-      {imgWithTextSection.map((sec)=>{
-        return <ImageWithText key={sec.id} imageWithTextSection={sec} />
+      {imgWithTextSection.map((sec) => {
+        return <ImageWithText key={sec.id} imageWithTextSection={sec} />;
+      })}
+
+      {/* Featured Product Section */}
+      {featuredProductSection.map((sec) => {
+        return <FeaturedProduct key={sec.id} featuredProductSec={sec} />;
       })}
     </div>
   );

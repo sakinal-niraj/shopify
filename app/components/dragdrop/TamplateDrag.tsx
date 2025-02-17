@@ -39,6 +39,7 @@ import {
 } from "@/app/redux/slices/tamplateSlice";
 import {
   FeaturedCollection,
+  FeaturedProductSection,
   ImageBannerSection,
   ImageWithTextSection,
   RichTextSection,
@@ -455,6 +456,11 @@ export default function TamplateDrag() {
                     {
                       section.type === "Image with text" && (
                         <ImageWithTextSection secId={section.id} />
+                      )
+                    }
+                    {
+                      section.type === 'Featured Product' &&(
+                        <FeaturedProductSection secId={section.id} />
                       )
                     }
                   </div>
