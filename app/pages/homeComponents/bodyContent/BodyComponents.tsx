@@ -65,7 +65,7 @@ export const NavBar: React.FC<NavBar> = ({
   const storeName = useAppSelector(selectStoreName);
   const storeImg = useAppSelector(selectStoreImg);
   return (
-    <div className="w-full">
+    <div className="w-full navBar">
       {/* navbar */}
       <nav
         className={`w-full flex justify-center rounded-lg ${
@@ -73,7 +73,7 @@ export const NavBar: React.FC<NavBar> = ({
         }`}
       >
         <div
-          className={`flex max-w-[83%] w-full  ${
+          className={`flex 3xl:w-[82%] w-[95%]  ${
             screenType === "mobile" ? "hidden" : "block"
           } items-center justify-between py-3 px-10 `}
         >
@@ -211,48 +211,73 @@ export function HomeBody() {
       }
     }
   }, [sliderSections]);
+
+  const bodyDragSection = tamplateSection.filter(
+    (s) =>
+      s.type === "Slider" ||
+      s.type === "Featured Collection" ||
+      s.type === "Featured Product" ||
+      s.type === "Rich Text" ||
+      s.type === "Image banner" ||
+      s.type === "Image with text"
+  );
+
   return (
     <div className="homeBody py-2  w-full">
-      {/* Slider */}
-      <div className="w-full flex justify-center">
-        <div className="3xl:w-[80%] w-[97%]">
-          {/* hero section */}
-          {sliderSections.map((section) => {
-            if (section.type === "Slider" && section.subSections.length > 1) {
-              const sliderSettings = {
-                dots: false,
-                arrows: true,
-                infinite: true,
-                speed: 500,
-                slidesToShow: 1,
-                slidesToScroll: 1,
-                autoplay: section.autoplay === "on",
-                autoplaySpeed: section.autoplaySpeed,
-                pauseOnHover: false,
-                nextArrow: <NextArrow />,
-                prevArrow: <PrevArrow />,
-                fade: section.animation === "fade",
-                cssEase: section.animation === "fade" ? "linear" : "ease",
-                swipe: section.animation !== "none",
-                draggable: section.animation !== "none",
-              };
+      {bodyDragSection.map((sec) => {
+        if (sec.type === "Slider") {
+          return (
+            // {/* Slider */}
+            <div className="w-full flex justify-center" key={sec.id}>
+              <div
+                className={`${
+                  screenType === "mobile"
+                    ? "w-full mr-14"
+                    : "3xl:w-[80%] w-[95%] mr-20"
+                } `}
+              >
+                {/* hero section */}
+                {sliderSections.map((section) => {
+                  if (
+                    section.type === "Slider" &&
+                    section.subSections.length > 1
+                  ) {
+                    const sliderSettings = {
+                      dots: false,
+                      arrows: true,
+                      infinite: true,
+                      speed: 500,
+                      slidesToShow: 1,
+                      slidesToScroll: 1,
+                      autoplay: section.autoplay === "on",
+                      autoplaySpeed: section.autoplaySpeed,
+                      pauseOnHover: false,
+                      nextArrow: <NextArrow />,
+                      prevArrow: <PrevArrow />,
+                      fade: section.animation === "fade",
+                      cssEase: section.animation === "fade" ? "linear" : "ease",
+                      swipe: section.animation !== "none",
+                      draggable: section.animation !== "none",
+                    };
 
-              return (
-                <section
-                  key={section.id}
-                  className={`mx-10 w-full ${
-                    section.visible ? "block" : "hidden"
-                  } `}
-                >
-                  <Slider
-                    {...sliderSettings}
-                    ref={sliderRef}
-                    key={`slider-${section.id}-${section.autoplay}`}
-                  >
-                    {section.subSections.map((sub) => (
-                      <div
-                        key={sub.id}
-                        className={`relative ${sub.visible ? "block" : "hidden"}
+                    return (
+                      <section
+                        key={section.id}
+                        className={`mx-10 w-full ${
+                          section.visible ? "block" : "hidden"
+                        } `}
+                      >
+                        <Slider
+                          {...sliderSettings}
+                          ref={sliderRef}
+                          key={`slider-${section.id}-${section.autoplay}`}
+                        >
+                          {section.subSections.map((sub) => (
+                            <div
+                              key={sub.id}
+                              className={`relative ${
+                                sub.visible ? "block" : "hidden"
+                              }
                     
                        ${
                          section.slideHight === "Small"
@@ -269,38 +294,38 @@ export function HomeBody() {
                            ? "aspect-[9/6]"
                            : "aspect-[9/5]"
                        } `}
-                        style={{ aspectRatio: section.slideHight }}
-                      >
-                        <Image
-                          src={
-                            sub.sliderImg instanceof File
-                              ? URL.createObjectURL(sub.sliderImg)
-                              : sub.sliderImg || hero1
-                          }
-                          alt="Hero Slider"
-                          width={100}
-                          height={100}
-                          className={`w-full h-full ${
-                            sub.visible ? "block" : "hidden"
-                          }`}
-                          unoptimized
-                        />
-                        <div className="absolute bottom-28 left-1/2 transform -translate-x-1/2 text-3xl">
-                          {sub.content}
-                        </div>
-                        <div className="absolute bottom-[86px] left-1/2 transform -translate-x-1/2">
-                          {sub.description}
-                        </div>
-                      </div>
-                    ))}
-                  </Slider>
-                </section>
-              );
-            } else {
-              return (
-                <section
-                  key={section.id}
-                  className={`aspect-w-6 aspect-h mx-10 
+                              style={{ aspectRatio: section.slideHight }}
+                            >
+                              <Image
+                                src={
+                                  sub.sliderImg instanceof File
+                                    ? URL.createObjectURL(sub.sliderImg)
+                                    : sub.sliderImg || hero1
+                                }
+                                alt="Hero Slider"
+                                width={100}
+                                height={100}
+                                className={`w-full h-full ${
+                                  sub.visible ? "block" : "hidden"
+                                }`}
+                                unoptimized
+                              />
+                              <div className="absolute bottom-28 left-1/2 transform -translate-x-1/2 text-3xl">
+                                {sub.content}
+                              </div>
+                              <div className="absolute bottom-[86px] left-1/2 transform -translate-x-1/2">
+                                {sub.description}
+                              </div>
+                            </div>
+                          ))}
+                        </Slider>
+                      </section>
+                    );
+                  } else {
+                    return (
+                      <section
+                        key={section.id}
+                        className={`aspect-w-6 aspect-h mx-10 
               ${
                 section.slideHight === "Small" ? "aspect-[9/3]" : "aspect-[9/5]"
               } 
@@ -313,74 +338,87 @@ export function HomeBody() {
                 section.slideHight === "Large" ? "aspect-[9/6]" : "aspect-[9/5]"
               } 
               ${section.visible ? "block" : "hidden"}`}
-                >
-                  <div>
-                    <Image
-                      src={
-                        section.subSections[0].sliderImg instanceof File
-                          ? URL.createObjectURL(
-                              section.subSections[0].sliderImg
-                            )
-                          : section.subSections[0].sliderImg || hero1
-                      }
-                      alt="Hero Slider"
-                      className={`w-full h-full rounded-md relative ${
-                        section.subSections[0].visible ? "block" : "hidden"
-                      }`}
-                      width={1200}
-                      height={600}
-                      unoptimized={
-                        section.subSections[0].sliderImg instanceof File
-                      }
-                    />
-                    <div className="absolute bottom-28 left-1/2 transform -translate-x-1/2 text-3xl">
-                      {section?.subSections[0].content}
-                    </div>
-                    <div className="absolute bottom-[86px] left-1/2 transform -translate-x-1/2">
-                      {section?.subSections[0].description}
-                    </div>
-                  </div>
-                </section>
-              );
-            }
-          })}
-        </div>
-      </div>
-
-      {/* Products section */}
-      <div className="w-full flex justify-center">
-        <div className="3xl:w-[80%] w-[97%]">
-          {FeaturedCollections.map((fsec) => {
-            return (
+                      >
+                        <div>
+                          <Image
+                            src={
+                              section.subSections[0].sliderImg instanceof File
+                                ? URL.createObjectURL(
+                                    section.subSections[0].sliderImg
+                                  )
+                                : section.subSections[0].sliderImg || hero1
+                            }
+                            alt="Hero Slider"
+                            className={`w-full h-full rounded-md relative ${
+                              section.subSections[0].visible
+                                ? "block"
+                                : "hidden"
+                            }`}
+                            width={1200}
+                            height={600}
+                            unoptimized={
+                              section.subSections[0].sliderImg instanceof File
+                            }
+                          />
+                          <div className="absolute bottom-28 left-1/2 transform -translate-x-1/2 text-3xl">
+                            {section?.subSections[0].content}
+                          </div>
+                          <div className="absolute bottom-[86px] left-1/2 transform -translate-x-1/2">
+                            {section?.subSections[0].description}
+                          </div>
+                        </div>
+                      </section>
+                    );
+                  }
+                })}
+              </div>
+            </div>
+          );
+        } else if (sec.type === "Featured Collection") {
+          return (
+            // {/* Products section */}
+            <div
+              className="w-full flex justify-center overflow-x-hidden"
+              key={sec.id}
+            >
               <div
-                className={`mt-10 mx-10 ${fsec.visible ? "block" : "hidden"}`}
-                key={fsec.id}
+                className={`${
+                  screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[97%]"
+                } `}
               >
-                {/* filter */}
-                <div>
-                  <p>{fsec.content}</p>
-                  <p>{fsec.description}</p>
-                </div>
+                {FeaturedCollections.map((fsec) => {
+                  return (
+                    <div
+                      className={`mt-10 mx-10 ${
+                        fsec.visible ? "block" : "hidden"
+                      }`}
+                      key={fsec.id}
+                    >
+                      {/* filter */}
+                      <div>
+                        <p>{fsec.content}</p>
+                        <p>{fsec.description}</p>
+                      </div>
 
-                {/* Products */}
-                <div
-                  className={`mt-5 grid  ${
-                    screenType === "mobile" ? "grid-cols-1" : ""
-                  } text-center gap-10
+                      {/* Products */}
+                      <div
+                        className={`mt-5 grid  ${
+                          screenType === "mobile" ? "grid-cols-1" : ""
+                        } text-center gap-10
               ${
                 screenType !== "mobile" && fsec.totalProduct === 1
                   ? "grid-cols-1"
-                  : ""
+                  : "grid-cols-1"
               }
               ${
                 screenType !== "mobile" && fsec.totalProduct === 2
                   ? "grid-cols-2"
-                  : ""
+                  : "grid-cols-1"
               }
               ${
                 screenType !== "mobile" && fsec.totalProduct === 3
                   ? "grid-cols-3"
-                  : ""
+                  : "grid-cols-1"
               }
               ${
                 screenType !== "mobile" && fsec.totalProduct === 4
@@ -398,97 +436,124 @@ export function HomeBody() {
                   : ""
               }
               `}
-                >
-                  {/* single product container */}
-                  {productsData.length > 0 ? (
-                    productsData.map((item) => (
-                      <div className="max-w-full products" key={item?.id}>
-                        {/* img container */}
-                        <div className="w-full h-auto text-left imgContainer">
-                          <Image
-                            src={item?.thumbnail}
-                            alt="product image"
-                            width={200} // Set the width of the image (e.g., 200px)
-                            height={200} // Set the height of the image (e.g., 200px)
-                            layout="responsive" // Makes the image responsive and adjusts automatically
-                            className="object-cover productImg"
-                          />
-                        </div>
-                        <div className="px-2 pb-2">
-                          {/* content */}
-                          <p className="w-full">
-                            <span className="cursor-pointer">
-                              {item?.title}
-                            </span>
-                          </p>
-                          <p className="w-full mrp">
-                            <span className="cursor-pointer">
-                              {item?.price}
-                            </span>
-                          </p>
-                        </div>
+                      >
+                        {/* single product container */}
+                        {productsData.length > 0 ? (
+                          productsData.map((item) => (
+                            <div className="max-w-full products" key={item?.id}>
+                              {/* img container */}
+                              <div className="w-full h-auto text-left imgContainer">
+                                <Image
+                                  src={item?.thumbnail}
+                                  alt="product image"
+                                  width={200} // Set the width of the image (e.g., 200px)
+                                  height={200} // Set the height of the image (e.g., 200px)
+                                  layout="responsive" // Makes the image responsive and adjusts automatically
+                                  className="object-cover productImg"
+                                />
+                              </div>
+                              <div className="px-2 pb-2">
+                                {/* content */}
+                                <p className="w-full">
+                                  <span className="cursor-pointer">
+                                    {item?.title}
+                                  </span>
+                                </p>
+                                <p className="w-full mrp">
+                                  <span className="cursor-pointer">
+                                    {item?.price}
+                                  </span>
+                                </p>
+                              </div>
+                              <button
+                                onClick={() => {
+                                  handleProductClick(item.id);
+                                }}
+                                className="px-2 rounded-sm btn-Custome mb-3 mx-1.5"
+                              >
+                                Show
+                              </button>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="text-center text-4xl">Loading...</div>
+                        )}
+                      </div>
+                      <div className="w-full text-center my-4 mt-6">
                         <button
-                          onClick={() => {
-                            handleProductClick(item.id);
-                          }}
-                          className="px-2 rounded-sm btn-Custome mb-3 mx-1.5"
+                          className={`bg-black text-white rounded-sm ${
+                            fsec.buttonText ? "px-4 py-1" : "px-0 py-0"
+                          }`}
                         >
-                          Show
+                          {fsec.buttonText}
                         </button>
                       </div>
-                    ))
-                  ) : (
-                    <div className="text-center text-4xl">Loading...</div>
-                  )}
-                </div>
-                <div className="w-full text-center my-4 mt-6">
-                  <button
-                    className={`bg-black text-white rounded-sm ${
-                      fsec.buttonText ? "px-4 py-1" : "px-0 py-0"
-                    }`}
-                  >
-                    {fsec.buttonText}
-                  </button>
-                </div>
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Rich text section */}
-      <div className="w-full flex justify-center">
-        <div className="3xl:w-[80%] w-[97%]">
-          {RichTextSection.map((section) => {
-            return <RichText key={section.id} RichTextSection={section} />;
-          })}
-        </div>
-      </div>
-
-      {/* Image with banner section */}
-      <div className="">
-        {imgBannerSection.map((sec) => {
-          return <ImageBanner key={sec.id} ImageBannerSection={sec} />;
-        })}
-      </div>
-
-      {/* Image with text section */}
-      <div className="w-full flex justify-center">
-        <div className="3xl:w-[80%] w-[97%] ">
-          {imgWithTextSection.map((sec) => {
-            return <ImageWithText key={sec.id} imageWithTextSection={sec} />;
-          })}
-        </div>
-      </div>
-
-      {/* Featured Product Section */}
-      <div className="w-full flex justify-center">
-        <div className="3xl:w-[80%] w-[97%] ">
-          {featuredProductSection.map((sec) => {
-            return <FeaturedProduct key={sec.id} featuredProductSec={sec} />;
-          })}
-        </div>
-      </div>
+            </div>
+          );
+        } else if (sec.type === "Featured Product") {
+          return (
+            // {/* Rich text section */}
+            <div className="w-full flex justify-center" key={sec.id}>
+              <div
+                className={`${
+                  screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[97%]"
+                } `}
+              >
+                {RichTextSection.map((section) => {
+                  return (
+                    <RichText key={section.id} RichTextSection={section} />
+                  );
+                })}
+              </div>
+            </div>
+          );
+        } else if (sec.type === "Rich Text") {
+          return (
+            // {/* Image with banner section */}
+            <div className="" key={sec.id}>
+              {imgBannerSection.map((sec) => {
+                return <ImageBanner key={sec.id} ImageBannerSection={sec} />;
+              })}
+            </div>
+          );
+        } else if (sec.type === "Image banner") {
+          /* Image with text section */
+          <div className="w-full flex justify-center" key={sec.id}>
+            <div
+              className={`${
+                screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[97%]"
+              } `}
+            >
+              {imgWithTextSection.map((sec) => {
+                return (
+                  <ImageWithText key={sec.id} imageWithTextSection={sec} />
+                );
+              })}
+            </div>
+          </div>;
+        } else if (sec.type === "Image with text") {
+          return (
+            // {/* Featured Product Section */}
+            <div className="w-full flex justify-center" key={sec.id}>
+              <div
+                className={`${
+                  screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[97%]"
+                } `}
+              >
+                {featuredProductSection.map((sec) => {
+                  return (
+                    <FeaturedProduct key={sec.id} featuredProductSec={sec} />
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+      })}
     </div>
   );
 }

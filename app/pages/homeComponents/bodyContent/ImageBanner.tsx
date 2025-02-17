@@ -32,6 +32,7 @@ interface ImageBannerProps {
 export const ImageBanner: React.FC<ImageBannerProps> = ({
   ImageBannerSection,
 }) => {
+  
   return (
     <div
       className={`aspect-[9/4.5] relative z-20 overflow-x-hidden w-full
@@ -107,7 +108,7 @@ export const ImageBanner: React.FC<ImageBannerProps> = ({
         `}
       >
         <div
-          className={`max-w-[800px] w-auto min-w-[400px]  bg-black h-auto rounded-lg text-white p-5 space-y-2 
+          className={`max-w-[800px] w-auto min-w-[200px]  bg-black h-auto rounded-lg text-white p-5 space-y-2 
           ${ImageBannerSection.alignment === "Start" && "text-start"}
           ${ImageBannerSection.alignment === "Center" && "text-center"}
           ${ImageBannerSection.alignment === "End" && "text-end"}

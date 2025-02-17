@@ -1,6 +1,8 @@
 import Image, { StaticImageData } from "next/image";
 import React from "react";
 import hero2 from "@/public/images/t-shirt.jpg";
+import { selectScreenType } from "@/app/redux/slices/screenSizeSlice";
+import { useAppSelector } from "@/app/redux/hooks";
 
 interface Section {
   id?: string;
@@ -32,9 +34,11 @@ interface ImageWithTextProps {
 export const ImageWithText: React.FC<ImageWithTextProps> = ({
   imageWithTextSection,
 }) => {
+      const screenType = useAppSelector(selectScreenType);
+    
   return (
     <div
-      className={`flex w-full text-center h-[450px] px-10 my-5 overflow-x-hidden
+      className={`${screenType === 'mobile' ? 'flex flex-col h-[450px]' : 'flex h-[500px]'} w-full text-center  px-10 my-5 overflow-x-hidden
         ${imageWithTextSection.visible ? 'block' : 'hidden'}
     ${
       imageWithTextSection.alignment === "Image First" ? "" : "flex-row-reverse"
@@ -42,7 +46,7 @@ export const ImageWithText: React.FC<ImageWithTextProps> = ({
     `}
     >
       {/* Image data */}
-      <div className="w-full">
+      <div className={`${screenType === 'mobile' ?'h-[300px] mb-5':''} w-full`} >
         <Image
           src={
             imageWithTextSection.img instanceof File

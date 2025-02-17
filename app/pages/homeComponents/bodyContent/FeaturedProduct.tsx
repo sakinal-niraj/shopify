@@ -1,5 +1,7 @@
 // import { useAppSelector } from "@/app/redux/hooks";
 // import { selectProductId } from "@/app/redux/slices/pageSlice";
+import { useAppSelector } from "@/app/redux/hooks";
+import { selectScreenType } from "@/app/redux/slices/screenSizeSlice";
 import Image, { StaticImageData } from "next/image";
 import { useEffect, useState } from "react";
 import { FiMinus, FiPlus } from "react-icons/fi";
@@ -85,13 +87,15 @@ export const FeaturedProduct:React.FC<FeaturedProductProps> = ({
           }
         }
       };
+        const screenType = useAppSelector(selectScreenType);
+      
       return (
-        <div className="homeBody flex flex-col">
-          <div className="">
+        <div className="homeBody flex w-full mb-5">
+          <div className="w-full ">
             {product ? (
-              <div className="ml-10 flex gap-10 w-full justify-evenly">
+              <div className={`${screenType ==='mobile' ? '':'flex justify-evenly ml-10'}  gap-10 w-full`}>
                 {/* img container */}
-                <div className="w-[500px] h-auto text-left px-10 py-5">
+                <div className="h-auto text-left px-10 py-5 w-full">
                   <Image
                     src={product?.thumbnail}
                     alt="product image"
@@ -103,10 +107,10 @@ export const FeaturedProduct:React.FC<FeaturedProductProps> = ({
                 </div>
     
                 {/* content container */}
-                <div className="mt-10 flex flex-col space-y-4">
+                <div className="mt-10 flex flex-col space-y-4 w-full pl-5">
                   <h1 className="text-4xl font-semibold">{product.title}</h1>
                   <span className="text-2xl font-medium">${product.price}</span>
-                  <p className="w-[450px] mr-[100px] text-base">
+                  <p className={`${screenType==='mobile' ? 'w-[340px]':'w-[450px]'} mr-[100px] text-base`}>
                     {product.description}
                   </p>
     

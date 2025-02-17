@@ -18,18 +18,19 @@ export default function ContentPage() {
   const screenType = useAppSelector(selectScreenType);
   const pageName = useAppSelector(selectPageName);
   const { sections } = useSelector((state: RootState) => state.headerSection);
-  const { footerSections } = useSelector((state:RootState)=> state.footerSection);
+  const { footerSections } = useSelector(
+    (state: RootState) => state.footerSection
+  );
 
   // Get only the sections that are draggable (header and announcementbar)
   const dragSections = sections.filter(
     (s) => s.type === "announcementbar" || s.type === "header"
   );
 
-
   const footerDragSections = footerSections.filter(
-    (s)=> s.type === 'announcementbar' || s.type === "footer"
-  )
- 
+    (s) => s.type === "announcementbar" || s.type === "footer"
+  );
+
   return (
     <main
       id="logo-sidebar"
@@ -47,72 +48,73 @@ export default function ContentPage() {
       ${screenType === "mobile" ? "w-[25vw] left-[40%]" : ""}`}
       aria-label="Sidebar"
     >
-      {/* Drag-and-drop context for header and announcementbar */}
-          {dragSections.map((section) => {
-            if (section.type === "announcementbar") {
-              return (
-                <div key={section.id} className="w-full">
-                  <div className={section.visible ? "block" : "hidden"}>
-                    <Anouncment
-                      visible={section.subSections.some((s) => s.visible)}
-                      section={[section]}
-                    />
-                  </div>
-                </div>
-              );
-            } else if (section.type === "header") {
-              return (
-                <div key={section.id} className="w-full">
-                  <NavBar
-                    visible={section.visible}
-                    visible1={section.subSections[0]?.visible}
-                    visible2={section.subSections[1]?.visible}
-                    visible3={section.subSections[2]?.visible}
+      <div className="w-full">
+        {/* Drag-and-drop context for header and announcementbar */}
+        {dragSections.map((section) => {
+          if (section.type === "announcementbar") {
+            return (
+              <div key={section.id} className="w-full">
+                <div className={section.visible ? "block" : "hidden"}>
+                  <Anouncment
+                    visible={section.subSections.some((s) => s.visible)}
+                    section={[section]}
                   />
                 </div>
-              );
-            } else {
-              return null;
-            }
-          })}
+              </div>
+            );
+          } else if (section.type === "header") {
+            return (
+              <div key={section.id} className="w-full">
+                <NavBar
+                  visible={section.visible}
+                  visible1={section.subSections[0]?.visible}
+                  visible2={section.subSections[1]?.visible}
+                  visible3={section.subSections[2]?.visible}
+                />
+              </div>
+            );
+          } else {
+            return null;
+          }
+        })}
 
-      {/* Other content remains unchanged */}
-      <div className="flex w-full">
-        {pageName === "Home Page" && <HomeBody />}
-        {pageName === "Categories" && <Categories />}
-        {pageName === "Product Details Page" && <PageDetailsPage />}
+        {/* Other content remains unchanged */}
+        <div className="w-full overflow-x-hidden overflow-y-scroll">
+          {pageName === "Home Page" && <HomeBody />}
+          {pageName === "Categories" && <Categories />}
+          {pageName === "Product Details Page" && <PageDetailsPage />}
+        </div>
+
+        {footerDragSections.map((section) => {
+          if (section.type === "announcementbar") {
+            return (
+              <div key={section.id} className="w-full">
+                <div
+                  className={`w-full ${section.visible ? "block" : "hidden"}`}
+                >
+                  <Anouncment
+                    visible={section.subSections.some((s) => s.visible)}
+                    section={[section]}
+                  />
+                </div>
+              </div>
+            );
+          } else if (section.type === "footer") {
+            return (
+              <div key={section.id} className={`w-full ${screenType==='mobile' ? 'hidden' :"block"}`}>
+                <Footer
+                  visible={section.visible}
+                  visible1={section.subSections[0]?.visible}
+                  visible2={section.subSections[1]?.visible}
+                  visible3={section.subSections[2]?.visible}
+                />
+              </div>
+            );
+          } else {
+            return null;
+          }
+        })}
       </div>
-
-
-      {footerDragSections.map((section) => {
-            if (section.type === "announcementbar") {
-              return (
-                <div key={section.id}  className="w-full">
-                  <div className={`w-full ${section.visible ? "block" : "hidden" }`}>
-                    <Anouncment
-                      visible={section.subSections.some((s) => s.visible)}
-                      section={[section]}
-                    />
-                  </div>
-                </div>
-              );
-            } else if (section.type === "footer") {
-              return (
-                <div key={section.id} className="w-full">
-                  <Footer
-                    visible={section.visible}
-                    visible1={section.subSections[0]?.visible}
-                    visible2={section.subSections[1]?.visible}
-                    visible3={section.subSections[2]?.visible}
-                  />
-                </div>
-              );
-            } else {
-              return null;
-            }
-          })}
-
-
     </main>
   );
 }
