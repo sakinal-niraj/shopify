@@ -87,9 +87,9 @@ export const FeaturedProduct:React.FC<FeaturedProductProps> = ({
       };
       return (
         <div className="homeBody flex flex-col">
-          <div>
+          <div className="">
             {product ? (
-              <div className="ml-10 flex gap-10">
+              <div className="ml-10 flex gap-10 w-full justify-evenly">
                 {/* img container */}
                 <div className="w-[500px] h-auto text-left px-10 py-5">
                   <Image
@@ -103,7 +103,7 @@ export const FeaturedProduct:React.FC<FeaturedProductProps> = ({
                 </div>
     
                 {/* content container */}
-                <div className="mt-6 flex flex-col space-y-4">
+                <div className="mt-10 flex flex-col space-y-4">
                   <h1 className="text-4xl font-semibold">{product.title}</h1>
                   <span className="text-2xl font-medium">${product.price}</span>
                   <p className="w-[450px] mr-[100px] text-base">

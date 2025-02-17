@@ -421,7 +421,7 @@ export default function TamplateDrag() {
                   </SortableSection>
                   {/* section menu bar */}
                   <div
-                    className={`fixed top-12 right-0 z-40 max-h-[95%] h-full 3xl:max-h-[98%] pb-10 mainScrollBar overflow-y-auto transition-transform bg-white w-[83%] 3xl:w-[85%]  duration-500 ${
+                    className={`fixed top-12 right-0 z-40 max-h-[95%] h-full 3xl:max-h-[98%] pb-10 mainScrollBar overflow-y-auto transition-transform bg-white w-[83%] 3xl:w-[87%]  duration-500 ${
                       isSectoinMenubar.sectionId === section.id
                         ? "block"
                         : "hidden"

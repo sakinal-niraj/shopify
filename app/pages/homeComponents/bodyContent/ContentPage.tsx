@@ -51,7 +51,7 @@ export default function ContentPage() {
           {dragSections.map((section) => {
             if (section.type === "announcementbar") {
               return (
-                <div key={section.id} >
+                <div key={section.id} className="w-full">
                   <div className={section.visible ? "block" : "hidden"}>
                     <Anouncment
                       visible={section.subSections.some((s) => s.visible)}
@@ -62,7 +62,7 @@ export default function ContentPage() {
               );
             } else if (section.type === "header") {
               return (
-                <div key={section.id}>
+                <div key={section.id} className="w-full">
                   <NavBar
                     visible={section.visible}
                     visible1={section.subSections[0]?.visible}
@@ -77,7 +77,7 @@ export default function ContentPage() {
           })}
 
       {/* Other content remains unchanged */}
-      <div className="flex ">
+      <div className="flex w-full">
         {pageName === "Home Page" && <HomeBody />}
         {pageName === "Categories" && <Categories />}
         {pageName === "Product Details Page" && <PageDetailsPage />}
@@ -87,8 +87,8 @@ export default function ContentPage() {
       {footerDragSections.map((section) => {
             if (section.type === "announcementbar") {
               return (
-                <div key={section.id} >
-                  <div className={section.visible ? "block" : "hidden"}>
+                <div key={section.id}  className="w-full">
+                  <div className={`w-full ${section.visible ? "block" : "hidden" }`}>
                     <Anouncment
                       visible={section.subSections.some((s) => s.visible)}
                       section={[section]}
@@ -98,7 +98,7 @@ export default function ContentPage() {
               );
             } else if (section.type === "footer") {
               return (
-                <div key={section.id}>
+                <div key={section.id} className="w-full">
                   <Footer
                     visible={section.visible}
                     visible1={section.subSections[0]?.visible}
