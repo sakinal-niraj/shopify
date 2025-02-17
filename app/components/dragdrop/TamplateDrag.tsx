@@ -37,7 +37,14 @@ import {
   // tamplateToggleSubSectionVisibility,
   tamplateToggleVisibility,
 } from "@/app/redux/slices/tamplateSlice";
-import { FeaturedCollection, RichTextSection, Slider, SliderSub } from "./TamplateSubComponents";
+import {
+  FeaturedCollection,
+  ImageBannerSection,
+  ImageWithTextSection,
+  RichTextSection,
+  Slider,
+  SliderSub,
+} from "./TamplateSubComponents";
 import { secTypes } from "@/app/constant/type";
 
 interface SubSection {
@@ -331,9 +338,11 @@ export default function TamplateDrag() {
                             </span>
                             {subSection.id}
                           </div>
-                          <SliderSub 
-                          secId={isSliderMenubar.sectionId || section.id}
-                          subSecId={isSliderMenubar.subSectionId || subSection.id}
+                          <SliderSub
+                            secId={isSliderMenubar.sectionId || section.id}
+                            subSecId={
+                              isSliderMenubar.subSectionId || subSection.id
+                            }
                           />
                         </div>
                       </div>
@@ -437,11 +446,15 @@ export default function TamplateDrag() {
                         secId={isSectoinMenubar.sectionId || section.id}
                       />
                     )}
+                    {section.type === "Rich Text" && (
+                      <RichTextSection secId={section.id} />
+                    )}
+                    {section.type === "Image banner" && (
+                      <ImageBannerSection secId={section.id} />
+                    )}
                     {
-                      section.type === "Rich Text" && (
-                       <RichTextSection 
-                       secId={section.id}
-                        /> 
+                      section.type === "Image with text" && (
+                        <ImageWithTextSection secId={section.id} />
                       )
                     }
                   </div>

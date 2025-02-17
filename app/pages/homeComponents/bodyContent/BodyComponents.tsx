@@ -29,6 +29,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { NextArrow, PrevArrow } from "@/app/constant/Arrows";
 import { RichText } from "./RichText";
+import { ImageBanner } from "./ImageBanner";
+import { ImageWithText } from "./ImageWithText";
 
 interface Product {
   id: number;
@@ -175,6 +177,8 @@ export function HomeBody() {
     (s) => s.type === "Featured Collection"
   );
   const RichTextSection = tamplateSection.filter((s) => s.type === "Rich Text");
+  const imgBannerSection = tamplateSection.filter((s)=> s.type === "Image banner");
+  const imgWithTextSection = tamplateSection.filter((s)=> s.type === "Image with text");
 
   interface SlickSlider {
     slickPlay: () => void;
@@ -234,7 +238,7 @@ export function HomeBody() {
                     className={`relative ${sub.visible ? "block" : "hidden"}
                        ${
                          section.slideHight === "Small"
-                           ? "aspect-[9/4]"
+                           ? "aspect-[9/3.5]"
                            : "aspect-[9/5]"
                        } 
                        ${
@@ -261,7 +265,7 @@ export function HomeBody() {
                       className={`w-full h-full ${
                         sub.visible ? "block" : "hidden"
                       }`}
-                      unoptimized={sub.sliderImg instanceof File}
+                      unoptimized
                     />
                     <div className="absolute bottom-28 left-1/2 transform -translate-x-1/2 text-3xl">
                       {sub.content}
@@ -280,7 +284,7 @@ export function HomeBody() {
               key={section.id}
               className={`aspect-w-6 aspect-h mx-10 
               ${
-                section.slideHight === "Small" ? "aspect-[9/4]" : "aspect-[9/5]"
+                section.slideHight === "Small" ? "aspect-[9/3.5]" : "aspect-[9/5]"
               } 
               ${
                 section.slideHight === "Medium"
@@ -432,8 +436,19 @@ export function HomeBody() {
         );
       })}
 
+      {/* Rich text section */}
       {RichTextSection.map((section) => {
         return <RichText key={section.id} RichTextSection={section} />;
+      })}
+
+      {/* Image with banner section */}
+      {imgBannerSection.map((sec)=>{
+        return <ImageBanner key={sec.id} ImageBannerSection={sec} />
+      })}
+
+      {/* Image with text section */}
+      {imgWithTextSection.map((sec)=>{
+        return <ImageWithText key={sec.id} imageWithTextSection={sec} />
       })}
     </div>
   );

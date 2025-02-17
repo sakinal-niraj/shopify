@@ -3,11 +3,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { StaticImageData } from "next/image";
 import hero1 from '@/public/images/hero1.jpg';
 import hero2 from '@/public/images/t-shirt.jpg';
+import blueImg from '@/public/images/istockphoto-902957562-612x612.jpg';
 
 interface SubSection {
   id: string;
   visible: boolean;
-  sliderImg?: File | string | StaticImageData;
+  sliderImg?: string | File | StaticImageData;
   content?: string;
   description?: string;
 }
@@ -30,7 +31,9 @@ interface Section {
   buttonLink1?: string,
   tagLine?: string,
   totalProduct?: number,
+  imgAlignment?:string,
   alignment?: string,
+  img?: string | File | StaticImageData;
   subSections: SubSection[];
 }
 
@@ -105,7 +108,14 @@ const initialState: InitialState = {
       content: "Image banner",
       description: "this is Image banner description",
       contentType: "marquee",
+      alignment:"Center",
+      imgAlignment:"Middle Center",
+      slideHight:"Medium",
+      heading:'Image banner',
+      img:blueImg,
       visible: true,
+      buttonText:'hello',
+      buttonText1:'hello',
       subSections: [
       ],
     },
@@ -115,6 +125,10 @@ const initialState: InitialState = {
       content: "Image with text",
       description: "this is Image with text description",
       contentType: "marquee",
+      heading:'Image With Text',
+      buttonText:'hello',
+      imgAlignment:"Middle Center",
+      alignment:"Image First",
       visible: true,
       subSections: [
       ],
@@ -146,7 +160,9 @@ const tamplateSectionSlice = createSlice({
         buttonText1: "",
         buttonLink1: "",
         tagLine: 'add new tag line',
+        img:blueImg,
         alignment: 'center',
+        imgAlignment:"Middle Center",
         visible: true,
         subSections: [
           {
@@ -241,7 +257,9 @@ const tamplateSectionSlice = createSlice({
       const section = state.tamplateSection.find((s) => s.id === action.payload.sectionId);
       if (section) {
         section.slideHight = action.payload.height;
+            console.log("img banner height",action.payload.height);
       }
+      console.log("img banner height",action.payload.height, section?.slideHight);
     },
     tamplateSlideAnimation: (state, action: PayloadAction<{ sectionId: string; animate: string }>) => {
       const section = state.tamplateSection.find((s) => s.id === action.payload.sectionId);
@@ -296,6 +314,14 @@ const tamplateSectionSlice = createSlice({
       }
     },
 
+    tamplateImage:(state,action:PayloadAction<{secId:string; img:File | string}>)=>{
+      console.log("reduc",action.payload.secId);
+      const section = state.tamplateSection.find((s)=> s.id === action.payload.secId);
+      if(section){
+        section.img = action.payload.img;
+      }
+    },
+
     tamplateFeaturedCollectionContent: (state, action: PayloadAction<{ sectoinId: string; content: string }>) => {
       const section = state.tamplateSection.find((s) => s.id === action.payload.sectoinId);
       if (section) {
@@ -324,6 +350,12 @@ const tamplateSectionSlice = createSlice({
       const section = state.tamplateSection.find((sec) => sec.id === action.payload.sectionId);
       if (section) {
         section.alignment = action.payload.alignment;
+      }
+    },
+    tamplateImgAlignment: (state, action: PayloadAction<{ sectionId: string; imgAlignment: string }>) => {
+      const section = state.tamplateSection.find((sec) => sec.id === action.payload.sectionId);
+      if (section) {
+        section.imgAlignment = action.payload.imgAlignment;
       }
     },
     tamplateRicthTextHeading: (state, action: PayloadAction<{ sectionId: string; heading: string }>) => {
@@ -400,6 +432,8 @@ export const {
   tamplateRicthTextSecondButton,
   tamplateRicthTextFirstButtonLink,
   tamplateRicthTextSecondButtonLink,
+  tamplateImage,
+  tamplateImgAlignment,
 } = tamplateSectionSlice.actions;
 
 
