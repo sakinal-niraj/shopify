@@ -52,7 +52,7 @@ const initialState: InitialState = {
       slideHight: "Medium",
       animation: "slide",
       autoplay: "on",
-      autoplaySpeed: 1000,
+      autoplaySpeed: 3000,
       subSections: [
         {
           id: "subslider",

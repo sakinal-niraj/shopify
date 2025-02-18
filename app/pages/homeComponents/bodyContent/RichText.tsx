@@ -1,4 +1,5 @@
 import React from "react";
+import {motion} from 'framer-motion';
 
 interface Section {
     id?: string;
@@ -36,9 +37,13 @@ export const RichText:React.FC<RichTextProps> = ({RichTextSection}) => {
       <span className="text-base font-semibold">{RichTextSection.tagLine}</span>
       <p className="text-base">{RichTextSection.description}</p>
       <div className="space-x-2">
-        <button className={`bg-black text-white rounded-sm uppercase text-lg font-medium ${RichTextSection.buttonText ? 'px-4 py-2' : 'px-0 py-0'}`}>
+        <motion.button
+        whileTap={{scale:0.9}}
+        whileHover={{scale:1.05}}
+        transition={{duration:0.3}}
+         className={`bg-black text-white rounded-sm uppercase text-lg font-medium ${RichTextSection.buttonText ? 'px-4 py-2' : 'px-0 py-0'}`}>
           <a href={RichTextSection.buttonLink?.startsWith('http') ? RichTextSection.buttonLink : `https://${RichTextSection.buttonLink}`}>{RichTextSection.buttonText}</a>
-        </button>
+        </motion.button>
         <button className={`bg-black text-white  rounded-sm uppercase text-lg font-medium ${RichTextSection.buttonText1 ? 'px-4 py-2': 'px-0 py-0'}`}>
           <a href={RichTextSection.buttonLink1?.startsWith('http') ? RichTextSection.buttonLink1 : `https://${RichTextSection.buttonLink1}`}>{RichTextSection.buttonText1}</a>
         </button>

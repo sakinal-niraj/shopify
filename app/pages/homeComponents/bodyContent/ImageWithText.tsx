@@ -3,6 +3,7 @@ import React from "react";
 import hero2 from "@/public/images/t-shirt.jpg";
 import { selectScreenType } from "@/app/redux/slices/screenSizeSlice";
 import { useAppSelector } from "@/app/redux/hooks";
+import { motion } from "framer-motion";
 
 interface Section {
   id?: string;
@@ -34,19 +35,23 @@ interface ImageWithTextProps {
 export const ImageWithText: React.FC<ImageWithTextProps> = ({
   imageWithTextSection,
 }) => {
-      const screenType = useAppSelector(selectScreenType);
-    
+  const screenType = useAppSelector(selectScreenType);
+
   return (
     <div
-      className={`${screenType === 'mobile' ? 'flex flex-col h-[450px]' : 'flex h-[500px]'}  w-full text-center  px-10 my-5 overflow-x-hidden
-        ${imageWithTextSection.visible ? 'block' : 'hidden'}
+      className={`${
+        screenType === "mobile" ? "flex flex-col h-[450px]" : "flex h-[500px]"
+      }  w-full text-center  px-10 my-5 overflow-x-hidden overflow-y-hidden
+        ${imageWithTextSection.visible ? "block" : "hidden"}
     ${
       imageWithTextSection.alignment === "Image First" ? "" : "flex-row-reverse"
     }
     `}
     >
       {/* Image data */}
-      <div className={`${screenType === 'mobile' ?'h-[300px] mb-5':''} w-full`} >
+      <div
+        className={`${screenType === "mobile" ? "max-h-[300px] h-full mb-5" : ""} w-full hover:scale-105 duration-300 transform ease-linear`}
+      >
         <Image
           src={
             imageWithTextSection.img instanceof File
@@ -116,11 +121,18 @@ export const ImageWithText: React.FC<ImageWithTextProps> = ({
                 ? imageWithTextSection.buttonLink
                 : `https://${imageWithTextSection.buttonLink}`
             }
-            className={`${imageWithTextSection.buttonText ? 'block' : 'hidden'}`}
+            className={`${
+              imageWithTextSection.buttonText ? "block" : "hidden"
+            }`}
           >
-            <button className="text-base px-3 py-1 bg-black text-white rounded-md">
+            <motion.button
+              whileTap={{ scale: 0.8 }}
+              whileHover={{scale:1.1}}
+              transition={{ duration: 0.2 }}
+              className="text-base px-3 py-1 bg-black text-white rounded-md"
+            >
               {imageWithTextSection.buttonText}
-            </button>
+            </motion.button>
           </a>
         </div>
       </div>

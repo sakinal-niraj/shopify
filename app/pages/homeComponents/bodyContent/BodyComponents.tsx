@@ -1,4 +1,5 @@
 "use client";
+import { motion } from "framer-motion";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -32,6 +33,8 @@ import { RichText } from "./RichText";
 import { ImageBanner } from "./ImageBanner";
 import { ImageWithText } from "./ImageWithText";
 import { FeaturedProduct } from "./FeaturedProduct";
+import { ClipLoader } from "react-spinners";
+import { FadeLeft } from "@/app/util/Animation";
 
 interface Product {
   id: number;
@@ -86,7 +89,7 @@ export const NavBar: React.FC<NavBar> = ({
               }`}
             >
               {
-                <div className="mt-2 aspect-h-5">
+                <div className="mt-2 aspect-h-5 hover:scale-105 duration-200 ease-linear">
                   <Image
                     src={storeImg || logo}
                     alt="Current store"
@@ -159,7 +162,7 @@ export function HomeBody() {
   useEffect(() => {
     async function getProducts() {
       try {
-        const res = await fetch("https://dummyjson.com/products?limit=12");
+        const res = await fetch("https://dummyjson.com/products?limit=8");
         const data = await res.json();
         setProductsData(data.products);
       } catch (error) {
@@ -237,7 +240,11 @@ export function HomeBody() {
                     <section className="mx-10 w-full">
                       <Slider {...sliderSettings} ref={sliderRef}>
                         {sec.subSections.map((sub: SubSection) => (
-                          <div
+                          <motion.div
+                            initial={{ opacity: 0}}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ duration: 0.5, delay: 0.1 }}
+                            viewport={{ once: true }}
                             key={sub.id}
                             className={`relative ${
                               sub.visible ? "block" : "hidden"
@@ -269,7 +276,7 @@ export function HomeBody() {
                             <div className="absolute bottom-[86px] left-1/2 transform -translate-x-1/2">
                               {sub.description}
                             </div>
-                          </div>
+                          </motion.div>
                         ))}
                       </Slider>
                     </section>
@@ -277,7 +284,13 @@ export function HomeBody() {
                     sec.subSections &&
                     sec.subSections[0] && (
                       <section className="mx-10 w-full" key={sec.id}>
-                        <div className="relative">
+                        <motion.div
+                          initial={{ opacity: 0}}
+                          whileInView={{ opacity: 1 }}
+                          transition={{ duration: 0.7, delay: 0.1 }}
+                          viewport={{ once: true }}
+                          className="relative"
+                        >
                           <Image
                             src={
                               sec.subSections[0].sliderImg instanceof File
@@ -300,7 +313,7 @@ export function HomeBody() {
                           <div className="absolute bottom-[86px] left-1/2 transform -translate-x-1/2">
                             {sec.subSections[0].description}
                           </div>
-                        </div>
+                        </motion.div>
                       </section>
                     )
                   )}
@@ -329,18 +342,54 @@ export function HomeBody() {
                       className={`mt-5 grid ${
                         screenType === "mobile" && "grid-cols-1"
                       }
-                      ${screenType !== "mobile" && sec.totalProduct === 1 && "grid-cols-1"}
-                      ${screenType !== "mobile" && sec.totalProduct === 2 && "grid-cols-2"}
-                      ${screenType !== "mobile" && sec.totalProduct === 3 && "grid-cols-3"}
-                      ${screenType !== "mobile" && sec.totalProduct === 4 && "grid-cols-4"}
-                      ${screenType !== "mobile" && sec.totalProduct === 5 && "grid-cols-5"}
-                      ${screenType !== "mobile" && sec.totalProduct === 6 && "grid-cols-6"}
+                      ${
+                        screenType !== "mobile" &&
+                        sec.totalProduct === 1 &&
+                        "grid-cols-1"
+                      }
+                      ${
+                        screenType !== "mobile" &&
+                        sec.totalProduct === 2 &&
+                        "grid-cols-2"
+                      }
+                      ${
+                        screenType !== "mobile" &&
+                        sec.totalProduct === 3 &&
+                        "grid-cols-3"
+                      }
+                      ${
+                        screenType !== "mobile" &&
+                        sec.totalProduct === 4 &&
+                        "grid-cols-4"
+                      }
+                      ${
+                        screenType !== "mobile" &&
+                        sec.totalProduct === 5 &&
+                        "grid-cols-5"
+                      }
+                      ${
+                        screenType !== "mobile" &&
+                        sec.totalProduct === 6 &&
+                        "grid-cols-6"
+                      }
                        gap-10`}
                     >
                       {productsData.length > 0 ? (
                         productsData.map((item) => (
-                          <div className="max-w-full products" key={item.id}>
-                            <div className="w-full h-auto text-left imgContainer">
+                          <motion.div
+                            initial={{ opacity: 0, scale: 0.5 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.3, duration: 0.5 }}
+                            viewport={{ once: true }}
+                            className="max-w-full products transform"
+                            key={item.id}
+                          >
+                            <motion.div
+                              whileHover={{ scale: 1.03 }}
+                              transition={{ duration: 0.3 }}
+                              viewport={{ once: true }}
+                              className="w-full h-auto text-left imgContainer"
+                            >
                               <Image
                                 src={item.thumbnail}
                                 alt="Product image"
@@ -349,8 +398,14 @@ export function HomeBody() {
                                 layout="responsive"
                                 className="object-cover productImg"
                               />
-                            </div>
-                            <div className="px-2 pb-2">
+                            </motion.div>
+                            <motion.div
+                              initial={{ opacity: 0, x: 50 }}
+                              whileInView={{ opacity: 1, x: 0 }}
+                              transition={{ duration: 0.5, delay: 0.6 }}
+                              viewport={{ once: true }}
+                              className="px-2 pb-2"
+                            >
                               <p className="w-full">
                                 <span className="cursor-pointer">
                                   {item.title}
@@ -361,27 +416,37 @@ export function HomeBody() {
                                   {item.price}
                                 </span>
                               </p>
-                            </div>
-                            <button
+                            </motion.div>
+                            <motion.button
+                              initial={{ opacity: 0, x: 50 }}
+                              whileInView={{ opacity: 1, x: 0,transition:{ duration: 0.5, delay: 0.7 }}}
+                              whileHover={{ scale: 1.05 ,transition:{duration:0.2}}} 
+                              viewport={{ once: true }}
                               onClick={() => handleProductClick(item.id)}
-                              className="px-2 rounded-sm btn-Custome mb-3 mx-1.5"
+                              className="px-2 rounded-sm btn-Custome mb-3 mx-1.5 hover:scale-105 transform"
                             >
                               Show
-                            </button>
-                          </div>
+                            </motion.button>
+                          </motion.div>
                         ))
                       ) : (
                         <div className="text-center text-4xl">Loading...</div>
                       )}
                     </div>
                     <div className="w-full text-center my-4 mt-6">
-                      <button
+                      <motion.button
+                       initial={{opacity:0,scale:0.4}}
+                       whileInView={{opacity:1,scale:1,transition:{duration:0.5,delay:0.2}}}
+                       whileHover={{scale:1.1,transition:{duration:0.3}}}
+                       whileTap={{scale:0.8,transition:{duration:0.3}}}
+                       transition={{duration:0}}
+                       viewport={{once:true}}
                         className={`bg-black text-white rounded-sm ${
                           sec.buttonText ? "px-4 py-1" : "px-0 py-0"
                         }`}
                       >
                         {sec.buttonText}
-                      </button>
+                      </motion.button>
                     </div>
                   </div>
                 </div>
@@ -456,16 +521,21 @@ export function HomeBody() {
 export function Categories() {
   const screenType = useAppSelector(selectScreenType);
   const [productsData, setProductsData] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); // Loading state
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     async function getProducts() {
       try {
+        setLoading(true);
         const res = await fetch("https://dummyjson.com/products?limit=12");
         const data = await res.json();
         setProductsData(data.products);
       } catch (error) {
         console.log("Error Fetching products : ", error);
+      } finally {
+        setLoading(false); // Stop loading when data is fetched
       }
     }
 
@@ -505,11 +575,22 @@ export function Categories() {
           } text-center gap-10`}
         >
           {/* single product container */}
-          {productsData.length > 0 ? (
+          {loading ? (
+            <div className="flex justify-center items-center h-40">
+              <ClipLoader color="#000" size={50} /> {/* Loading Spinner */}
+            </div>
+          ) : (
             productsData.map((item) => (
-              <div className="max-w-full products" key={item?.id}>
+              <motion.div
+                initial="hidden"
+                whileInView={"visible"}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+                className="max-w-full products"
+                key={item?.id}
+              >
                 {/* img container */}
-                <div className="w-full h-auto text-left imgContainer">
+                <motion.div className="w-full h-auto text-left imgContainer">
                   <Image
                     src={item?.thumbnail}
                     alt="product image"
@@ -518,7 +599,7 @@ export function Categories() {
                     layout="responsive" // Makes the image responsive and adjusts automatically
                     className="object-cover productImg"
                   />
-                </div>
+                </motion.div>
                 {/* content */}
                 <p className="w-full">
                   <span className="cursor-pointer">{item?.title}</span>
@@ -526,18 +607,19 @@ export function Categories() {
                 <p className="w-full mrp">
                   <span className="cursor-pointer">{item?.price}</span>
                 </p>
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.8 }}
+                  transition={{ duration: 0.2 }}
                   onClick={() => {
                     handleProductClick(item.id);
                   }}
                   className="px-2 rounded-sm btn-Custome mb-3 mx-1.5"
                 >
                   show
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
             ))
-          ) : (
-            <div className="text-center text-4xl">Loading...</div>
           )}
         </div>
       </div>
@@ -584,51 +666,106 @@ export function PageDetailsPage() {
         {product ? (
           <div className="ml-10 flex gap-10">
             {/* img container */}
-            <div className="w-[500px] h-auto text-left px-10 py-5">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ type: "spring", stiffness: 100, delay: 0.1 }}
+              className="w-[500px] h-auto text-left px-10 py-5"
+            >
               <Image
                 src={product?.thumbnail}
                 alt="product image"
                 width={100}
                 height={100}
                 layout="responsive"
-                className="object-cover rounded-2xl"
+                className="object-cover rounded-2xl hover:cursor-pointer bg-gray-200"
               />
-            </div>
+            </motion.div>
 
             {/* content container */}
             <div className="mt-6 flex flex-col space-y-4">
-              <h1 className="text-4xl font-semibold">{product.title}</h1>
-              <span className="text-2xl font-medium">${product.price}</span>
-              <p className="w-[450px] mr-[100px] text-base">
+              <motion.h1
+                variants={FadeLeft(0.2)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="text-4xl font-semibold"
+              >
+                {product.title}
+              </motion.h1>
+              <motion.span
+                variants={FadeLeft(0.3)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="text-2xl font-medium"
+              >
+                ${product.price}
+              </motion.span>
+              <motion.p
+                variants={FadeLeft(0.4)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="w-[450px] mr-[100px] text-base"
+              >
                 {product.description}
-              </p>
+              </motion.p>
 
               {/* quentity */}
-              <div className="flex items-center w-fit pb-10">
-                <button
+              <motion.div
+                variants={FadeLeft(0.5)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="flex items-center w-fit pb-10"
+              >
+                <motion.button
+                  whileTap={{ scale: 0.8 }}
+                  transition={{ duration: 0.2 }}
                   onClick={handleMinus}
                   className="bg-white border p-2 border-black w-full h-full"
                 >
                   <FiMinus />
-                </button>
+                </motion.button>
                 <span className="border-t bg-white border-b  h-full w-full p-2 px-4 border-black">
                   {totalProduct}
                 </span>
-                <button
+                <motion.button
+                  whileTap={{ scale: 0.8 }}
+                  transition={{ duration: 0.2 }}
                   onClick={handleAdd}
                   className="bg-white border p-2 border-black h-full w-full"
                 >
                   <FiPlus />
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
 
               {/* buttons */}
-              <div className="w-full h-10 flex gap-1">
-                <button className="w-full h-full addCartBtn">
+              <motion.div
+                variants={FadeLeft(0.4)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="w-full h-10 flex gap-4"
+              >
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ duration: 0.4 }}
+                  className="w-full h-full addCartBtn"
+                >
                   ADD TO CART
-                </button>
-                <button className="w-full h-full buyBtn">BUY NOW</button>
-              </div>
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ duration: 0.4 }}
+                  className="w-full h-full buyBtn"
+                >
+                  BUY NOW
+                </motion.button>
+              </motion.div>
             </div>
           </div>
         ) : (

@@ -1,6 +1,7 @@
 import Image, { StaticImageData } from "next/image";
 import React from "react";
 import blueImg from "@/public/images/istockphoto-902957562-612x612.jpg";
+import {motion} from 'framer-motion';
 
 interface Section {
   id?: string;
@@ -107,7 +108,11 @@ export const ImageBanner: React.FC<ImageBannerProps> = ({
         }
         `}
       >
-        <div
+        <motion.div
+          initial={{opacity:0,scale:0}}
+          whileInView={{opacity:1,scale:1}}
+          transition={{duration:0.6,delay:0.2}}
+          viewport={{once:true}}
           className={`max-w-[800px] w-auto min-w-[200px]  bg-black h-auto rounded-lg text-white p-5 space-y-2 
           ${ImageBannerSection.alignment === "Start" && "text-start"}
           ${ImageBannerSection.alignment === "Center" && "text-center"}
@@ -129,9 +134,13 @@ export const ImageBanner: React.FC<ImageBannerProps> = ({
                 ImageBannerSection?.buttonText ? "visible" : "hidden"
               }`}
             >
-              <button className="text-base bg-white text-black px-3 py-1  rounded-md">
+              <motion.button
+                whileHover={{scale:1.06,transition:{duration:0.4}}}
+                whileTap={{scale:0.9}}
+                
+               className="text-base bg-white text-black px-3 py-1  rounded-md">
                 {ImageBannerSection.buttonText}
-              </button>
+              </motion.button>
             </a>
             <a
               href={
@@ -143,12 +152,16 @@ export const ImageBanner: React.FC<ImageBannerProps> = ({
                 ImageBannerSection?.buttonText1 ? "visible" : "hidden"
               }`}
             >
-              <button className="text-base bg-white text-black px-3 py-1  rounded-md">
+              <motion.button
+                whileHover={{scale:1.06,transition:{duration:0.4}}}
+                whileTap={{scale:0.9}}
+                
+               className="text-base bg-white text-black px-3 py-1  rounded-md">
                 {ImageBannerSection.buttonText1}
-              </button>
+              </motion.button>
             </a>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
