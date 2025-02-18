@@ -90,10 +90,10 @@ export const FeaturedProduct:React.FC<FeaturedProductProps> = ({
         const screenType = useAppSelector(selectScreenType);
       
       return (
-        <div className="homeBody flex w-full mb-5">
+        <div className="homeBody flex w-full mb-5 pr-20">
           <div className="w-full ">
             {product ? (
-              <div className={`${screenType ==='mobile' ? '':'flex justify-evenly ml-10'}  gap-10 w-full`}>
+              <div className={`${screenType ==='mobile' ? '':'flex justify-evenly'}  gap-10 w-full`}>
                 {/* img container */}
                 <div className="h-auto text-left px-10 py-5 w-full">
                   <Image

@@ -36,15 +36,10 @@ export default function ContentPage() {
       id="logo-sidebar"
       className={`p-0 m-0 fixed top-0 z-40 h-full max-h-[91vh] my-14 mx-10 rounded-xl transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 overflow-y-auto mainScrollBar
       ${
-        screenType === "full screen"
-          ? " w-[99.5%] -left-9 2xl:w-[98%] 2xl:flex flex-col items-center 2xl:-left-5"
-          : ""
+        screenType === "full screen" &&
+        " w-[99.5%] -left-9 2xl:w-[98%] 2xl:flex flex-col items-center 2xl:-left-5"
       } 
-      ${
-        screenType === "screen"
-          ? "w-[76.5vw] left-[310px] 3xl:left-[18.5%]"
-          : ""
-      }
+      ${screenType === "screen" && "w-[76.5vw] left-[310px] 3xl:left-[20%]"}
       ${screenType === "mobile" ? "w-[25vw] left-[40%]" : ""}`}
       aria-label="Sidebar"
     >
@@ -101,7 +96,12 @@ export default function ContentPage() {
             );
           } else if (section.type === "footer") {
             return (
-              <div key={section.id} className={`w-full ${screenType==='mobile' ? 'hidden' :"block"}`}>
+              <div
+                key={section.id}
+                className={`w-full ${
+                  screenType === "mobile" ? "hidden" : "block"
+                }`}
+              >
                 <Footer
                   visible={section.visible}
                   visible1={section.subSections[0]?.visible}

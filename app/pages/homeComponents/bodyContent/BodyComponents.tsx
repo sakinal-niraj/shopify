@@ -326,9 +326,14 @@ export function HomeBody() {
                       <p>{sec.description}</p>
                     </div>
                     <div
-                      className={`mt-5 grid ${
-                        screenType === "mobile" ? "grid-cols-1" : "grid-cols-3"
-                      } gap-10`}
+                      className={`mt-5 grid ${screenType === "mobile" && "grid-cols-1"}
+                      ${sec.totalProduct === 1 && 'grid-cols-1'}
+                      ${sec.totalProduct === 2 && 'grid-cols-2'}
+                      ${sec.totalProduct === 3 && 'grid-cols-3'}
+                      ${sec.totalProduct === 4 && 'grid-cols-4'}
+                      ${sec.totalProduct === 5 && 'grid-cols-5'}
+                      ${sec.totalProduct === 6 && 'grid-cols-6'}
+                       gap-10`}
                     >
                       {productsData.length > 0 ? (
                         productsData.map((item) => (
@@ -387,7 +392,7 @@ export function HomeBody() {
               <div className="w-full flex justify-center" key={sec.id}>
                 <div
                   className={`${
-                    screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[97%]"
+                    screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[95%]"
                   }`}
                 >
                   <FeaturedProduct featuredProductSec={sec} />
@@ -414,9 +419,9 @@ export function HomeBody() {
             return (
               <div className="w-full flex justify-center" key={sec.id}>
                 <div
-                  className={`${
-                    screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[97%]"
-                  }`}
+                  className={` w-full
+                    // screenType === "mobile" ? 
+                  `}
                 >
                   <ImageBanner ImageBannerSection={sec} />
                 </div>
