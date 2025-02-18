@@ -82,7 +82,7 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
   const screenType = useAppSelector(selectScreenType);
 
   return (
-    <div className="homeBody flex w-full mb-5 pr-20">
+    <div className="homeBody flex w-full mb-5 pr-20 my-10">
       <div className="w-full">
         {loading ? (
           <div className="flex justify-center items-center h-40">
@@ -95,7 +95,7 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
             } gap-10 w-full`}
           >
             {/* Image Container */}
-            <div className="h-auto text-left px-10 py-5 w-full">
+            <div className="h-auto text-left px-10 py-5 w-full bg-gray-200 hover:scale-105 transfrom ease-linear duration-300">
               <Image
                 src={product.thumbnail}
                 alt="product image"
@@ -109,7 +109,7 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
             {/* Content Container */}
             <div
               className={`${
-                screenType === "screen" ? "mt-28" : "mt-10"
+                screenType === "screen" ? "mt-10" : "mt-10"
               } flex flex-col justify-center space-y-4 w-full pl-5`}
             >
               <h1 className="text-4xl font-semibold">{product.title}</h1>

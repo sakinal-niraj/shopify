@@ -71,6 +71,8 @@ const initialState: InitialState = {
       buttonText: "first",
       totalProduct: 4,
       contentType: "marquee",
+      animation:"zoom",
+      alignment:"Left to Right",
       visible: true,
       subSections: [
       ],

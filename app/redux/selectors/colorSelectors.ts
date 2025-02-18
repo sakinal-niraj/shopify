@@ -7,5 +7,6 @@ export const selectIconTextColor = (state: RootState) => state.color.iconTextCol
 export const selectHeadTextColor = (state: RootState) => state.color.headTextColor;
 export const selectBodyTextColor = (state: RootState) => state.color.bodyTextColor;
 export const selectButtonColor = (state: RootState) => state.color.buttonColor;
+export const selectButtonTextColor = (state:RootState) => state.color.buttonTextColor;
 export const selectProdutBgColor = (state: RootState) => state.color.productBgColor;
 export const selectMrpTextColor = (state: RootState) => state.color.mrpTextColor;

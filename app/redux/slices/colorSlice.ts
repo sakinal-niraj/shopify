@@ -14,6 +14,7 @@ interface ColorState {
   headTextColor: string;
   bodyTextColor: string;
   buttonColor: string,
+  buttonTextColor:string,
   productBgColor: string,
   mrpTextColor: string,
 }
@@ -26,6 +27,7 @@ const initialState: ColorState = {
   headTextColor: getInitialColor('headTextColor', '#000000'),
   bodyTextColor: getInitialColor('bodyTextColor', '#000000'),
   buttonColor: getInitialColor('buttonColor', '#000000'),
+  buttonTextColor:'#fafafa',
   productBgColor: getInitialColor('productBgColor', '#ffffff'),
   mrpTextColor: getInitialColor('mrpTextColor', '#000000'),
 };
@@ -55,6 +57,9 @@ const colorSlice = createSlice({
     setButtonColor: (state, action: PayloadAction<string>) => {
       state.buttonColor = action.payload;
     },
+    setButtonTextColor: (state, action: PayloadAction<string>) => {
+      state.buttonTextColor = action.payload;
+    },
     setProductBgColor: (state, action: PayloadAction<string>) => {
       state.productBgColor = action.payload;
     },
@@ -67,5 +72,5 @@ const colorSlice = createSlice({
   }
 });
 
-export const { setHeaderFooter, setBodyColor, setIconsColor, setIconTextColor, setHeadTextColor, setBodyTextColor, setButtonColor, setProductBgColor, setMrpTextColor ,resetColorState} = colorSlice.actions;
+export const { setHeaderFooter,setButtonTextColor, setBodyColor, setIconsColor, setIconTextColor, setHeadTextColor, setBodyTextColor, setButtonColor, setProductBgColor, setMrpTextColor ,resetColorState} = colorSlice.actions;
 export default colorSlice.reducer;

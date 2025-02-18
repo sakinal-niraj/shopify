@@ -34,7 +34,7 @@ import { ImageBanner } from "./ImageBanner";
 import { ImageWithText } from "./ImageWithText";
 import { FeaturedProduct } from "./FeaturedProduct";
 import { ClipLoader } from "react-spinners";
-import { FadeLeft } from "@/app/util/Animation";
+import { DownToUp, FadeLeft, LeftToRight, RightToLeft, ScaleFadeIn, UptoDown } from "@/app/util/Animation";
 
 interface Product {
   id: number;
@@ -241,7 +241,7 @@ export function HomeBody() {
                       <Slider {...sliderSettings} ref={sliderRef}>
                         {sec.subSections.map((sub: SubSection) => (
                           <motion.div
-                            initial={{ opacity: 0}}
+                            initial={{ opacity: 0 }}
                             whileInView={{ opacity: 1 }}
                             transition={{ duration: 0.5, delay: 0.1 }}
                             viewport={{ once: true }}
@@ -285,7 +285,7 @@ export function HomeBody() {
                     sec.subSections[0] && (
                       <section className="mx-10 w-full" key={sec.id}>
                         <motion.div
-                          initial={{ opacity: 0}}
+                          initial={{ opacity: 0 }}
                           whileInView={{ opacity: 1 }}
                           transition={{ duration: 0.7, delay: 0.1 }}
                           viewport={{ once: true }}
@@ -377,12 +377,14 @@ export function HomeBody() {
                       {productsData.length > 0 ? (
                         productsData.map((item) => (
                           <motion.div
-                            initial={{ opacity: 0, scale: 0.5 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.3, duration: 0.5 }}
+                            key={item.id}
+                            {...(sec.animation === "zoom" ? ScaleFadeIn() : {})}
+                            {...(sec.animation === "Left to Right" ? LeftToRight() : {})}
+                            {...(sec.animation === "Right to Left" ? RightToLeft() : {})}
+                            {...(sec.animation === "Up to Down" ? UptoDown() : {})}
+                            {...(sec.animation === "Down to Up" ? DownToUp() : {})}
                             viewport={{ once: true }}
                             className="max-w-full products transform"
-                            key={item.id}
                           >
                             <motion.div
                               whileHover={{ scale: 1.03 }}
@@ -400,9 +402,11 @@ export function HomeBody() {
                               />
                             </motion.div>
                             <motion.div
-                              initial={{ opacity: 0, x: 50 }}
-                              whileInView={{ opacity: 1, x: 0 }}
-                              transition={{ duration: 0.5, delay: 0.6 }}
+                              {...(sec.alignment === "zoom" ? ScaleFadeIn() : {})}
+                              {...(sec.alignment === "Left to Right" ? LeftToRight() : {})}
+                              {...(sec.alignment === "Right to Left" ? RightToLeft() : {})}
+                              {...(sec.alignment === "Up to Down" ? UptoDown() : {})}
+                              {...(sec.alignment === "Down to Up" ? DownToUp() : {})}
                               viewport={{ once: true }}
                               className="px-2 pb-2"
                             >
@@ -418,9 +422,15 @@ export function HomeBody() {
                               </p>
                             </motion.div>
                             <motion.button
-                              initial={{ opacity: 0, x: 50 }}
-                              whileInView={{ opacity: 1, x: 0,transition:{ duration: 0.5, delay: 0.7 }}}
-                              whileHover={{ scale: 1.05 ,transition:{duration:0.2}}} 
+                               {...(sec.alignment === "zoom" ? ScaleFadeIn() : {})}
+                               {...(sec.alignment === "Left to Right" ? LeftToRight() : {})}
+                               {...(sec.alignment === "Right to Left" ? RightToLeft() : {})}
+                               {...(sec.alignment === "Up to Down" ? UptoDown() : {})}
+                               {...(sec.alignment === "Down to Up" ? DownToUp() : {})}
+                              whileHover={{
+                                scale: 1.05,
+                                transition: { duration: 0.2 },
+                              }}
                               viewport={{ once: true }}
                               onClick={() => handleProductClick(item.id)}
                               className="px-2 rounded-sm btn-Custome mb-3 mx-1.5 hover:scale-105 transform"
@@ -435,12 +445,19 @@ export function HomeBody() {
                     </div>
                     <div className="w-full text-center my-4 mt-6">
                       <motion.button
-                       initial={{opacity:0,scale:0.4}}
-                       whileInView={{opacity:1,scale:1,transition:{duration:0.5,delay:0.2}}}
-                       whileHover={{scale:1.1,transition:{duration:0.3}}}
-                       whileTap={{scale:0.8,transition:{duration:0.3}}}
-                       transition={{duration:0}}
-                       viewport={{once:true}}
+                        initial={{ opacity: 0, scale: 0.4 }}
+                        whileInView={{
+                          opacity: 1,
+                          scale: 1,
+                          transition: { duration: 0.5, delay: 0.2 },
+                        }}
+                        whileHover={{
+                          scale: 1.1,
+                          transition: { duration: 0.3 },
+                        }}
+                        whileTap={{ scale: 0.8, transition: { duration: 0.3 } }}
+                        transition={{ duration: 0 }}
+                        viewport={{ once: true }}
                         className={`bg-black text-white rounded-sm ${
                           sec.buttonText ? "px-4 py-1" : "px-0 py-0"
                         }`}

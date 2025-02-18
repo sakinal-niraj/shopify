@@ -20,6 +20,7 @@
   --btn-border-style:'none';
   --btn-border-radius:'2px';
   --btn-border-color:'white';
+  --btn-text-color:'black';
   --btn-constrast-border-color:'#000000';
   --btn-horizontal-offset:'2px';
   --btn-vertical-offset:'2px';
@@ -117,6 +118,7 @@ body {
   border: var(--btn-border-thickness) var(--btn-border-color);
   border-style: var(--btn-border-style);
   border-radius: var(--btn-border-radius);
+  color: var(--btn-text-color); 
   box-shadow: var(--btn-horizontal-offset) var(--btn-vertical-offset) var(--btn-blur) var(--btn-shadow-color);
 }
 
@@ -124,12 +126,13 @@ body {
 .addCartBtn{
   background-color: var(--button-Color);
   border-radius: 8px;
+  color: var(--btn-text-color) !important; 
 }
 
 .buyBtn{
  background-color: var(--btn-constrast-border-color);
  border-radius: 8px;
- color: white; 
+ color: var(--btn-text-color) !important; 
 }
 
 .mrp{

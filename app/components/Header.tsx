@@ -109,7 +109,7 @@ export default function Header() {
           <div className="flex items-center gap-2 bg-gray-100 px-2.5 py-1.5 rounded-sm">
             {screenSizes.map((item) => (
               <span
-                data-tooltip-id={`${item.id}`}
+                data-tooltip-id={`tooltip-${item.id}`}
                 data-tooltip-content={item.name}
                 onClick={() => {
                   handleScreenSize(item.name);
@@ -125,7 +125,7 @@ export default function Header() {
                   }`}
                 />
                 <Tooltip
-                  id={`${item.id}`}
+                  id={`tooltip-${item.id}`}
                   place="bottom"
                   style={{
                     backgroundColor: "black",

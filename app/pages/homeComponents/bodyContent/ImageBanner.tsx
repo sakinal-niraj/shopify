@@ -110,8 +110,9 @@ export const ImageBanner: React.FC<ImageBannerProps> = ({
       >
         <motion.div
           initial={{opacity:0,scale:0}}
-          whileInView={{opacity:1,scale:1}}
-          transition={{duration:0.6,delay:0.2}}
+          whileInView={{opacity:1,scale:1,transition:{duration:0.6,delay:0.2}}}
+          whileHover={{scale:1.07,transition:{duration:0.3}}}
+          transition={{duration:0.1,delay:0}}
           viewport={{once:true}}
           className={`max-w-[800px] w-auto min-w-[200px]  bg-black h-auto rounded-lg text-white p-5 space-y-2 
           ${ImageBannerSection.alignment === "Start" && "text-start"}

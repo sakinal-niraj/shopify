@@ -268,6 +268,8 @@ export const FeaturedCollection = ({ secId }: { secId: string }) => {
   const [desc, setDesc] = useState<string | null>(null);
   const [buttonText, setButtonText] = useState<string | null>(null);
   const [numProduct, setNumProduct] = useState<number>(1);
+  const [productAnimation, setProductAnimation] = useState<string | null>(null);
+  const [contentAnimation, setContentAnimation] = useState<string | null>(null);
 
   // dispatcher
   const dispatch = useDispatch();
@@ -291,6 +293,10 @@ export const FeaturedCollection = ({ secId }: { secId: string }) => {
 
     if (section?.totalProduct) {
       setNumProduct(section.totalProduct);
+    }
+
+    if(section?.animation){
+      setProductAnimation(section.animation);
     }
   }, [section]);
 
@@ -338,6 +344,11 @@ export const FeaturedCollection = ({ secId }: { secId: string }) => {
     value: number;
   }
 
+  interface ProductAnimationType{
+    label: string;
+    value:string;
+  }
+
   const productOptions: ProductOptions[] = [
     { label: "1", value: 1 },
     { label: "2", value: 2 },
@@ -347,14 +358,19 @@ export const FeaturedCollection = ({ secId }: { secId: string }) => {
     { label: "6", value: 6 },
   ];
 
+  const productAnimationType: ProductAnimationType[] = [
+    { label: "zoom", value: 'zoom' },
+    { label: "Left to Right", value: 'Left to Right' },
+    { label: "Right to Left", value: 'Right to Left' },
+    { label: "Up to Down", value: 'Up to Down' },
+    { label: "Down to Up", value: 'Down to Up' },
+  ];
+
   // handle total product number change
   const handleProductNumberChange = (selectedOption: ProductOptions | null) => {
     if (selectedOption) {
       const newProductNumber = selectedOption.value;
       setNumProduct(newProductNumber);
-      // document.documentElement.style.setProperty(
-      //   "--number-of-product-grid",newProductNumber.toString(),
-      // )
       dispatch(
         tamplateFeaturedCollectionTotalProduct({
           sectionId: secId,
@@ -363,6 +379,29 @@ export const FeaturedCollection = ({ secId }: { secId: string }) => {
       );
     }
   };
+
+
+  // handle product animation change
+  const handleProductAnimationTypeChange = (selectedOption: ProductAnimationType | null)=>{
+    if(selectedOption){
+      const newAnimation = selectedOption.value;
+      setProductAnimation(newAnimation);
+      dispatch(
+        tamplateSlideAnimation({sectionId:secId,animate:newAnimation})
+      )
+    }
+  }
+
+  // handle Content animation change
+  const handleContentAnimationTypeChange = (selectedOption:ProductAnimationType | null)=>{
+    if(selectedOption){
+      const newAnimation = selectedOption.value;
+      setContentAnimation(newAnimation);
+      dispatch(
+        tamplateRicthTextAlignment({sectionId:secId,alignment:newAnimation})
+      )
+    }
+  }
   return (
     <div className="flex gap-2 mt-5 px-2 w-full flex-col gap-y-6">
       {/* Featured colleciton Title */}
@@ -398,6 +437,29 @@ export const FeaturedCollection = ({ secId }: { secId: string }) => {
         value={buttonText || ""}
         onChange={handleButtonTextChange}
       />
+
+      {/* Product card Animation Type */}
+      <div>
+        <label htmlFor="">Product Card Animation type</label>
+        <Select<ProductAnimationType>
+          options={productAnimationType}
+          value={productAnimationType.find((t) => t.value === productAnimation)}
+          onChange={handleProductAnimationTypeChange}
+          className="border-black"
+        />
+      </div>
+
+      {/* Product content animation */}
+      <div>
+        <label htmlFor="">Product Content Animation type</label>
+        <Select<ProductAnimationType>
+          options={productAnimationType}
+          value={productAnimationType.find((t) => t.value === contentAnimation)}
+          onChange={handleContentAnimationTypeChange}
+          className="border-black"
+        />
+      </div>
+
     </div>
   );
 };

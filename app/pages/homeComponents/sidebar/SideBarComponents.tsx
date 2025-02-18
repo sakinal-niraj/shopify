@@ -17,6 +17,7 @@ import {
   selectBodyColor,
   selectBodyTextColor,
   selectButtonColor,
+  selectButtonTextColor,
   selectHeaderFooterColor,
   selectHeadTextColor,
   selectIconsColor,
@@ -28,6 +29,7 @@ import {
   setBodyColor,
   setBodyTextColor,
   setButtonColor,
+  setButtonTextColor,
   setHeaderFooter,
   setHeadTextColor,
   setIconsColor,
@@ -134,6 +136,7 @@ export function Colors() {
   const buttonColor = useAppSelector(selectButtonColor);
   const productBgColor = useAppSelector(selectProdutBgColor);
   const mrpTextColor = useAppSelector(selectMrpTextColor);
+  const buttonTextColor = useAppSelector(selectButtonTextColor);
 
   useEffect(() => {
     // header and footer color
@@ -179,6 +182,8 @@ export function Colors() {
     document.documentElement.style.setProperty("--button-Color", buttonColor);
     localStorage.setItem("buttonColor", buttonColor);
 
+    // button text color
+    document.documentElement.style.setProperty('--btn-text-color',buttonTextColor);
     // product bg color
     document.documentElement.style.setProperty(
       "--product-Bg-Color",
@@ -202,6 +207,7 @@ export function Colors() {
     buttonColor,
     productBgColor,
     mrpTextColor,
+    buttonTextColor,
   ]);
 
   // header footer color change evnt handler
@@ -236,10 +242,15 @@ export function Colors() {
     dispatch(setBodyTextColor(e.target.value));
   };
 
-  // button text color
+  // button color
   const handleButtonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setButtonColor(e.target.value));
   };
+
+  // button text color change
+  const handleButtonTextColorChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    dispatch(setButtonTextColor(e.target.value));
+  }
 
   // product background color change event handler
   const handleProductBgColorChange = (
@@ -327,6 +338,15 @@ export function Colors() {
             label="Button Color"
             value={buttonColor}
             onChange={handleButtonChange}
+            icon={<IoMdArrowDropdown />}
+            id="buttonTextColor"
+          />
+
+          {/* button text color */}
+            <ColorSelector
+            label="Button Text Color"
+            value={buttonTextColor}
+            onChange={handleButtonTextColorChange}
             icon={<IoMdArrowDropdown />}
             id="buttonTextColor"
           />
