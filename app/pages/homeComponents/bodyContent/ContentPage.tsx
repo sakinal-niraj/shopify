@@ -74,7 +74,7 @@ export default function ContentPage() {
         })}
 
         {/* Other content remains unchanged */}
-        <div className="w-full overflow-x-hidden overflow-y-scroll">
+        <div className="w-full overflow-x-hidden ">
           {pageName === "Home Page" && <HomeBody />}
           {pageName === "Categories" && <Categories />}
           {pageName === "Product Details Page" && <PageDetailsPage />}

@@ -107,7 +107,7 @@ export const FeaturedProduct:React.FC<FeaturedProductProps> = ({
                 </div>
     
                 {/* content container */}
-                <div className="mt-10 flex flex-col space-y-4 w-full pl-5">
+                <div className={`${screenType === 'screen' ? 'mt-28' : 'mt-10'} flex flex-col justify-center space-y-4 w-full pl-5`}>
                   <h1 className="text-4xl font-semibold">{product.title}</h1>
                   <span className="text-2xl font-medium">${product.price}</span>
                   <p className={`${screenType==='mobile' ? 'w-[340px]':'w-[450px]'} mr-[100px] text-base`}>
@@ -115,14 +115,15 @@ export const FeaturedProduct:React.FC<FeaturedProductProps> = ({
                   </p>
     
                   {/* quentity */}
-                  <div className="flex items-center w-fit pb-10">
+                  <div className={`
+                    flex items-center w-fit pb-10`}>
                     <button
                       onClick={handleMinus}
                       className="bg-white border p-2 border-black w-full h-full"
                     >
                       <FiMinus />
                     </button>
-                    <span className="border-t bg-white border-b  h-full w-full p-2 px-4 border-black">
+                    <span className={`${screenType === 'mobile' && 'text-sm'} border-t bg-white border-b  h-full w-full p-2 px-4 border-black`}>
                       {totalProduct}
                     </span>
                     <button
@@ -135,10 +136,11 @@ export const FeaturedProduct:React.FC<FeaturedProductProps> = ({
     
                   {/* buttons */}
                   <div className="w-full h-10 flex gap-1">
-                    <button className="w-full h-full addCartBtn">
+                    <button className={`${screenType === 'mobile' && 'text-xs'} w-full h-full addCartBtn`}>
                       ADD TO CART
                     </button>
-                    <button className="w-full h-full buyBtn">BUY NOW</button>
+                    <button className={`${screenType === 'mobile' && 'text-xs'} w-full h-full buyBtn`}>
+                      BUY NOW</button>
                   </div>
                 </div>
               </div>

@@ -326,13 +326,15 @@ export function HomeBody() {
                       <p>{sec.description}</p>
                     </div>
                     <div
-                      className={`mt-5 grid ${screenType === "mobile" && "grid-cols-1"}
-                      ${sec.totalProduct === 1 && 'grid-cols-1'}
-                      ${sec.totalProduct === 2 && 'grid-cols-2'}
-                      ${sec.totalProduct === 3 && 'grid-cols-3'}
-                      ${sec.totalProduct === 4 && 'grid-cols-4'}
-                      ${sec.totalProduct === 5 && 'grid-cols-5'}
-                      ${sec.totalProduct === 6 && 'grid-cols-6'}
+                      className={`mt-5 grid ${
+                        screenType === "mobile" && "grid-cols-1"
+                      }
+                      ${screenType !== "mobile" && sec.totalProduct === 1 && "grid-cols-1"}
+                      ${screenType !== "mobile" && sec.totalProduct === 2 && "grid-cols-2"}
+                      ${screenType !== "mobile" && sec.totalProduct === 3 && "grid-cols-3"}
+                      ${screenType !== "mobile" && sec.totalProduct === 4 && "grid-cols-4"}
+                      ${screenType !== "mobile" && sec.totalProduct === 5 && "grid-cols-5"}
+                      ${screenType !== "mobile" && sec.totalProduct === 6 && "grid-cols-6"}
                        gap-10`}
                     >
                       {productsData.length > 0 ? (
