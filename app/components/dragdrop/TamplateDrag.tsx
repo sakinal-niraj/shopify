@@ -101,7 +101,8 @@ export default function TamplateDrag() {
   );
 
   // Local state for dropdowns and menus
-  const [tamplateDropDown, setTamplateDropDown] = useState(false);
+  const [openSliderId, setOpenSliderId] = useState<string | null>(null);
+
   // const [announcementDropDown, setAnnouncementDropDown] = useState<
   //   Record<string, boolean>
   // >({});
@@ -178,14 +179,15 @@ export default function TamplateDrag() {
                     <div className="flex items-center justify-between px-1 hover:bg-gray-100 rounded-lg group">
                       <div className="flex items-center gap-0.5 cursor-pointer w-full">
                         <span
-                          className="hover:bg-gray-200 rounded-xl text-gray-800"
                           onClick={(e) => {
                             e.stopPropagation();
-                            setTamplateDropDown(!tamplateDropDown);
+                            setOpenSliderId(
+                              openSliderId === section.id ? null : section.id
+                            );
                           }}
                           onMouseDown={(e) => e.stopPropagation()}
                         >
-                          {tamplateDropDown ? (
+                          {openSliderId === section.id ? (
                             <MdKeyboardArrowDown className="mb-0.5" size={20} />
                           ) : (
                             <MdKeyboardArrowRight size={20} />
@@ -265,7 +267,7 @@ export default function TamplateDrag() {
                     </div>
                     <Slider secId={isSectoinMenubar.sectionId || section.id} />
                   </div>
-                  {tamplateDropDown &&
+                  {openSliderId === section.id &&
                     section.subSections.map((subSection: SubSection) => (
                       <div key={subSection.id}>
                         <div className="p-1 ml-6 rounded-lg hover:bg-gray-100 flex items-center justify-between w-[80%] gap-1.5 font-normal cursor-pointer text-sm group">
@@ -356,7 +358,7 @@ export default function TamplateDrag() {
                       );
                     }}
                     className={`${
-                      tamplateDropDown ? "block" : "hidden"
+                      openSliderId === section.id  ? "block" : "hidden"
                     } text-blue-600 text-sm flex items-center ml-[52px] text-center gap-1 font-normal cursor-pointer w-full`}
                     onMouseDown={(e) => e.stopPropagation()}
                   >
@@ -453,16 +455,12 @@ export default function TamplateDrag() {
                     {section.type === "Image banner" && (
                       <ImageBannerSection secId={section.id} />
                     )}
-                    {
-                      section.type === "Image with text" && (
-                        <ImageWithTextSection secId={section.id} />
-                      )
-                    }
-                    {
-                      section.type === 'Featured Product' &&(
-                        <FeaturedProductSection secId={section.id} />
-                      )
-                    }
+                    {section.type === "Image with text" && (
+                      <ImageWithTextSection secId={section.id} />
+                    )}
+                    {section.type === "Featured Product" && (
+                      <FeaturedProductSection secId={section.id} />
+                    )}
                   </div>
                 </div>
               );

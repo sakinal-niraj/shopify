@@ -9,7 +9,7 @@ import { FiPlus } from "react-icons/fi";
 import logo from "@/public/images/t-shirt.jpg";
 
 import { LiaShoppingBagSolid } from "react-icons/lia";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import hero1 from "@/public/images/hero1.jpg";
 // import tshirt from "@/public/images/t-shirt.jpg";
 import { useEffect, useRef } from "react";
@@ -143,11 +143,19 @@ export const NavBar: React.FC<NavBar> = ({
   );
 };
 
+interface SubSection {
+  id: string;
+  visible: boolean;
+  sliderImg?: string | File | StaticImageData;
+  content?: string;
+  description?: string;
+}
 export function HomeBody() {
   const [productsData, setProductsData] = useState<Product[]>([]);
   const dispatch = useAppDispatch();
   const screenType = useAppSelector(selectScreenType);
 
+  // Fetch product data for Featured Collection sections
   useEffect(() => {
     async function getProducts() {
       try {
@@ -155,10 +163,9 @@ export function HomeBody() {
         const data = await res.json();
         setProductsData(data.products);
       } catch (error) {
-        console.log("Error Fetching products : ", error);
+        console.error("Error fetching products:", error);
       }
     }
-
     getProducts();
   }, []);
 
@@ -173,385 +180,266 @@ export function HomeBody() {
     }
   };
 
+  // Get the sorted sections from Redux (this order is updated by your drag & drop)
   const { tamplateSection } = useSelector(
     (state: RootState) => state.tamplateSection
-  );
-
-  const sliderSections = tamplateSection.filter((s) => s.type === "Slider");
-  const FeaturedCollections = tamplateSection.filter(
-    (s) => s.type === "Featured Collection"
-  );
-  const RichTextSection = tamplateSection.filter((s) => s.type === "Rich Text");
-  const imgBannerSection = tamplateSection.filter(
-    (s) => s.type === "Image banner"
-  );
-  const imgWithTextSection = tamplateSection.filter(
-    (s) => s.type === "Image with text"
-  );
-  const featuredProductSection = tamplateSection.filter(
-    (s) => s.type === "Featured Product"
   );
 
   interface SlickSlider {
     slickPlay: () => void;
     slickPause: () => void;
   }
-  const sliderRef = useRef<(Slider & SlickSlider) | null>(null);
+
+  // Optional: use a ref for controlling slider autoplay if needed
+  const sliderRef = useRef<Slider & SlickSlider>(null);
+
+  // (You can add any effect here for slider autoplay based on section properties)
   useEffect(() => {
-    if (sliderRef.current) {
-      // Handle autoplay changes
-      const currentSection = sliderSections.find(
-        (section) => section.type === "Slider" && section.subSections.length > 1
-      );
-
-      if (currentSection?.autoplay === "on") {
-        sliderRef.current.slickPlay();
-      } else {
-        sliderRef.current.slickPause();
-      }
-    }
-  }, [sliderSections]);
-
-  const bodyDragSection = tamplateSection.filter(
-    (s) =>
-      s.type === "Slider" ||
-      s.type === "Featured Collection" ||
-      s.type === "Featured Product" ||
-      s.type === "Rich Text" ||
-      s.type === "Image banner" ||
-      s.type === "Image with text"
-  );
+    // For example, find a slider section and play/pause based on its settings.
+  }, [tamplateSection]);
 
   return (
-    <div className="homeBody py-2  w-full">
-      {bodyDragSection.map((sec) => {
-        if (sec.type === "Slider") {
-          return (
-            // {/* Slider */}
-            <div className="w-full flex justify-center" key={sec.id}>
-              <div
-                className={`${
-                  screenType === "mobile"
-                    ? "w-full mr-14"
-                    : "3xl:w-[80%] w-[95%] mr-20"
-                } `}
-              >
-                {/* hero section */}
-                {sliderSections.map((section) => {
-                  if (
-                    section.type === "Slider" &&
-                    section.subSections.length > 1
-                  ) {
-                    const sliderSettings = {
-                      dots: false,
-                      arrows: true,
-                      infinite: true,
-                      speed: 500,
-                      slidesToShow: 1,
-                      slidesToScroll: 1,
-                      autoplay: section.autoplay === "on",
-                      autoplaySpeed: section.autoplaySpeed,
-                      pauseOnHover: false,
-                      nextArrow: <NextArrow />,
-                      prevArrow: <PrevArrow />,
-                      fade: section.animation === "fade",
-                      cssEase: section.animation === "fade" ? "linear" : "ease",
-                      swipe: section.animation !== "none",
-                      draggable: section.animation !== "none",
-                    };
+    <div className="homeBody py-2 w-full">
+      {tamplateSection.map((sec) => {
+        // Skip rendering if section is hidden
+        if (!sec.visible) return null;
 
-                    return (
-                      <section
-                        key={section.id}
-                        className={`mx-10 w-full ${
-                          section.visible ? "block" : "hidden"
-                        } `}
-                      >
-                        <Slider
-                          {...sliderSettings}
-                          ref={sliderRef}
-                          key={`slider-${section.id}-${section.autoplay}`}
-                        >
-                          {section.subSections.map((sub) => (
-                            <div
-                              key={sub.id}
-                              className={`relative ${
-                                sub.visible ? "block" : "hidden"
+        switch (sec.type) {
+          case "Slider": {
+            const sliderSettings = {
+              dots: false,
+              arrows: true,
+              infinite: true,
+              speed: 500,
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              autoplay: sec.autoplay === "on",
+              autoplaySpeed: sec.autoplaySpeed,
+              pauseOnHover: false,
+              nextArrow: <NextArrow />,
+              prevArrow: <PrevArrow />,
+              fade: sec.animation === "fade",
+              cssEase: sec.animation === "fade" ? "linear" : "ease",
+              swipe: sec.animation !== "none",
+              draggable: sec.animation !== "none",
+            };
+
+            return (
+              <div className="w-full flex justify-center" key={sec.id}>
+                <div
+                  className={`${
+                    screenType === "mobile"
+                      ? "w-full mr-14"
+                      : "3xl:w-[80%] w-[95%] mr-20"
+                  }`}
+                >
+                  {sec.subSections && sec.subSections.length > 1 ? (
+                    <section className="mx-10 w-full">
+                      <Slider {...sliderSettings} ref={sliderRef}>
+                        {sec.subSections.map((sub: SubSection) => (
+                          <div
+                            key={sub.id}
+                            className={`relative ${
+                              sub.visible ? "block" : "hidden"
+                            } ${
+                              sec.slideHight === "Small"
+                                ? "aspect-[9/3.5]"
+                                : sec.slideHight === "Medium"
+                                ? "aspect-[9/4.5]"
+                                : sec.slideHight === "Large"
+                                ? "aspect-[9/6]"
+                                : "aspect-[9/5]"
+                            }`}
+                          >
+                            <Image
+                              src={
+                                sub.sliderImg instanceof File
+                                  ? URL.createObjectURL(sub.sliderImg)
+                                  : sub.sliderImg || hero1
                               }
-                    
-                       ${
-                         section.slideHight === "Small"
-                           ? "aspect-[9/3.5]"
-                           : "aspect-[9/5]"
-                       } 
-                       ${
-                         section.slideHight === "Medium"
-                           ? "aspect-[9/4.5]"
-                           : "aspect-[9/5]"
-                       } 
-                       ${
-                         section.slideHight === "Large"
-                           ? "aspect-[9/6]"
-                           : "aspect-[9/5]"
-                       } `}
-                              style={{ aspectRatio: section.slideHight }}
-                            >
-                              <Image
-                                src={
-                                  sub.sliderImg instanceof File
-                                    ? URL.createObjectURL(sub.sliderImg)
-                                    : sub.sliderImg || hero1
-                                }
-                                alt="Hero Slider"
-                                width={100}
-                                height={100}
-                                className={`w-full h-full ${
-                                  sub.visible ? "block" : "hidden"
-                                }`}
-                                unoptimized
-                              />
-                              <div className="absolute bottom-28 left-1/2 transform -translate-x-1/2 text-3xl">
-                                {sub.content}
-                              </div>
-                              <div className="absolute bottom-[86px] left-1/2 transform -translate-x-1/2">
-                                {sub.description}
-                              </div>
+                              alt="Slider Image"
+                              width={100}
+                              height={100}
+                              className="w-full h-full"
+                              unoptimized
+                            />
+                            <div className="absolute bottom-28 left-1/2 transform -translate-x-1/2 text-3xl">
+                              {sub.content}
                             </div>
-                          ))}
-                        </Slider>
-                      </section>
-                    );
-                  } else {
-                    return (
-                      <section
-                        key={section.id}
-                        className={`aspect-w-6 aspect-h mx-10 
-              ${
-                section.slideHight === "Small" ? "aspect-[9/3]" : "aspect-[9/5]"
-              } 
-              ${
-                section.slideHight === "Medium"
-                  ? "aspect-[9/4.5]"
-                  : "aspect-[9/5]"
-              } 
-              ${
-                section.slideHight === "Large" ? "aspect-[9/6]" : "aspect-[9/5]"
-              } 
-              ${section.visible ? "block" : "hidden"}`}
-                      >
-                        <div>
+                            <div className="absolute bottom-[86px] left-1/2 transform -translate-x-1/2">
+                              {sub.description}
+                            </div>
+                          </div>
+                        ))}
+                      </Slider>
+                    </section>
+                  ) : (
+                    sec.subSections &&
+                    sec.subSections[0] && (
+                      <section className="mx-10 w-full" key={sec.id}>
+                        <div className="relative">
                           <Image
                             src={
-                              section.subSections[0].sliderImg instanceof File
+                              sec.subSections[0].sliderImg instanceof File
                                 ? URL.createObjectURL(
-                                    section.subSections[0].sliderImg
+                                    sec.subSections[0].sliderImg
                                   )
-                                : section.subSections[0].sliderImg || hero1
+                                : sec.subSections[0].sliderImg || hero1
                             }
-                            alt="Hero Slider"
-                            className={`w-full h-full rounded-md relative ${
-                              section.subSections[0].visible
-                                ? "block"
-                                : "hidden"
-                            }`}
+                            alt="Slider Image"
+                            className="w-full h-full rounded-md"
                             width={1200}
                             height={600}
                             unoptimized={
-                              section.subSections[0].sliderImg instanceof File
+                              sec.subSections[0].sliderImg instanceof File
                             }
                           />
                           <div className="absolute bottom-28 left-1/2 transform -translate-x-1/2 text-3xl">
-                            {section?.subSections[0].content}
+                            {sec.subSections[0].content}
                           </div>
                           <div className="absolute bottom-[86px] left-1/2 transform -translate-x-1/2">
-                            {section?.subSections[0].description}
+                            {sec.subSections[0].description}
                           </div>
                         </div>
                       </section>
-                    );
-                  }
-                })}
+                    )
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        } else if (sec.type === "Featured Collection") {
-          return (
-            // {/* Products section */}
-            <div
-              className="w-full flex justify-center overflow-x-hidden"
-              key={sec.id}
-            >
-              <div
-                className={`${
-                  screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[97%]"
-                } `}
-              >
-                {FeaturedCollections.map((fsec) => {
-                  return (
-                    <div
-                      className={`mt-10 mx-10 ${
-                        fsec.visible ? "block" : "hidden"
-                      }`}
-                      key={fsec.id}
-                    >
-                      {/* filter */}
-                      <div>
-                        <p>{fsec.content}</p>
-                        <p>{fsec.description}</p>
-                      </div>
+            );
+          }
 
-                      {/* Products */}
-                      <div
-                        className={`mt-5 grid  ${
-                          screenType === "mobile" ? "grid-cols-1" : ""
-                        } text-center gap-10
-              ${
-                screenType !== "mobile" && fsec.totalProduct === 1
-                  ? "grid-cols-1"
-                  : "grid-cols-1"
-              }
-              ${
-                screenType !== "mobile" && fsec.totalProduct === 2
-                  ? "grid-cols-2"
-                  : "grid-cols-1"
-              }
-              ${
-                screenType !== "mobile" && fsec.totalProduct === 3
-                  ? "grid-cols-3"
-                  : "grid-cols-1"
-              }
-              ${
-                screenType !== "mobile" && fsec.totalProduct === 4
-                  ? "grid-cols-4"
-                  : ""
-              }
-              ${
-                screenType !== "mobile" && fsec.totalProduct === 5
-                  ? "grid-cols-5"
-                  : ""
-              }
-              ${
-                screenType !== "mobile" && fsec.totalProduct === 6
-                  ? "grid-cols-6"
-                  : ""
-              }
-              `}
-                      >
-                        {/* single product container */}
-                        {productsData.length > 0 ? (
-                          productsData.map((item) => (
-                            <div className="max-w-full products" key={item?.id}>
-                              {/* img container */}
-                              <div className="w-full h-auto text-left imgContainer">
-                                <Image
-                                  src={item?.thumbnail}
-                                  alt="product image"
-                                  width={200} // Set the width of the image (e.g., 200px)
-                                  height={200} // Set the height of the image (e.g., 200px)
-                                  layout="responsive" // Makes the image responsive and adjusts automatically
-                                  className="object-cover productImg"
-                                />
-                              </div>
-                              <div className="px-2 pb-2">
-                                {/* content */}
-                                <p className="w-full">
-                                  <span className="cursor-pointer">
-                                    {item?.title}
-                                  </span>
-                                </p>
-                                <p className="w-full mrp">
-                                  <span className="cursor-pointer">
-                                    {item?.price}
-                                  </span>
-                                </p>
-                              </div>
-                              <button
-                                onClick={() => {
-                                  handleProductClick(item.id);
-                                }}
-                                className="px-2 rounded-sm btn-Custome mb-3 mx-1.5"
-                              >
-                                Show
-                              </button>
-                            </div>
-                          ))
-                        ) : (
-                          <div className="text-center text-4xl">Loading...</div>
-                        )}
-                      </div>
-                      <div className="w-full text-center my-4 mt-6">
-                        <button
-                          className={`bg-black text-white rounded-sm ${
-                            fsec.buttonText ? "px-4 py-1" : "px-0 py-0"
-                          }`}
-                        >
-                          {fsec.buttonText}
-                        </button>
-                      </div>
+          case "Featured Collection": {
+            return (
+              <div
+                className="w-full flex justify-center overflow-x-hidden"
+                key={sec.id}
+              >
+                <div
+                  className={`${
+                    screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[97%]"
+                  }`}
+                >
+                  <div className="mt-10 mx-10">
+                    <div>
+                      <p>{sec.content}</p>
+                      <p>{sec.description}</p>
                     </div>
-                  );
-                })}
+                    <div
+                      className={`mt-5 grid ${
+                        screenType === "mobile" ? "grid-cols-1" : "grid-cols-3"
+                      } gap-10`}
+                    >
+                      {productsData.length > 0 ? (
+                        productsData.map((item) => (
+                          <div className="max-w-full products" key={item.id}>
+                            <div className="w-full h-auto text-left imgContainer">
+                              <Image
+                                src={item.thumbnail}
+                                alt="Product image"
+                                width={200}
+                                height={200}
+                                layout="responsive"
+                                className="object-cover productImg"
+                              />
+                            </div>
+                            <div className="px-2 pb-2">
+                              <p className="w-full">
+                                <span className="cursor-pointer">
+                                  {item.title}
+                                </span>
+                              </p>
+                              <p className="w-full mrp">
+                                <span className="cursor-pointer">
+                                  {item.price}
+                                </span>
+                              </p>
+                            </div>
+                            <button
+                              onClick={() => handleProductClick(item.id)}
+                              className="px-2 rounded-sm btn-Custome mb-3 mx-1.5"
+                            >
+                              Show
+                            </button>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-center text-4xl">Loading...</div>
+                      )}
+                    </div>
+                    <div className="w-full text-center my-4 mt-6">
+                      <button
+                        className={`bg-black text-white rounded-sm ${
+                          sec.buttonText ? "px-4 py-1" : "px-0 py-0"
+                        }`}
+                      >
+                        {sec.buttonText}
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          );
-        } else if (sec.type === "Featured Product") {
-          return (
-            // {/* Rich text section */}
-            <div className="w-full flex justify-center" key={sec.id}>
-              <div
-                className={`${
-                  screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[97%]"
-                } `}
-              >
-                {RichTextSection.map((section) => {
-                  return (
-                    <RichText key={section.id} RichTextSection={section} />
-                  );
-                })}
+            );
+          }
+
+          case "Featured Product": {
+            return (
+              <div className="w-full flex justify-center" key={sec.id}>
+                <div
+                  className={`${
+                    screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[97%]"
+                  }`}
+                >
+                  <FeaturedProduct featuredProductSec={sec} />
+                </div>
               </div>
-            </div>
-          );
-        } else if (sec.type === "Rich Text") {
-          return (
-            // {/* Image with banner section */}
-            <div className="" key={sec.id}>
-              {imgBannerSection.map((sec) => {
-                return <ImageBanner key={sec.id} ImageBannerSection={sec} />;
-              })}
-            </div>
-          );
-        } else if (sec.type === "Image banner") {
-          /* Image with text section */
-          <div className="w-full flex justify-center" key={sec.id}>
-            <div
-              className={`${
-                screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[97%]"
-              } `}
-            >
-              {imgWithTextSection.map((sec) => {
-                return (
-                  <ImageWithText key={sec.id} imageWithTextSection={sec} />
-                );
-              })}
-            </div>
-          </div>;
-        } else if (sec.type === "Image with text") {
-          return (
-            // {/* Featured Product Section */}
-            <div className="w-full flex justify-center" key={sec.id}>
-              <div
-                className={`${
-                  screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[97%]"
-                } `}
-              >
-                {featuredProductSection.map((sec) => {
-                  return (
-                    <FeaturedProduct key={sec.id} featuredProductSec={sec} />
-                  );
-                })}
+            );
+          }
+
+          case "Rich Text": {
+            return (
+              <div className="w-full flex justify-center" key={sec.id}>
+                <div
+                  className={`${
+                    screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[97%]"
+                  }`}
+                >
+                  <RichText RichTextSection={sec} />
+                </div>
               </div>
-            </div>
-          );
+            );
+          }
+
+          case "Image banner": {
+            return (
+              <div className="w-full flex justify-center" key={sec.id}>
+                <div
+                  className={`${
+                    screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[97%]"
+                  }`}
+                >
+                  <ImageBanner ImageBannerSection={sec} />
+                </div>
+              </div>
+            );
+          }
+
+          case "Image with text": {
+            return (
+              <div className="w-full flex justify-center" key={sec.id}>
+                <div
+                  className={`${
+                    screenType === "mobile" ? "w-full" : "3xl:w-[80%] w-[97%]"
+                  }`}
+                >
+                  <ImageWithText imageWithTextSection={sec} />
+                </div>
+              </div>
+            );
+          }
+
+          default:
+            return null;
         }
       })}
     </div>

@@ -11,3 +11,11 @@ export const secTypes = [
     {id:5, name:'Image banner'},
     {id:6, name:'Image with text'},
 ]
+
+
+
+
+
+
+
+
