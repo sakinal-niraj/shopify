@@ -38,7 +38,7 @@ export const ImageWithText: React.FC<ImageWithTextProps> = ({
     
   return (
     <div
-      className={`${screenType === 'mobile' ? 'flex flex-col h-[450px]' : 'flex h-[500px]'} w-full text-center  px-10 my-5 overflow-x-hidden
+      className={`${screenType === 'mobile' ? 'flex flex-col h-[450px]' : 'flex h-[500px]'}  w-full text-center  px-10 my-5 overflow-x-hidden
         ${imageWithTextSection.visible ? 'block' : 'hidden'}
     ${
       imageWithTextSection.alignment === "Image First" ? "" : "flex-row-reverse"
