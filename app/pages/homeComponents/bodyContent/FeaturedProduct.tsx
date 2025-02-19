@@ -82,7 +82,7 @@ export const FeaturedProduct: React.FC<FeaturedProductProps> = ({
   const screenType = useAppSelector(selectScreenType);
 
   return (
-    <div className="homeBody flex w-full mb-5 pr-20 my-10">
+    <div className="homeBody flex w-full mb-5 pr-20 my-10 ml-10">
       <div className="w-full">
         {loading ? (
           <div className="flex justify-center items-center h-40">
